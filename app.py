@@ -6,6 +6,17 @@ import time
 import uuid
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+from supabase import create_client, Client
+
+# -----------------------------
+# Supabase connection
+# -----------------------------
+supabase: Client = create_client(
+    st.secrets["SUPABASE_URL"],
+    st.secrets["SUPABASE_KEY"]
+)
+
+
 
 st.set_page_config(page_title="Final Project Dashboard", layout="wide")
 
@@ -250,6 +261,38 @@ def build_export_df(total_duration: float) -> pd.DataFrame:
         rows.append(row)
     return pd.DataFrame(rows)
 
+def save_session_to_db(total_duration):
+    data = {
+        "session_id": st.session_state.session_id,
+        "participant_id": st.session_state.participant_id,
+        "experiment_group": st.session_state.experiment_group,
+        "total_duration_seconds": round(total_duration, 2),
+        "dashboard_interaction_clicks": st.session_state.dashboard_interaction_clicks,
+        "correct_answers_count": st.session_state.correct_count,
+        "total_questions": len(questions),
+    }
+
+    supabase.table("sessions").insert(data).execute()
+
+
+def save_responses_to_db():
+    rows = []
+
+    for answer in st.session_state.answers:
+        rows.append({
+            "session_id": st.session_state.session_id,
+            "participant_id": st.session_state.participant_id,
+            "experiment_group": st.session_state.experiment_group,
+            "question_id": answer["question_id"],
+            "question_text": answer["question_text"],
+            "selected_answer": answer["selected_answer"],
+            "correct_answer": answer["correct_answer"],
+            "is_correct": answer["is_correct"],
+            "response_time_seconds": answer["response_time_seconds"],
+        })
+
+    if rows:
+        supabase.table("responses").insert(rows).execute()
 
 def empty_panel():
     st.markdown('<div class="empty-panel"></div>', unsafe_allow_html=True)
@@ -603,7 +646,16 @@ else:
         total_duration = time.time() - st.session_state.session_start_time
         export_df = build_export_df(total_duration)
 
+        if "db_saved" not in st.session_state:
+            st.session_state.db_saved = False
+
+        if not st.session_state.db_saved:
+            save_session_to_db(total_duration)
+            save_responses_to_db()
+            st.session_state.db_saved = True
+
         st.success("הניסוי הסתיים")
+        
         x, y, z = st.columns(3)
         with x:
             st.markdown(f'<div class="metric-card"><div class="metric-label">זמן כולל</div><div class="metric-value">{round(total_duration, 2)}</div></div>', unsafe_allow_html=True)
