@@ -952,5 +952,6 @@ else:
         )
 
         if st.button("התחל מחדש", use_container_width=True):
-            reset_experiment()
+            for key in list(st.session_state.keys()):
+                del st.session_state[key]
             st.rerun()
