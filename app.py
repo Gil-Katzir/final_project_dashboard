@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -9,6 +8,15 @@ from plotly.subplots import make_subplots
 from supabase import create_client, Client
 
 # -----------------------------
+# Page config - must be first Streamlit command
+# -----------------------------
+st.set_page_config(
+    page_title="Final Project Dashboard",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
+
+# -----------------------------
 # Supabase connection
 # -----------------------------
 supabase: Client = create_client(
@@ -16,66 +24,134 @@ supabase: Client = create_client(
     st.secrets["SUPABASE_KEY"]
 )
 
-
-
-st.set_page_config(page_title="Final Project Dashboard", layout="wide")
-
 # -----------------------------
 # Styling
 # -----------------------------
 st.markdown("""
 <style>
-.main {
-    background-color: #f6f8fb;
+html, body, [class*="css"] {
+    font-family: "Segoe UI", sans-serif;
 }
+
+.main {
+    background: linear-gradient(180deg, #f7f9fc 0%, #eef3f9 100%);
+}
+
 .block-container {
     max-width: 1450px;
-    padding-top: 1.5rem;
+    padding-top: 1.2rem;
     padding-bottom: 2rem;
 }
+
 .big-title {
-    font-size: 2.1rem;
+    font-size: 2.3rem;
     font-weight: 800;
     color: #18212f;
-    margin-bottom: 0.1rem;
+    margin-bottom: 0.2rem;
+    letter-spacing: -0.02em;
 }
+
 .sub-title {
     font-size: 1rem;
     color: #667085;
-    margin-bottom: 1.2rem;
+    margin-bottom: 1.4rem;
 }
+
 .metric-card {
-    background: white;
-    border: 1px solid #e7ecf3;
-    border-radius: 18px;
-    padding: 14px 18px;
-    box-shadow: 0 4px 14px rgba(16,24,40,0.06);
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid #e6ebf2;
+    border-radius: 20px;
+    padding: 16px 18px;
+    box-shadow: 0 8px 24px rgba(16, 24, 40, 0.06);
+    backdrop-filter: blur(4px);
 }
+
 .metric-label {
     color: #667085;
     font-size: 0.85rem;
+    margin-bottom: 0.3rem;
 }
+
 .metric-value {
     color: #111827;
-    font-size: 1.2rem;
+    font-size: 1.35rem;
     font-weight: 800;
 }
+
 .section-title {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     font-weight: 800;
     color: #18212f;
-    margin-top: 1.2rem;
-    margin-bottom: 0.7rem;
+    margin-top: 1.3rem;
+    margin-bottom: 0.8rem;
 }
+
+.chart-card {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid #e6ebf2;
+    border-radius: 22px;
+    padding: 14px 14px 8px 14px;
+    box-shadow: 0 10px 28px rgba(16, 24, 40, 0.06);
+    min-height: 100%;
+}
+
+.chart-title {
+    font-size: 1.02rem;
+    font-weight: 800;
+    color: #18212f;
+    margin-bottom: 0.35rem;
+}
+
+.story-box {
+    background: #eef4ff;
+    border: 1px solid #d8e4ff;
+    border-radius: 14px;
+    padding: 10px 12px;
+    color: #2c4a7a;
+    font-size: 0.95rem;
+    margin-bottom: 0.9rem;
+}
+
 .empty-panel {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px dashed #d7deea;
+    border-radius: 20px;
+    min-height: 430px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #98a2b3;
+    text-align: center;
+    padding: 20px;
+}
+
+.dashboard-note {
+    color: #667085;
+    font-size: 0.9rem;
+    margin-top: 0.6rem;
+}
+
+div[data-testid="stPlotlyChart"] {
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+div[data-testid="stRadio"] label {
     background: white;
     border: 1px solid #e7ecf3;
-    border-radius: 18px;
-    min-height: 420px;
-    box-shadow: 0 4px 14px rgba(16,24,40,0.04);
+    border-radius: 12px;
+    padding: 8px 10px;
+    margin-bottom: 8px;
 }
-div[data-testid="stVerticalBlock"] div:has(> div[data-testid="stPlotlyChart"]) {
-    border-radius: 18px;
+
+div.stButton > button {
+    border-radius: 12px;
+    font-weight: 600;
+    min-height: 42px;
+}
+
+div[data-baseweb="select"] > div {
+    border-radius: 12px;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -87,33 +163,48 @@ df = pd.read_csv("data.csv")
 df["Date"] = pd.to_datetime(df["Date"])
 months_order = list(df["Month"].drop_duplicates())
 
-# monthly aggregates
 monthly_total = (
     df.groupby("Month", as_index=False)
-      .agg(**{
-          "Revenue Total": ("Revenue", "sum"),
-          "Profit Total": ("Profit", "sum")
-      })
+    .agg(
+        **{
+            "Revenue Total": ("Revenue", "sum"),
+            "Profit Total": ("Profit", "sum")
+        }
+    )
 )
-monthly_total["Month"] = pd.Categorical(monthly_total["Month"], categories=months_order, ordered=True)
+monthly_total["Month"] = pd.Categorical(
+    monthly_total["Month"],
+    categories=months_order,
+    ordered=True
+)
 monthly_total = monthly_total.sort_values("Month")
 
 monthly_category = (
     df.groupby(["Month", "Category"], as_index=False)
-      .agg(Revenue=("Revenue", "sum"), Profit=("Profit", "sum"))
+    .agg(Revenue=("Revenue", "sum"), Profit=("Profit", "sum"))
 )
-monthly_category["Month"] = pd.Categorical(monthly_category["Month"], categories=months_order, ordered=True)
+monthly_category["Month"] = pd.Categorical(
+    monthly_category["Month"],
+    categories=months_order,
+    ordered=True
+)
 monthly_category = monthly_category.sort_values(["Month", "Category"])
 
 monthly_dress = (
     df[df["Category"] == "Dress"]
     .groupby("Month", as_index=False)
-    .agg(**{
-        "Discount Dress": ("Discount", "mean"),
-        "Profit Dress": ("Profit", "sum")
-    })
+    .agg(
+        **{
+            "Discount Dress": ("Discount", "mean"),
+            "Profit Dress": ("Profit", "sum")
+        }
+    )
 )
-monthly_dress["Month"] = pd.Categorical(monthly_dress["Month"], categories=months_order, ordered=True)
+monthly_dress["Month"] = pd.Categorical(
+    monthly_dress["Month"],
+    categories=months_order,
+    ordered=True
+)
 monthly_dress = monthly_dress.sort_values("Month")
 
 # -----------------------------
@@ -213,17 +304,48 @@ defaults = {
     "answers": [],
     "correct_count": 0,
     "dashboard_interaction_clicks": 0,
+    "interaction_log": [],
+    "db_saved": False,
+
     "chart1_drilled": False,
     "chart1_month": months_order[0],
+
     "chart2_drilled": False,
     "chart2_month": months_order[0],
+
     "chart3_drilled": False,
     "chart3_month": months_order[0],
     "chart3_category": "Dress",
+
     "chart4_drilled": False,
-    "chart4_month": months_order[0]
+    "chart4_month": months_order[0],
 }
+
 for key, value in defaults.items():
+    if key not in st.session_state:
+        st.session_state[key] = value
+
+# widget defaults
+widget_defaults = {
+    "chart1_month_select": months_order[0],
+    "chart2_month_select": months_order[0],
+    "chart3_month_select": months_order[0],
+    "chart3_category_select": "Dress",
+    "chart4_month_select": months_order[0],
+}
+for key, value in widget_defaults.items():
+    if key not in st.session_state:
+        st.session_state[key] = value
+
+# previous values for change tracking
+prev_defaults = {
+    "__prev_chart1_month_select": months_order[0],
+    "__prev_chart2_month_select": months_order[0],
+    "__prev_chart3_month_select": months_order[0],
+    "__prev_chart3_category_select": "Dress",
+    "__prev_chart4_month_select": months_order[0],
+}
+for key, value in prev_defaults.items():
     if key not in st.session_state:
         st.session_state[key] = value
 
@@ -231,16 +353,48 @@ for key, value in defaults.items():
 def reset_experiment():
     for key, value in defaults.items():
         st.session_state[key] = value if key != "session_id" else str(uuid.uuid4())
+
+    for key, value in widget_defaults.items():
+        st.session_state[key] = value
+
+    for key, value in prev_defaults.items():
+        st.session_state[key] = value
+
     st.session_state.experiment_started = False
     st.session_state.participant_id = ""
     st.session_state.experiment_group = ""
     st.session_state.session_start_time = None
     st.session_state.question_start_time = None
     st.session_state.answers = []
+    st.session_state.db_saved = False
 
 
-def track_dashboard_click():
+def track_dashboard_click(action_type: str, action_value: str = ""):
+    if not st.session_state.experiment_started:
+        return
+    if st.session_state.current_question >= len(questions):
+        return
+
     st.session_state.dashboard_interaction_clicks += 1
+    st.session_state.interaction_log.append({
+        "session_id": st.session_state.session_id,
+        "participant_id": st.session_state.participant_id,
+        "experiment_group": st.session_state.experiment_group,
+        "timestamp": round(time.time(), 3),
+        "question_index_at_time": st.session_state.current_question + 1,
+        "action_type": action_type,
+        "action_value": action_value
+    })
+
+
+def track_filter_change(widget_key: str, action_type: str):
+    current_val = st.session_state.get(widget_key)
+    prev_key = f"__prev_{widget_key}"
+    prev_val = st.session_state.get(prev_key)
+
+    if current_val != prev_val:
+        track_dashboard_click(action_type, f"{widget_key}={current_val}")
+        st.session_state[prev_key] = current_val
 
 
 def build_export_df(total_duration: float) -> pd.DataFrame:
@@ -253,13 +407,25 @@ def build_export_df(total_duration: float) -> pd.DataFrame:
         "correct_answers_count": st.session_state.correct_count,
         "total_questions": len(questions),
     }
+
     rows = []
     for answer in st.session_state.answers:
         row = {}
         row.update(summary)
         row.update(answer)
         rows.append(row)
+
     return pd.DataFrame(rows)
+
+
+def build_interactions_df() -> pd.DataFrame:
+    if not st.session_state.interaction_log:
+        return pd.DataFrame(columns=[
+            "session_id", "participant_id", "experiment_group",
+            "timestamp", "question_index_at_time", "action_type", "action_value"
+        ])
+    return pd.DataFrame(st.session_state.interaction_log)
+
 
 def save_session_to_db(total_duration):
     data = {
@@ -271,13 +437,11 @@ def save_session_to_db(total_duration):
         "correct_answers_count": st.session_state.correct_count,
         "total_questions": len(questions),
     }
-
     supabase.table("sessions").insert(data).execute()
 
 
 def save_responses_to_db():
     rows = []
-
     for answer in st.session_state.answers:
         rows.append({
             "session_id": st.session_state.session_id,
@@ -294,13 +458,23 @@ def save_responses_to_db():
     if rows:
         supabase.table("responses").insert(rows).execute()
 
+
 def empty_panel():
-    st.markdown('<div class="empty-panel"></div>', unsafe_allow_html=True)
+    st.markdown("""
+        <div class="empty-panel">
+            <div>
+                <div style="font-size:1.05rem;font-weight:700;margin-bottom:6px;">הגרף עדיין לא נחשף</div>
+                <div>המשך/י לענות על השאלות כדי לחשוף את השלב הבא בדשבורד</div>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
 
 
 def panel_header(title: str, narrative: str):
-    st.markdown(f"**{title}**")
-    st.write(narrative)
+    st.markdown(f'<div class="chart-title">{title}</div>', unsafe_allow_html=True)
+
+    if st.session_state.experiment_group == "storytelling":
+        st.markdown(f'<div class="story-box">{narrative}</div>', unsafe_allow_html=True)
 
 
 def month_daily_totals(month_name: str):
@@ -312,133 +486,197 @@ def month_daily_totals(month_name: str):
 
 
 def category_month_daily(month_name: str, category_name: str):
-    d = df[(df["Month"] == month_name) & (df["Category"] == category_name)].sort_values("Day")
+    d = df[
+        (df["Month"] == month_name) &
+        (df["Category"] == category_name)
+    ].sort_values("Day")
     return d[["Day", "Revenue", "Profit", "Discount"]].copy()
 
 
 def dress_month_daily(month_name: str):
-    d = df[(df["Month"] == month_name) & (df["Category"] == "Dress")].sort_values("Day")
+    d = df[
+        (df["Month"] == month_name) &
+        (df["Category"] == "Dress")
+    ].sort_values("Day")
     return d[["Day", "Profit", "Discount"]].copy()
+
+
+def apply_common_layout(fig, title_text):
+    fig.update_layout(
+        title=title_text,
+        template="plotly_white",
+        hovermode="x unified",
+        margin=dict(l=20, r=20, t=55, b=20),
+        legend_title_text="",
+        title_x=0.02
+    )
+    return fig
 
 
 def show_chart1():
     panel_header("גרף 1: מגמת הכנסות", chart_narratives["chart1"])
+
     if not st.session_state.chart1_drilled:
         fig = px.line(
             monthly_total,
             x="Month",
             y="Revenue Total",
-            markers=True,
-            title="Revenue Total by Month"
+            markers=True
         )
+        fig = apply_common_layout(fig, "Revenue Total by Month")
         st.plotly_chart(fig, use_container_width=True)
-        c1, c2 = st.columns([2, 1])
+
+        c1, c2 = st.columns([2.2, 1])
         with c1:
-            selected_month = st.selectbox("בחר/י חודש ל-drill down", months_order, key="chart1_month_select")
+            st.selectbox(
+                "בחר/י חודש ל-drill down",
+                months_order,
+                key="chart1_month_select",
+                on_change=track_filter_change,
+                args=("chart1_month_select", "chart1_filter_month_change")
+            )
         with c2:
             st.write("")
             if st.button("Drill Down", key="chart1_drill_btn", use_container_width=True):
-                st.session_state.chart1_month = selected_month
+                st.session_state.chart1_month = st.session_state.chart1_month_select
                 st.session_state.chart1_drilled = True
-                track_dashboard_click()
+                track_dashboard_click("chart1_drill_down", st.session_state.chart1_month)
                 st.rerun()
     else:
         drill_df = month_daily_totals(st.session_state.chart1_month)
         fig = px.bar(
             drill_df,
             x="Day",
-            y="Revenue",
-            title=f"Daily Revenue - {st.session_state.chart1_month}"
+            y="Revenue"
         )
+        fig = apply_common_layout(fig, f"Daily Revenue - {st.session_state.chart1_month}")
         st.plotly_chart(fig, use_container_width=True)
+
         if st.button("חזרה", key="chart1_back_btn", use_container_width=True):
             st.session_state.chart1_drilled = False
-            track_dashboard_click()
+            track_dashboard_click("chart1_back", st.session_state.chart1_month)
             st.rerun()
 
 
 def show_chart2():
     panel_header("גרף 2: מגמת רווח", chart_narratives["chart2"])
+
     if not st.session_state.chart2_drilled:
         fig = px.line(
             monthly_total,
             x="Month",
             y="Profit Total",
-            markers=True,
-            title="Profit Total by Month"
+            markers=True
         )
+        fig = apply_common_layout(fig, "Profit Total by Month")
         st.plotly_chart(fig, use_container_width=True)
-        c1, c2 = st.columns([2, 1])
+
+        c1, c2 = st.columns([2.2, 1])
         with c1:
-            selected_month = st.selectbox("בחר/י חודש ל-drill down", months_order, key="chart2_month_select")
+            st.selectbox(
+                "בחר/י חודש ל-drill down",
+                months_order,
+                key="chart2_month_select",
+                on_change=track_filter_change,
+                args=("chart2_month_select", "chart2_filter_month_change")
+            )
         with c2:
             st.write("")
             if st.button("Drill Down", key="chart2_drill_btn", use_container_width=True):
-                st.session_state.chart2_month = selected_month
+                st.session_state.chart2_month = st.session_state.chart2_month_select
                 st.session_state.chart2_drilled = True
-                track_dashboard_click()
+                track_dashboard_click("chart2_drill_down", st.session_state.chart2_month)
                 st.rerun()
     else:
         drill_df = month_daily_totals(st.session_state.chart2_month)
         fig = px.bar(
             drill_df,
             x="Day",
-            y="Profit",
-            title=f"Daily Profit - {st.session_state.chart2_month}"
+            y="Profit"
         )
+        fig = apply_common_layout(fig, f"Daily Profit - {st.session_state.chart2_month}")
         st.plotly_chart(fig, use_container_width=True)
+
         if st.button("חזרה", key="chart2_back_btn", use_container_width=True):
             st.session_state.chart2_drilled = False
-            track_dashboard_click()
+            track_dashboard_click("chart2_back", st.session_state.chart2_month)
             st.rerun()
 
 
 def show_chart3():
     panel_header("גרף 3: הכנסות לפי קטגוריה", chart_narratives["chart3"])
+
     if not st.session_state.chart3_drilled:
         fig = px.line(
             monthly_category,
             x="Month",
             y="Revenue",
             color="Category",
-            markers=True,
-            title="Revenue by Category and Month"
+            markers=True
         )
+        fig = apply_common_layout(fig, "Revenue by Category and Month")
         st.plotly_chart(fig, use_container_width=True)
 
         c1, c2, c3 = st.columns([1.2, 1.2, 1])
         with c1:
-            selected_category = st.selectbox("בחר/י קטגוריה", ["T-shirt", "Dress", "Jeans"], key="chart3_category_select")
+            st.selectbox(
+                "בחר/י קטגוריה",
+                ["T-shirt", "Dress", "Jeans"],
+                key="chart3_category_select",
+                on_change=track_filter_change,
+                args=("chart3_category_select", "chart3_filter_category_change")
+            )
         with c2:
-            selected_month = st.selectbox("בחר/י חודש", months_order, key="chart3_month_select")
+            st.selectbox(
+                "בחר/י חודש",
+                months_order,
+                key="chart3_month_select",
+                on_change=track_filter_change,
+                args=("chart3_month_select", "chart3_filter_month_change")
+            )
         with c3:
             st.write("")
             if st.button("Drill Down", key="chart3_drill_btn", use_container_width=True):
-                st.session_state.chart3_category = selected_category
-                st.session_state.chart3_month = selected_month
+                st.session_state.chart3_category = st.session_state.chart3_category_select
+                st.session_state.chart3_month = st.session_state.chart3_month_select
                 st.session_state.chart3_drilled = True
-                track_dashboard_click()
+                track_dashboard_click(
+                    "chart3_drill_down",
+                    f"{st.session_state.chart3_category}|{st.session_state.chart3_month}"
+                )
                 st.rerun()
     else:
-        drill_df = category_month_daily(st.session_state.chart3_month, st.session_state.chart3_category)
+        drill_df = category_month_daily(
+            st.session_state.chart3_month,
+            st.session_state.chart3_category
+        )
+
         long_df = drill_df.melt(
             id_vars="Day",
             value_vars=["Revenue", "Profit"],
             var_name="Metric",
             value_name="Value"
         )
+
         fig = px.bar(
             long_df,
             x="Day",
             y="Value",
             color="Metric",
-            barmode="group",
-            title=f"{st.session_state.chart3_category} - Daily Revenue and Profit ({st.session_state.chart3_month})"
+            barmode="group"
+        )
+        fig = apply_common_layout(
+            fig,
+            f"{st.session_state.chart3_category} - Daily Revenue and Profit ({st.session_state.chart3_month})"
         )
         st.plotly_chart(fig, use_container_width=True)
+
         if st.button("חזרה", key="chart3_back_btn", use_container_width=True):
             st.session_state.chart3_drilled = False
-            track_dashboard_click()
+            track_dashboard_click(
+                "chart3_back",
+                f"{st.session_state.chart3_category}|{st.session_state.chart3_month}"
+            )
             st.rerun()
 
 
@@ -468,36 +706,32 @@ def show_chart4():
             secondary_y=True
         )
 
-        fig.update_layout(
-            title="Dress Discount and Profit by Month",
-            margin=dict(l=20, r=20, t=50, b=20)
-        )
-
         fig.update_yaxes(title_text="Profit Dress", secondary_y=False)
         fig.update_yaxes(title_text="Discount Dress (%)", secondary_y=True)
+        fig = apply_common_layout(fig, "Dress Discount and Profit by Month")
 
         st.plotly_chart(fig, use_container_width=True)
 
-        c1, c2 = st.columns([2, 1])
+        c1, c2 = st.columns([2.2, 1])
         with c1:
-            selected_month = st.selectbox(
+            st.selectbox(
                 "בחר/י חודש ל-drill down",
                 months_order,
-                key="chart4_month_select"
+                key="chart4_month_select",
+                on_change=track_filter_change,
+                args=("chart4_month_select", "chart4_filter_month_change")
             )
         with c2:
             st.write("")
             if st.button("Drill Down", key="chart4_drill_btn", use_container_width=True):
-                st.session_state.chart4_month = selected_month
+                st.session_state.chart4_month = st.session_state.chart4_month_select
                 st.session_state.chart4_drilled = True
-                track_dashboard_click()
+                track_dashboard_click("chart4_drill_down", st.session_state.chart4_month)
                 st.rerun()
-
     else:
         drill_df = dress_month_daily(st.session_state.chart4_month)
 
         fig = make_subplots(specs=[[{"secondary_y": True}]])
-
         fig.add_trace(
             go.Scatter(
                 x=drill_df["Day"],
@@ -518,29 +752,28 @@ def show_chart4():
             secondary_y=True
         )
 
-        fig.update_layout(
-            title=f"Dress Discount and Profit by Day ({st.session_state.chart4_month})",
-            margin=dict(l=20, r=20, t=50, b=20)
-        )
-
         fig.update_yaxes(title_text="Profit Dress", secondary_y=False)
         fig.update_yaxes(title_text="Discount Dress (%)", secondary_y=True)
+        fig = apply_common_layout(
+            fig,
+            f"Dress Discount and Profit by Day ({st.session_state.chart4_month})"
+        )
 
         st.plotly_chart(fig, use_container_width=True)
 
         if st.button("חזרה", key="chart4_back_btn", use_container_width=True):
             st.session_state.chart4_drilled = False
-            track_dashboard_click()
+            track_dashboard_click("chart4_back", st.session_state.chart4_month)
             st.rerun()
 
 
 def show_or_empty(show_flag, func):
-    with st.container(border=True):
-        if show_flag:
-            func()
-        else:
-            empty_panel()
-
+    st.markdown('<div class="chart-card">', unsafe_allow_html=True)
+    if show_flag:
+        func()
+    else:
+        empty_panel()
+    st.markdown('</div>', unsafe_allow_html=True)
 
 # -----------------------------
 # Start screen
@@ -563,22 +796,37 @@ if not st.session_state.experiment_started:
             st.session_state.experiment_started = True
             st.session_state.session_start_time = time.time()
             st.session_state.question_start_time = time.time()
+            st.session_state.db_saved = False
             st.rerun()
 
 # -----------------------------
 # Experiment screen
 # -----------------------------
 else:
-    st.markdown('<div class="big-title">Final Project Dashboard</div>', unsafe_allow_html=True)
+    st.markdown('<div class="big-title">📊 Business Performance Dashboard</div>', unsafe_allow_html=True)
     st.markdown('<div class="sub-title">Dashboard-based decision experiment</div>', unsafe_allow_html=True)
 
-    a, b, c = st.columns(3)
+    a, b, c, d = st.columns(4)
     with a:
-        st.markdown(f'<div class="metric-card"><div class="metric-label">מספר משתתף</div><div class="metric-value">{st.session_state.participant_id}</div></div>', unsafe_allow_html=True)
+        st.markdown(
+            f'<div class="metric-card"><div class="metric-label">מספר משתתף</div><div class="metric-value">{st.session_state.participant_id}</div></div>',
+            unsafe_allow_html=True
+        )
     with b:
-        st.markdown(f'<div class="metric-card"><div class="metric-label">קבוצת ניסוי</div><div class="metric-value">{st.session_state.experiment_group}</div></div>', unsafe_allow_html=True)
+        st.markdown(
+            f'<div class="metric-card"><div class="metric-label">קבוצת ניסוי</div><div class="metric-value">{st.session_state.experiment_group}</div></div>',
+            unsafe_allow_html=True
+        )
     with c:
-        st.markdown(f'<div class="metric-card"><div class="metric-label">שאלה נוכחית</div><div class="metric-value">{min(st.session_state.current_question + 1, len(questions))} / {len(questions)}</div></div>', unsafe_allow_html=True)
+        st.markdown(
+            f'<div class="metric-card"><div class="metric-label">שאלה נוכחית</div><div class="metric-value">{min(st.session_state.current_question + 1, len(questions))} / {len(questions)}</div></div>',
+            unsafe_allow_html=True
+        )
+    with d:
+        st.markdown(
+            f'<div class="metric-card"><div class="metric-label">אינטראקציות בדשבורד</div><div class="metric-value">{st.session_state.dashboard_interaction_clicks}</div></div>',
+            unsafe_allow_html=True
+        )
 
     # reveal logic
     show_fig1 = True
@@ -612,7 +860,10 @@ else:
     with bottom_right:
         show_or_empty(show_fig4, show_chart4)
 
-    st.caption("שים/י לב: לאחר שליחת תשובה לא ניתן לשנות אותה.")
+    st.markdown(
+        '<div class="dashboard-note">נספרות רק אינטראקציות עם הדשבורד עצמו, כמו שינויי פילטרים, drill down וחזרה. בחירת תשובות לשאלות אינה נספרת.</div>',
+        unsafe_allow_html=True
+    )
 
     st.divider()
 
@@ -621,7 +872,11 @@ else:
         st.subheader(f"שאלה {q['id']} מתוך {len(questions)}")
         st.write(q["text"])
 
-        selected = st.radio("בחר/י תשובה:", q["options"], key=f"question_{q['id']}")
+        selected = st.radio(
+            "בחר/י תשובה:",
+            q["options"],
+            key=f"question_{q['id']}"
+        )
 
         if st.button("שלח/י תשובה", use_container_width=True):
             response_time = time.time() - st.session_state.question_start_time
@@ -642,12 +897,11 @@ else:
             st.session_state.current_question += 1
             st.session_state.question_start_time = time.time()
             st.rerun()
+
     else:
         total_duration = time.time() - st.session_state.session_start_time
         export_df = build_export_df(total_duration)
-
-        if "db_saved" not in st.session_state:
-            st.session_state.db_saved = False
+        interactions_df = build_interactions_df()
 
         if not st.session_state.db_saved:
             save_session_to_db(total_duration)
@@ -655,24 +909,48 @@ else:
             st.session_state.db_saved = True
 
         st.success("הניסוי הסתיים")
-        
+
         x, y, z = st.columns(3)
         with x:
-            st.markdown(f'<div class="metric-card"><div class="metric-label">זמן כולל</div><div class="metric-value">{round(total_duration, 2)}</div></div>', unsafe_allow_html=True)
+            st.markdown(
+                f'<div class="metric-card"><div class="metric-label">זמן כולל</div><div class="metric-value">{round(total_duration, 2)}</div></div>',
+                unsafe_allow_html=True
+            )
         with y:
-            st.markdown(f'<div class="metric-card"><div class="metric-label">אינטראקציות בדשבורד</div><div class="metric-value">{st.session_state.dashboard_interaction_clicks}</div></div>', unsafe_allow_html=True)
+            st.markdown(
+                f'<div class="metric-card"><div class="metric-label">אינטראקציות בדשבורד</div><div class="metric-value">{st.session_state.dashboard_interaction_clicks}</div></div>',
+                unsafe_allow_html=True
+            )
         with z:
-            st.markdown(f'<div class="metric-card"><div class="metric-label">תשובות נכונות</div><div class="metric-value">{st.session_state.correct_count}</div></div>', unsafe_allow_html=True)
+            st.markdown(
+                f'<div class="metric-card"><div class="metric-label">תשובות נכונות</div><div class="metric-value">{st.session_state.correct_count}</div></div>',
+                unsafe_allow_html=True
+            )
 
+        st.subheader("תוצאות שאלון")
         st.dataframe(export_df, use_container_width=True)
-        csv = export_df.to_csv(index=False).encode("utf-8-sig")
+
+        csv_results = export_df.to_csv(index=False).encode("utf-8-sig")
         st.download_button(
             "הורדת תוצאות CSV",
-            data=csv,
+            data=csv_results,
             file_name=f"results_{st.session_state.participant_id}.csv",
             mime="text/csv",
             use_container_width=True
         )
+
+        st.subheader("לוג אינטראקציות בדשבורד")
+        st.dataframe(interactions_df, use_container_width=True)
+
+        csv_interactions = interactions_df.to_csv(index=False).encode("utf-8-sig")
+        st.download_button(
+            "הורדת לוג אינטראקציות CSV",
+            data=csv_interactions,
+            file_name=f"interactions_{st.session_state.participant_id}.csv",
+            mime="text/csv",
+            use_container_width=True
+        )
+
         if st.button("התחל מחדש", use_container_width=True):
             reset_experiment()
             st.rerun()
