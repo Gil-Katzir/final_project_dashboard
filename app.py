@@ -700,26 +700,40 @@ def show_chart3():
     else:
         drill_df = category_all_time(st.session_state.chart3_category)
 
-        long_df = drill_df.melt(
-            id_vars="Date",
-            value_vars=["Revenue", "Profit"],
-            var_name="Metric",
-            value_name="Value"
+        fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+        # Revenue (ציר שמאל)
+        fig.add_trace(
+            go.Scatter(
+                x=drill_df["Date"],
+                y=drill_df["Revenue"],
+                mode="lines+markers",
+                name="Revenue",
+                line=dict(color="#3b82f6", width=3)
+            ),
+            secondary_y=False
         )
 
-        fig = px.line(
-            long_df,
-            x="Date",
-            y="Value",
-            color="Metric",
-            markers=True,
-            color_discrete_map={"Revenue": "#3b82f6", "Profit": "#10b981"}
+        # Profit (ציר ימין)
+        fig.add_trace(
+            go.Scatter(
+                x=drill_df["Date"],
+                y=drill_df["Profit"],
+                mode="lines+markers",
+                name="Profit",
+                line=dict(color="#10b981", width=3, dash="dot")
+            ),
+            secondary_y=True
         )
+
+        fig.update_yaxes(title_text="Revenue", secondary_y=False)
+        fig.update_yaxes(title_text="Profit", secondary_y=True)
 
         fig = apply_common_layout(
             fig,
             f"{st.session_state.chart3_category} - לאורך כל התקופה"
         )
+
         st.plotly_chart(fig, use_container_width=True)
 
         if st.button("⬅️ חזרה", key="chart3_back_btn", use_container_width=True):
