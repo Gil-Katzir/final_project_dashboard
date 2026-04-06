@@ -35,21 +35,6 @@ st.markdown("""
         font-family: 'Inter', "Segoe UI", sans-serif;
     }
 
-    body {
-        direction: rtl;
-        unicode-bidi: bidi-override;
-    }
-
-    h1, h2, h3, h4, h5, h6 {
-        direction: rtl;
-        unicode-bidi: bidi-override;
-    }
-
-    div[data-testid="stMarkdownContainer"] {
-        direction: rtl;
-        unicode-bidi: bidi-override;
-    }
-
     .main {
         background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
     }
@@ -167,11 +152,6 @@ st.markdown("""
         gap: 10px;
     }
     
-    div[data-testid="stRadio"] {
-        direction: rtl;
-        unicode-bidi: bidi-override;
-    }
-
     div[data-testid="stRadio"] label {
         background: #ffffff;
         border: 1px solid #e2e8f0;
@@ -179,7 +159,6 @@ st.markdown("""
         padding: 12px 20px !important;
         transition: all 0.2s ease;
         cursor: pointer;
-        justify-content: flex-end;
     }
 
     div[data-testid="stRadio"] label:hover {
@@ -216,6 +195,31 @@ st.markdown("""
         font-size: 0.9rem;
         margin-top: 1.5rem;
         display: inline-block;
+    }
+
+    /* RTL only where needed */
+    .rtl-title,
+    .rtl-question,
+    .rtl-label,
+    .chart-title,
+    .story-box {
+        direction: rtl;
+        text-align: right;
+    }
+
+    div[data-testid="stRadio"] {
+        direction: rtl;
+        text-align: right;
+    }
+
+    div[data-testid="stRadio"] > div {
+        direction: rtl;
+    }
+
+    div[data-testid="stRadio"] label {
+        direction: rtl;
+        text-align: right;
+        justify-content: flex-end;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -536,10 +540,16 @@ def empty_panel():
 
 
 def panel_header(title: str, narrative: str):
-    st.markdown(f'<div class="chart-title">{title}</div>', unsafe_allow_html=True)
+    st.markdown(
+        f'<div class="chart-title rtl-title">{title}</div>',
+        unsafe_allow_html=True
+    )
 
     if st.session_state.experiment_group == "storytelling":
-        st.markdown(f'<div class="story-box">{narrative}</div>', unsafe_allow_html=True)
+        st.markdown(
+            f'<div class="story-box rtl-question">{narrative}</div>',
+            unsafe_allow_html=True
+        )
 
 
 def month_daily_totals(month_name: str):
@@ -740,32 +750,21 @@ def show_chart3():
     else:
         drill_df = category_monthly_totals(st.session_state.chart3_category)
 
-        fig = make_subplots(specs=[[{"secondary_y": True}]])
-
-        fig.add_trace(
-            go.Scatter(
-                x=drill_df["Month"],
-                y=drill_df["Revenue"],
-                mode="lines+markers",
-                name="Revenue",
-                line=dict(color="#3b82f6", width=3)
-            ),
-            secondary_y=False
+        long_df = drill_df.melt(
+            id_vars="Month",
+            value_vars=["Revenue", "Profit"],
+            var_name="Metric",
+            value_name="Value"
         )
 
-        fig.add_trace(
-            go.Scatter(
-                x=drill_df["Month"],
-                y=drill_df["Profit"],
-                mode="lines+markers",
-                name="Profit",
-                line=dict(color="#10b981", width=3, dash="dot")
-            ),
-            secondary_y=True
+        fig = px.bar(
+            long_df,
+            x="Month",
+            y="Value",
+            color="Metric",
+            barmode="group",
+            color_discrete_map={"Revenue": "#3b82f6", "Profit": "#10b981"}
         )
-
-        fig.update_yaxes(title_text="Revenue", secondary_y=False)
-        fig.update_yaxes(title_text="Profit", secondary_y=True)
 
         fig = apply_common_layout(
             fig,
@@ -976,14 +975,26 @@ else:
     if st.session_state.current_question < len(questions):
         q = questions[st.session_state.current_question]
         
-        st.markdown(f"### שאלה {q['id']}")
-        st.markdown(f"#### {q['text']}")
+    st.markdown(
+        f'<div class="rtl-title" style="font-size:1.4rem;font-weight:700;margin-bottom:0.5rem;">שאלה {q["id"]}</div>',
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        f'<div class="rtl-question" style="font-size:1.15rem;font-weight:600;margin-bottom:1rem;">{q["text"]}</div>',
+        unsafe_allow_html=True
+    )
 
-        selected = st.radio(
-            "בחר/י את התשובה הנכונה ביותר:",
-            q["options"],
-            key=f"question_{q['id']}"
-        )
+    st.markdown(
+        '<div class="rtl-label" style="font-weight:600;margin-bottom:0.4rem;">בחר/י את התשובה הנכונה ביותר:</div>',
+        unsafe_allow_html=True
+    )
+
+    selected = st.radio(
+        "",
+        q["options"],
+        key=f"question_{q['id']}",
+        label_visibility="collapsed"
+    )
 
         if st.button("שלח/י תשובה ✨", use_container_width=True):
             response_time = time.time() - st.session_state.question_start_time
