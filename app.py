@@ -660,6 +660,25 @@ def category_all_time(category_name):
     return d[["Date", "Revenue", "Profit"]].copy()
 
 
+def category_monthly_totals(category_name):
+    d = (
+        df[df["Category"] == category_name]
+        .groupby("Month", as_index=False)
+        .agg(
+            Revenue=("Revenue", "sum"),
+            Profit=("Profit", "sum")
+        )
+    )
+
+    d["Month"] = pd.Categorical(
+        d["Month"],
+        categories=months_order,
+        ordered=True
+    )
+    d = d.sort_values("Month")
+    return d
+
+
 def show_chart3():
     panel_header("גרף 3: הכנסות לפי קטגוריה", chart_narratives["chart3"])
 
@@ -698,14 +717,13 @@ def show_chart3():
                 st.rerun()
 
     else:
-        drill_df = category_all_time(st.session_state.chart3_category)
+        drill_df = category_monthly_totals(st.session_state.chart3_category)
 
         fig = make_subplots(specs=[[{"secondary_y": True}]])
 
-        # Revenue (ציר שמאל)
         fig.add_trace(
             go.Scatter(
-                x=drill_df["Date"],
+                x=drill_df["Month"],
                 y=drill_df["Revenue"],
                 mode="lines+markers",
                 name="Revenue",
@@ -714,10 +732,9 @@ def show_chart3():
             secondary_y=False
         )
 
-        # Profit (ציר ימין)
         fig.add_trace(
             go.Scatter(
-                x=drill_df["Date"],
+                x=drill_df["Month"],
                 y=drill_df["Profit"],
                 mode="lines+markers",
                 name="Profit",
@@ -731,7 +748,7 @@ def show_chart3():
 
         fig = apply_common_layout(
             fig,
-            f"{st.session_state.chart3_category} - לאורך כל התקופה"
+            f"{st.session_state.chart3_category} - Monthly Revenue vs Profit"
         )
 
         st.plotly_chart(fig, use_container_width=True)
@@ -743,6 +760,7 @@ def show_chart3():
                 st.session_state.chart3_category
             )
             st.rerun()
+            
 
 
 def show_chart4():
