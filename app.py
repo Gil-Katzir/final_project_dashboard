@@ -593,13 +593,12 @@ def show_chart1():
                 st.rerun()
     else:
         drill_df = month_daily_totals(st.session_state.chart1_month)
-        fig = px.line(
+        fig = px.bar(
             drill_df,
             x="Day",
             y="Revenue",
             color_discrete_sequence=['#60a5fa']
         )
-
         fig = apply_common_layout(fig, f"Daily Revenue - {st.session_state.chart1_month}")
         st.plotly_chart(fig, use_container_width=True)
 
