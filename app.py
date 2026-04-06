@@ -35,6 +35,21 @@ st.markdown("""
         font-family: 'Inter', "Segoe UI", sans-serif;
     }
 
+    body {
+        direction: rtl;
+        unicode-bidi: bidi-override;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        direction: rtl;
+        unicode-bidi: bidi-override;
+    }
+
+    div[data-testid="stMarkdownContainer"] {
+        direction: rtl;
+        unicode-bidi: bidi-override;
+    }
+
     .main {
         background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
     }
@@ -152,6 +167,11 @@ st.markdown("""
         gap: 10px;
     }
     
+    div[data-testid="stRadio"] {
+        direction: rtl;
+        unicode-bidi: bidi-override;
+    }
+
     div[data-testid="stRadio"] label {
         background: #ffffff;
         border: 1px solid #e2e8f0;
@@ -159,6 +179,7 @@ st.markdown("""
         padding: 12px 20px !important;
         transition: all 0.2s ease;
         cursor: pointer;
+        justify-content: flex-end;
     }
 
     div[data-testid="stRadio"] label:hover {
