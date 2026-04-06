@@ -593,12 +593,10 @@ def show_chart1():
                 st.rerun()
     else:
         drill_df = month_daily_totals(st.session_state.chart1_month)
-
         fig = px.line(
             drill_df,
             x="Day",
             y="Revenue",
-            markers=True,
             color_discrete_sequence=['#60a5fa']
         )
 
