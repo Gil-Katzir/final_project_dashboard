@@ -707,7 +707,7 @@ def show_chart3():
 
         with c2:
             st.write("")
-            if st.button("Drill Down 🔍", key="chart3_drill_btn", use_container_width=True):
+            if st.button("הכנסות מול רווח לפי קטגוריה 🔍", key="chart3_drill_btn", use_container_width=True):
                 st.session_state.chart3_category = st.session_state.chart3_category_select
                 st.session_state.chart3_drilled = True
                 track_dashboard_click(
@@ -760,7 +760,7 @@ def show_chart3():
                 st.session_state.chart3_category
             )
             st.rerun()
-            
+
 
 
 def show_chart4():
