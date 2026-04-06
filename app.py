@@ -640,7 +640,7 @@ def show_chart2():
                 st.rerun()
     else:
         drill_df = month_daily_totals(st.session_state.chart2_month)
-        fig = px.bar(
+        fig = px.line(
             drill_df,
             x="Day",
             y="Profit",
