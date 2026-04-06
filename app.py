@@ -655,6 +655,11 @@ def show_chart2():
             st.rerun()
 
 
+def category_all_time(category_name):
+    d = df[df["Category"] == category_name].sort_values("Date")
+    return d[["Date", "Revenue", "Profit"]].copy()
+
+
 def show_chart3():
     panel_header("גרף 3: הכנסות לפי קטגוריה", chart_narratives["chart3"])
 
@@ -670,7 +675,8 @@ def show_chart3():
         fig = apply_common_layout(fig, "Revenue by Category and Month")
         st.plotly_chart(fig, use_container_width=True)
 
-        c1, c2, c3 = st.columns([1.2, 1.2, 1])
+        c1, c2 = st.columns([2.2, 1])
+
         with c1:
             st.selectbox(
                 "קטגוריה:",
@@ -679,49 +685,40 @@ def show_chart3():
                 on_change=track_filter_change,
                 args=("chart3_category_select", "chart3_filter_category_change")
             )
+
         with c2:
-            st.selectbox(
-                "חודש:",
-                months_order,
-                key="chart3_month_select",
-                on_change=track_filter_change,
-                args=("chart3_month_select", "chart3_filter_month_change")
-            )
-        with c3:
             st.write("")
             if st.button("Drill Down 🔍", key="chart3_drill_btn", use_container_width=True):
                 st.session_state.chart3_category = st.session_state.chart3_category_select
-                st.session_state.chart3_month = st.session_state.chart3_month_select
                 st.session_state.chart3_drilled = True
                 track_dashboard_click(
                     "chart3_drill_down",
-                    f"{st.session_state.chart3_category}|{st.session_state.chart3_month}"
+                    st.session_state.chart3_category
                 )
                 st.rerun()
+
     else:
-        drill_df = category_month_daily(
-            st.session_state.chart3_month,
-            st.session_state.chart3_category
-        )
+        drill_df = category_all_time(st.session_state.chart3_category)
 
         long_df = drill_df.melt(
-            id_vars="Day",
+            id_vars="Date",
             value_vars=["Revenue", "Profit"],
             var_name="Metric",
             value_name="Value"
         )
 
-        fig = px.bar(
+        fig = px.line(
             long_df,
-            x="Day",
+            x="Date",
             y="Value",
             color="Metric",
-            barmode="group",
+            markers=True,
             color_discrete_map={"Revenue": "#3b82f6", "Profit": "#10b981"}
         )
+
         fig = apply_common_layout(
             fig,
-            f"{st.session_state.chart3_category} - ({st.session_state.chart3_month})"
+            f"{st.session_state.chart3_category} - לאורך כל התקופה"
         )
         st.plotly_chart(fig, use_container_width=True)
 
@@ -729,7 +726,7 @@ def show_chart3():
             st.session_state.chart3_drilled = False
             track_dashboard_click(
                 "chart3_back",
-                f"{st.session_state.chart3_category}|{st.session_state.chart3_month}"
+                st.session_state.chart3_category
             )
             st.rerun()
 
