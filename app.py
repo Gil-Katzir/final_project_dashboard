@@ -11,7 +11,7 @@ from supabase import create_client, Client
 # Page config - must be first Streamlit command
 # -----------------------------
 st.set_page_config(
-    page_title="ניסוי ניתוח נתונים",
+    page_title="Final Project Dashboard",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
@@ -25,7 +25,7 @@ supabase: Client = create_client(
 )
 
 # -----------------------------
-# Styling
+# Styling - ENHANCED UI/UX
 # -----------------------------
 st.markdown("""
 <style>
@@ -44,219 +44,169 @@ st.markdown("""
         padding: 2rem 3rem;
     }
 
+    /* Titles */
     .big-title {
         font-size: 2.8rem;
         font-weight: 800;
+        color: #1e293b;
         margin-bottom: 0.5rem;
         letter-spacing: -0.03em;
         background: linear-gradient(90deg, #1e293b, #3b82f6);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        direction: rtl;
-        text-align: right;
     }
 
     .sub-title {
-        font-size: 1.05rem;
+        font-size: 1.1rem;
         color: #64748b;
         margin-bottom: 2rem;
-        direction: rtl;
-        text-align: right;
     }
 
-    /* ---- Welcome screen ---- */
-    .welcome-card {
-        background: #ffffff;
-        border: 1px solid #e2e8f0;
-        border-radius: 28px;
-        padding: 44px 52px;
-        box-shadow: 0 20px 40px -10px rgba(0,0,0,0.08);
-        direction: rtl;
-        text-align: right;
-        max-width: 820px;
-        margin: 0 auto;
-    }
-
-    .welcome-title {
-        font-size: 2.1rem;
-        font-weight: 800;
-        background: linear-gradient(90deg, #3b82f6, #1e293b);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        margin-bottom: 0.3rem;
-        text-align: center;
-    }
-
-    .welcome-subtitle {
-        font-size: 0.95rem;
-        color: #94a3b8;
-        text-align: center;
-        margin-bottom: 2rem;
-    }
-
-    .welcome-section-title {
-        font-size: 1rem;
-        font-weight: 700;
-        color: #1e293b;
-        margin: 1.4rem 0 0.45rem 0;
-        border-right: 4px solid #3b82f6;
-        padding-right: 10px;
-    }
-
-    .welcome-text {
-        font-size: 0.95rem;
-        color: #475569;
-        line-height: 1.85;
-    }
-
-    .welcome-highlight {
-        background: #eff6ff;
-        border-right: 4px solid #3b82f6;
-        border-radius: 10px;
-        padding: 13px 16px;
-        color: #1e40af;
-        font-size: 0.93rem;
-        margin: 1.3rem 0;
-        line-height: 1.75;
-    }
-
-    .welcome-divider {
-        border: none;
-        border-top: 1px solid #e2e8f0;
-        margin: 1.8rem 0;
-    }
-
-    /* ---- Registration ---- */
-    .reg-card {
-        background: #ffffff;
-        border: 1px solid #e2e8f0;
-        border-radius: 20px;
-        padding: 32px 36px;
-        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.07);
-        direction: rtl;
-        text-align: right;
-        max-width: 520px;
-        margin: 0 auto;
-    }
-
-    .reg-title {
-        font-size: 1.15rem;
-        font-weight: 700;
-        color: #1e293b;
-        margin-bottom: 1.4rem;
-        border-right: 4px solid #3b82f6;
-        padding-right: 10px;
-    }
-
-    /* ---- Metric cards ---- */
+    /* Metric Cards */
     .metric-card {
-        background: rgba(255,255,255,0.88);
-        border: 1px solid rgba(255,255,255,0.4);
-        border-radius: 20px;
-        padding: 18px 22px;
-        box-shadow: 0 8px 20px -4px rgba(0,0,0,0.07);
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 24px;
+        padding: 20px 24px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
         backdrop-filter: blur(12px);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        transition: transform 0.2s ease;
     }
-
+    
     .metric-card:hover {
         transform: translateY(-2px);
-        box-shadow: 0 12px 24px -4px rgba(0,0,0,0.1);
     }
 
     .metric-label {
         color: #64748b;
-        font-size: 0.72rem;
-        font-weight: 700;
+        font-size: 0.8rem;
+        font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 0.07em;
-        margin-bottom: 6px;
+        letter-spacing: 0.05em;
+        margin-bottom: 8px;
     }
 
     .metric-value {
         color: #0f172a;
-        font-size: 1.5rem;
+        font-size: 1.6rem;
         font-weight: 800;
     }
 
     .section-title {
-        font-size: 1.35rem;
+        font-size: 1.5rem;
         font-weight: 800;
         color: #1e293b;
-        margin: 1.8rem 0 1.1rem 0;
-        padding-right: 12px;
+        margin: 2.5rem 0 1.5rem 0;
+        padding-right: 10px;
         border-right: 5px solid #3b82f6;
-        direction: rtl;
-        text-align: right;
     }
 
-    /* ---- Chart cards ---- */
+    /* Chart Cards */
     .chart-card {
         background: #ffffff;
         border: 1px solid #e2e8f0;
-        border-radius: 24px;
-        padding: 22px;
-        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.06);
+        border-radius: 28px;
+        padding: 24px;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
         height: 100%;
-        animation: fadeIn 0.5s cubic-bezier(0.16,1,0.3,1);
-    }
-
-    .chart-card-empty {
-        border-radius: 24px;
-        height: 100%;
-        min-height: 420px;
+        animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(14px); }
-        to   { opacity: 1; transform: translateY(0); }
+        from { opacity: 0; transform: translateY(20px);}
+        to { opacity: 1; transform: translateY(0);}
     }
 
     .chart-title {
-        font-size: 1.08rem;
+        font-size: 1.2rem;
         font-weight: 700;
         color: #1e293b;
-        margin-bottom: 0.9rem;
-        direction: rtl;
-        text-align: right;
+        margin-bottom: 1.2rem;
     }
 
     .story-box {
         background: #eff6ff;
         border-right: 4px solid #3b82f6;
-        border-radius: 10px;
-        padding: 11px 15px;
+        border-radius: 12px;
+        padding: 14px 18px;
         color: #1e40af;
-        font-size: 0.93rem;
-        line-height: 1.65;
-        margin-bottom: 1.1rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        margin-bottom: 1.5rem;
+    }
+
+    .empty-panel {
+        background: #f8fafc;
+        border: 2px dashed #cbd5e1;
+        border-radius: 24px;
+        min-height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #94a3b8;
+        text-align: center;
+    }
+
+    /* Inputs & Buttons */
+    div[data-testid="stRadio"] > div {
+        gap: 10px;
+    }
+    
+    div[data-testid="stRadio"] label {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 15px;
+        padding: 12px 20px !important;
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+
+    div[data-testid="stRadio"] label:hover {
+        border-color: #3b82f6;
+        background: #f0f7ff;
+    }
+
+    div.stButton > button {
+        border-radius: 14px;
+        font-weight: 600;
+        padding: 0.6rem 2rem;
+        background-color: #ffffff;
+        color: #1e293b;
+        border: 1px solid #e2e8f0;
+        transition: all 0.2s ease;
+    }
+
+    div.stButton > button:hover {
+        border-color: #3b82f6;
+        color: #3b82f6;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+    }
+
+    div[data-baseweb="select"] > div {
+        border-radius: 14px;
+        border: 1px solid #e2e8f0;
+    }
+    
+    .dashboard-note {
+        background: #fff7ed;
+        color: #9a3412;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        margin-top: 1.5rem;
+        display: inline-block;
+    }
+
+    /* RTL only where needed */
+    .rtl-title,
+    .rtl-question,
+    .rtl-label,
+    .chart-title,
+    .story-box {
         direction: rtl;
         text-align: right;
     }
 
-    /* ---- New chart badge ---- */
-    .new-chart-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: linear-gradient(135deg, #10b981, #059669);
-        color: white;
-        font-size: 0.82rem;
-        font-weight: 700;
-        padding: 5px 14px;
-        border-radius: 20px;
-        margin-bottom: 1rem;
-        box-shadow: 0 2px 10px rgba(16,185,129,0.35);
-        animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
-        direction: rtl;
-    }
-
-    @keyframes popIn {
-        from { opacity: 0; transform: scale(0.7); }
-        to   { opacity: 1; transform: scale(1); }
-    }
-
-    /* ---- Inputs & Buttons ---- */
     div[data-testid="stRadio"] {
         direction: rtl;
         text-align: right;
@@ -265,97 +215,23 @@ st.markdown("""
     div[data-testid="stRadio"] > div {
         direction: rtl;
         align-items: flex-end;
-        gap: 8px;
     }
 
     div[data-testid="stRadio"] label {
-        background: #f8fafc;
-        border: 1.5px solid #e2e8f0;
-        border-radius: 12px;
-        padding: 11px 18px !important;
-        transition: all 0.18s ease;
-        cursor: pointer;
         direction: rtl;
         text-align: right;
         justify-content: flex-end;
         flex-direction: row-reverse;
     }
 
-    div[data-testid="stRadio"] label:hover {
-        border-color: #3b82f6;
-        background: #eff6ff;
+    div[data-testid="stRadio"] label span {
+        direction: rtl;
+        text-align: right;
     }
 
-    div[data-testid="stRadio"] label span,
     div[data-testid="stRadio"] p {
         direction: rtl;
         text-align: right;
-    }
-
-    div.stButton > button {
-        border-radius: 12px;
-        font-weight: 600;
-        padding: 0.6rem 2rem;
-        background-color: #ffffff;
-        color: #1e293b;
-        border: 1.5px solid #e2e8f0;
-        transition: all 0.18s ease;
-    }
-
-    div.stButton > button:hover {
-        border-color: #3b82f6;
-        color: #3b82f6;
-        box-shadow: 0 4px 12px rgba(59,130,246,0.12);
-    }
-
-    div[data-baseweb="select"] > div {
-        border-radius: 12px;
-        border: 1.5px solid #e2e8f0;
-    }
-
-    .dashboard-note {
-        background: #fff7ed;
-        color: #9a3412;
-        padding: 10px 18px;
-        border-radius: 10px;
-        font-size: 0.87rem;
-        margin-top: 1.1rem;
-        display: inline-block;
-        direction: rtl;
-    }
-
-    .rtl-title, .rtl-question, .rtl-label {
-        direction: rtl;
-        text-align: right;
-    }
-
-    /* ---- Thank-you screen ---- */
-    .thankyou-card {
-        background: #ffffff;
-        border: 1px solid #e2e8f0;
-        border-radius: 28px;
-        padding: 60px 48px;
-        box-shadow: 0 20px 40px -10px rgba(0,0,0,0.08);
-        text-align: center;
-        max-width: 620px;
-        margin: 4rem auto;
-        animation: fadeIn 0.6s ease;
-        direction: rtl;
-    }
-
-    .thankyou-emoji { font-size: 4rem; margin-bottom: 1rem; }
-
-    .thankyou-title {
-        font-size: 2rem;
-        font-weight: 800;
-        color: #1e293b;
-        margin-bottom: 0.8rem;
-    }
-
-    .thankyou-sub {
-        font-size: 1rem;
-        color: #64748b;
-        line-height: 1.8;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -369,30 +245,46 @@ months_order = list(df["Month"].drop_duplicates())
 
 monthly_total = (
     df.groupby("Month", as_index=False)
-    .agg(**{
-        "Revenue Total": ("Revenue", "sum"),
-        "Profit Total":  ("Profit",  "sum")
-    })
+    .agg(
+        **{
+            "Revenue Total": ("Revenue", "sum"),
+            "Profit Total": ("Profit", "sum")
+        }
+    )
 )
-monthly_total["Month"] = pd.Categorical(monthly_total["Month"], categories=months_order, ordered=True)
+monthly_total["Month"] = pd.Categorical(
+    monthly_total["Month"],
+    categories=months_order,
+    ordered=True
+)
 monthly_total = monthly_total.sort_values("Month")
 
 monthly_category = (
     df.groupby(["Month", "Category"], as_index=False)
     .agg(Revenue=("Revenue", "sum"), Profit=("Profit", "sum"))
 )
-monthly_category["Month"] = pd.Categorical(monthly_category["Month"], categories=months_order, ordered=True)
+monthly_category["Month"] = pd.Categorical(
+    monthly_category["Month"],
+    categories=months_order,
+    ordered=True
+)
 monthly_category = monthly_category.sort_values(["Month", "Category"])
 
 monthly_dress = (
     df[df["Category"] == "Dress"]
     .groupby("Month", as_index=False)
-    .agg(**{
-        "Discount Dress": ("Discount", "mean"),
-        "Profit Dress":   ("Profit",   "sum")
-    })
+    .agg(
+        **{
+            "Discount Dress": ("Discount", "mean"),
+            "Profit Dress": ("Profit", "sum")
+        }
+    )
 )
-monthly_dress["Month"] = pd.Categorical(monthly_dress["Month"], categories=months_order, ordered=True)
+monthly_dress["Month"] = pd.Categorical(
+    monthly_dress["Month"],
+    categories=months_order,
+    ordered=True
+)
 monthly_dress = monthly_dress.sort_values("Month")
 
 # -----------------------------
@@ -473,19 +365,15 @@ questions = [
 
 chart_narratives = {
     "chart1": "📈 **מבט על הכנסות:** הגרף מציג את סך ההכנסות החודשיות של החברה.",
-    "chart2": "💰 **מבט על רווחים:** הגרף מציג את השורה התחתונה — הרווח הנקי לאורך זמן.",
+    "chart2": "💰 **מבט על רווחים:** הגרף מציג את השורה התחתונה - הרווח הנקי לאורך זמן.",
     "chart3": "🏷️ **פילוח קטגוריות:** השוואה בין ביצועי קטגוריות הלבוש השונות.",
     "chart4": "📉 **ניתוח עומק (Dress):** בחינת הקשר בין מדיניות ההנחות לרווחיות הקטגוריה."
 }
-
-# שאלות שבהן נוסף גרף (storytelling) — מפתח = index שאלה (0-based)
-NEW_CHART_AT = {2: "גרף 2 נוסף", 4: "גרף 3 נוסף", 7: "גרף 4 נוסף"}
 
 # -----------------------------
 # Session state
 # -----------------------------
 defaults = {
-    "screen": "welcome",   # welcome | register | experiment | summary | thankyou
     "experiment_started": False,
     "participant_id": "",
     "experiment_group": "",
@@ -506,6 +394,7 @@ defaults = {
     "chart2_month": months_order[0],
 
     "chart3_drilled": False,
+    "chart3_month": months_order[0],
     "chart3_category": "Dress",
 
     "chart4_drilled": False,
@@ -516,9 +405,11 @@ for key, value in defaults.items():
     if key not in st.session_state:
         st.session_state[key] = value
 
+# widget defaults
 widget_defaults = {
     "chart1_month_select": months_order[0],
     "chart2_month_select": months_order[0],
+    "chart3_month_select": months_order[0],
     "chart3_category_select": "Dress",
     "chart4_month_select": months_order[0],
 }
@@ -526,9 +417,11 @@ for key, value in widget_defaults.items():
     if key not in st.session_state:
         st.session_state[key] = value
 
+# previous values for change tracking
 prev_defaults = {
     "__prev_chart1_month_select": months_order[0],
     "__prev_chart2_month_select": months_order[0],
+    "__prev_chart3_month_select": months_order[0],
     "__prev_chart3_category_select": "Dress",
     "__prev_chart4_month_select": months_order[0],
 }
@@ -536,14 +429,32 @@ for key, value in prev_defaults.items():
     if key not in st.session_state:
         st.session_state[key] = value
 
-# -----------------------------
-# Helper functions
-# -----------------------------
+
+def reset_experiment():
+    for key, value in defaults.items():
+        st.session_state[key] = value if key != "session_id" else str(uuid.uuid4())
+
+    for key, value in widget_defaults.items():
+        st.session_state[key] = value
+
+    for key, value in prev_defaults.items():
+        st.session_state[key] = value
+
+    st.session_state.experiment_started = False
+    st.session_state.participant_id = ""
+    st.session_state.experiment_group = ""
+    st.session_state.session_start_time = None
+    st.session_state.question_start_time = None
+    st.session_state.answers = []
+    st.session_state.db_saved = False
+
+
 def track_dashboard_click(action_type: str, action_value: str = ""):
     if not st.session_state.experiment_started:
         return
     if st.session_state.current_question >= len(questions):
         return
+
     st.session_state.dashboard_interaction_clicks += 1
     st.session_state.interaction_log.append({
         "session_id": st.session_state.session_id,
@@ -560,6 +471,7 @@ def track_filter_change(widget_key: str, action_type: str):
     current_val = st.session_state.get(widget_key)
     prev_key = f"__prev_{widget_key}"
     prev_val = st.session_state.get(prev_key)
+
     if current_val != prev_val:
         track_dashboard_click(action_type, f"{widget_key}={current_val}")
         st.session_state[prev_key] = current_val
@@ -575,12 +487,14 @@ def build_export_df(total_duration: float) -> pd.DataFrame:
         "correct_answers_count": st.session_state.correct_count,
         "total_questions": len(questions),
     }
+
     rows = []
     for answer in st.session_state.answers:
         row = {}
         row.update(summary)
         row.update(answer)
         rows.append(row)
+
     return pd.DataFrame(rows)
 
 
@@ -620,8 +534,34 @@ def save_responses_to_db():
             "is_correct": answer["is_correct"],
             "response_time_seconds": answer["response_time_seconds"],
         })
+
     if rows:
         supabase.table("responses").insert(rows).execute()
+
+
+def empty_panel():
+    st.markdown("""
+        <div class="empty-panel">
+            <div>
+                <div style="font-size:3rem;margin-bottom:15px;">🔒</div>
+                <div style="font-size:1.1rem;font-weight:700;color:#64748b;margin-bottom:6px;">התוכן נעול</div>
+                <div style="font-size:0.9rem;color:#94a3b8;">המשך/י במענה על השאלות כדי לחשוף את הגרף הבא</div>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
+
+def panel_header(title: str, narrative: str):
+    st.markdown(
+        f'<div class="chart-title rtl-title">{title}</div>',
+        unsafe_allow_html=True
+    )
+
+    if st.session_state.experiment_group == "storytelling":
+        st.markdown(
+            f'<div class="story-box rtl-question">{narrative}</div>',
+            unsafe_allow_html=True
+        )
 
 
 def month_daily_totals(month_name: str):
@@ -632,26 +572,25 @@ def month_daily_totals(month_name: str):
     return d.sort_values("Day")
 
 
+def category_month_daily(month_name: str, category_name: str):
+    d = df[
+        (df["Month"] == month_name) &
+        (df["Category"] == category_name)
+    ].sort_values("Day")
+    return d[["Day", "Revenue", "Profit", "Discount"]].copy()
+
+
 def dress_month_daily(month_name: str):
     d = df[
-        (df["Month"] == month_name) & (df["Category"] == "Dress")
+        (df["Month"] == month_name) &
+        (df["Category"] == "Dress")
     ].sort_values("Day")
     return d[["Day", "Profit", "Discount"]].copy()
 
 
-def category_monthly_totals(category_name):
-    d = (
-        df[df["Category"] == category_name]
-        .groupby("Month", as_index=False)
-        .agg(Revenue=("Revenue", "sum"), Profit=("Profit", "sum"))
-    )
-    d["Month"] = pd.Categorical(d["Month"], categories=months_order, ordered=True)
-    return d.sort_values("Month")
-
-
 def apply_common_layout(fig, title_text):
     fig.update_layout(
-        title=dict(text=title_text, font=dict(size=13, color="#475569")),
+        title=dict(text=title_text, font=dict(size=14, color="#475569")),
         template="plotly_white",
         hovermode="x unified",
         margin=dict(l=10, r=10, t=50, b=10),
@@ -665,22 +604,16 @@ def apply_common_layout(fig, title_text):
     return fig
 
 
-def panel_header(title: str, narrative: str):
-    st.markdown(f'<div class="chart-title">{title}</div>', unsafe_allow_html=True)
-    if st.session_state.experiment_group == "storytelling":
-        st.markdown(f'<div class="story-box">{narrative}</div>', unsafe_allow_html=True)
-
-
-# -----------------------------
-# Chart renderers
-# -----------------------------
 def show_chart1():
     panel_header("גרף 1: מגמת הכנסות", chart_narratives["chart1"])
 
     if not st.session_state.chart1_drilled:
         fig = px.line(
-            monthly_total, x="Month", y="Revenue Total",
-            markers=True, color_discrete_sequence=['#3b82f6']
+            monthly_total,
+            x="Month",
+            y="Revenue Total",
+            markers=True,
+            color_discrete_sequence=['#3b82f6']
         )
         fig = apply_common_layout(fig, "Revenue Total by Month")
         st.plotly_chart(fig, use_container_width=True)
@@ -688,7 +621,8 @@ def show_chart1():
         c1, c2 = st.columns([2.2, 1])
         with c1:
             st.selectbox(
-                "בחר/י חודש לפירוט:", months_order,
+                "בחר/י חודש לפירוט:",
+                months_order,
                 key="chart1_month_select",
                 on_change=track_filter_change,
                 args=("chart1_month_select", "chart1_filter_month_change")
@@ -702,9 +636,15 @@ def show_chart1():
                 st.rerun()
     else:
         drill_df = month_daily_totals(st.session_state.chart1_month)
-        fig = px.line(drill_df, x="Day", y="Revenue", color_discrete_sequence=['#60a5fa'])
-        fig = apply_common_layout(fig, f"Daily Revenue — {st.session_state.chart1_month}")
+        fig = px.line(
+            drill_df,
+            x="Day",
+            y="Revenue",
+            color_discrete_sequence=['#60a5fa']
+        )
+        fig = apply_common_layout(fig, f"Daily Revenue - {st.session_state.chart1_month}")
         st.plotly_chart(fig, use_container_width=True)
+
         if st.button("⬅️ חזרה", key="chart1_back_btn", use_container_width=True):
             st.session_state.chart1_drilled = False
             track_dashboard_click("chart1_back", st.session_state.chart1_month)
@@ -716,8 +656,11 @@ def show_chart2():
 
     if not st.session_state.chart2_drilled:
         fig = px.line(
-            monthly_total, x="Month", y="Profit Total",
-            markers=True, color_discrete_sequence=['#10b981']
+            monthly_total,
+            x="Month",
+            y="Profit Total",
+            markers=True,
+            color_discrete_sequence=['#10b981']
         )
         fig = apply_common_layout(fig, "Profit Total by Month")
         st.plotly_chart(fig, use_container_width=True)
@@ -725,7 +668,8 @@ def show_chart2():
         c1, c2 = st.columns([2.2, 1])
         with c1:
             st.selectbox(
-                "בחר/י חודש לפירוט:", months_order,
+                "בחר/י חודש לפירוט:",
+                months_order,
                 key="chart2_month_select",
                 on_change=track_filter_change,
                 args=("chart2_month_select", "chart2_filter_month_change")
@@ -739,13 +683,43 @@ def show_chart2():
                 st.rerun()
     else:
         drill_df = month_daily_totals(st.session_state.chart2_month)
-        fig = px.line(drill_df, x="Day", y="Profit", color_discrete_sequence=['#34d399'])
-        fig = apply_common_layout(fig, f"Daily Profit — {st.session_state.chart2_month}")
+        fig = px.line(
+            drill_df,
+            x="Day",
+            y="Profit",
+            color_discrete_sequence=['#34d399']
+        )
+        fig = apply_common_layout(fig, f"Daily Profit - {st.session_state.chart2_month}")
         st.plotly_chart(fig, use_container_width=True)
+
         if st.button("⬅️ חזרה", key="chart2_back_btn", use_container_width=True):
             st.session_state.chart2_drilled = False
             track_dashboard_click("chart2_back", st.session_state.chart2_month)
             st.rerun()
+
+
+def category_all_time(category_name):
+    d = df[df["Category"] == category_name].sort_values("Date")
+    return d[["Date", "Revenue", "Profit"]].copy()
+
+
+def category_monthly_totals(category_name):
+    d = (
+        df[df["Category"] == category_name]
+        .groupby("Month", as_index=False)
+        .agg(
+            Revenue=("Revenue", "sum"),
+            Profit=("Profit", "sum")
+        )
+    )
+
+    d["Month"] = pd.Categorical(
+        d["Month"],
+        categories=months_order,
+        ordered=True
+    )
+    d = d.sort_values("Month")
+    return d
 
 
 def show_chart3():
@@ -753,7 +727,10 @@ def show_chart3():
 
     if not st.session_state.chart3_drilled:
         fig = px.line(
-            monthly_category, x="Month", y="Revenue", color="Category",
+            monthly_category,
+            x="Month",
+            y="Revenue",
+            color="Category",
             markers=True,
             color_discrete_map={"T-shirt": "#3b82f6", "Dress": "#f43f5e", "Jeans": "#8b5cf6"}
         )
@@ -761,87 +738,99 @@ def show_chart3():
         st.plotly_chart(fig, use_container_width=True)
 
         c1, c2 = st.columns([2.2, 1])
+
         with c1:
             st.selectbox(
-                "קטגוריה:", ["T-shirt", "Dress", "Jeans"],
+                "קטגוריה:",
+                ["T-shirt", "Dress", "Jeans"],
                 key="chart3_category_select",
                 on_change=track_filter_change,
                 args=("chart3_category_select", "chart3_filter_category_change")
             )
+
         with c2:
             st.write("")
-            if st.button("הכנסות מול רווח 🔍", key="chart3_drill_btn", use_container_width=True):
+            if st.button("הכנסות מול רווח לפי קטגוריה 🔍", key="chart3_drill_btn", use_container_width=True):
                 st.session_state.chart3_category = st.session_state.chart3_category_select
                 st.session_state.chart3_drilled = True
-                track_dashboard_click("chart3_drill_down", st.session_state.chart3_category)
+                track_dashboard_click(
+                    "chart3_drill_down",
+                    st.session_state.chart3_category
+                )
                 st.rerun()
+
     else:
         drill_df = category_monthly_totals(st.session_state.chart3_category)
-        months_list = drill_df["Month"].astype(str).tolist()
 
-        # Dual Y-axis: Revenue (primary) | Profit (secondary)
-        fig = make_subplots(specs=[[{"secondary_y": True}]])
-
-        fig.add_trace(
-            go.Bar(
-                x=months_list, y=drill_df["Revenue"],
-                name="Revenue", marker_color="#3b82f6", opacity=0.85
-            ),
-            secondary_y=False
-        )
-        fig.add_trace(
-            go.Bar(
-                x=months_list, y=drill_df["Profit"],
-                name="Profit", marker_color="#10b981", opacity=0.85
-            ),
-            secondary_y=True
+        long_df = drill_df.melt(
+            id_vars="Month",
+            value_vars=["Revenue", "Profit"],
+            var_name="Metric",
+            value_name="Value"
         )
 
-        fig.update_layout(barmode="group")
-        fig.update_yaxes(title_text="Revenue", secondary_y=False,
-                         showgrid=True, gridcolor="#f1f5f9")
-        fig.update_yaxes(title_text="Profit", secondary_y=True, showgrid=False)
+        fig = px.bar(
+            long_df,
+            x="Month",
+            y="Value",
+            color="Metric",
+            barmode="group",
+            color_discrete_map={"Revenue": "#3b82f6", "Profit": "#10b981"}
+        )
+
         fig = apply_common_layout(
-            fig, f"{st.session_state.chart3_category} — Monthly Revenue vs Profit"
+            fig,
+            f"{st.session_state.chart3_category} - Monthly Revenue vs Profit"
         )
+
         st.plotly_chart(fig, use_container_width=True)
 
         if st.button("⬅️ חזרה", key="chart3_back_btn", use_container_width=True):
             st.session_state.chart3_drilled = False
-            track_dashboard_click("chart3_back", st.session_state.chart3_category)
+            track_dashboard_click(
+                "chart3_back",
+                st.session_state.chart3_category
+            )
             st.rerun()
-
-
 def show_chart4():
     panel_header("גרף 4: הנחה ורווח ב-Dress", chart_narratives["chart4"])
 
     if not st.session_state.chart4_drilled:
         fig = make_subplots(specs=[[{"secondary_y": True}]])
+
         fig.add_trace(
             go.Scatter(
-                x=monthly_dress["Month"], y=monthly_dress["Profit Dress"],
-                mode="lines+markers", name="Profit",
+                x=monthly_dress["Month"],
+                y=monthly_dress["Profit Dress"],
+                mode="lines+markers",
+                name="Profit",
                 line=dict(color="#f43f5e", width=3)
             ),
             secondary_y=False
         )
+
         fig.add_trace(
             go.Scatter(
-                x=monthly_dress["Month"], y=monthly_dress["Discount Dress"],
-                mode="lines+markers", name="Discount %",
+                x=monthly_dress["Month"],
+                y=monthly_dress["Discount Dress"],
+                mode="lines+markers",
+                name="Discount %",
                 line=dict(color="#fbbf24", width=3, dash='dot')
             ),
             secondary_y=True
         )
+
         fig.update_yaxes(title_text="Profit", secondary_y=False)
         fig.update_yaxes(title_text="Discount (%)", secondary_y=True)
         fig = apply_common_layout(fig, "Dress: Discount vs Profit")
+
         st.plotly_chart(fig, use_container_width=True)
 
         c1, c2 = st.columns([2.2, 1])
         with c1:
             st.selectbox(
-                "בחר/י חודש לפירוט:", months_order,
+                "בחר/י חודש לפירוט:",
+                months_order,
                 key="chart4_month_select",
                 on_change=track_filter_change,
                 args=("chart4_month_select", "chart4_filter_month_change")
@@ -855,188 +844,135 @@ def show_chart4():
                 st.rerun()
     else:
         drill_df = dress_month_daily(st.session_state.chart4_month)
+
         fig = make_subplots(specs=[[{"secondary_y": True}]])
         fig.add_trace(
             go.Scatter(
-                x=drill_df["Day"], y=drill_df["Profit"],
-                mode="lines+markers", name="Profit",
+                x=drill_df["Day"],
+                y=drill_df["Profit"],
+                mode="lines+markers",
+                name="Profit",
                 line=dict(color="#f43f5e", width=2)
             ),
             secondary_y=False
         )
+
         fig.add_trace(
             go.Scatter(
-                x=drill_df["Day"], y=drill_df["Discount"],
-                mode="lines+markers", name="Discount %",
+                x=drill_df["Day"],
+                y=drill_df["Discount"],
+                mode="lines+markers",
+                name="Discount %",
                 line=dict(color="#fbbf24", width=2)
             ),
             secondary_y=True
         )
-        fig = apply_common_layout(fig, f"Dress: Daily Stats ({st.session_state.chart4_month})")
+
+        fig = apply_common_layout(
+            fig,
+            f"Dress: Daily Stats ({st.session_state.chart4_month})"
+        )
+
         st.plotly_chart(fig, use_container_width=True)
+
         if st.button("⬅️ חזרה", key="chart4_back_btn", use_container_width=True):
             st.session_state.chart4_drilled = False
             track_dashboard_click("chart4_back", st.session_state.chart4_month)
             st.rerun()
 
 
-def show_or_empty(show_flag, func, is_storytelling=False):
+def show_or_empty(show_flag, func):
+    st.markdown('<div class="chart-card">', unsafe_allow_html=True)
     if show_flag:
-        st.markdown('<div class="chart-card">', unsafe_allow_html=True)
         func()
-        st.markdown('</div>', unsafe_allow_html=True)
     else:
-        # storytelling: completely blank; control: should not reach here (all shown)
-        st.markdown('<div class="chart-card-empty"></div>', unsafe_allow_html=True)
+        empty_panel()
+    st.markdown('</div>', unsafe_allow_html=True)
 
+# -----------------------------
+# Start screen
+# -----------------------------
+if not st.session_state.experiment_started:
+    st.markdown('<div class="big-title">📊 ניסוי ניתוח נתונים</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-title">ברוכים הבאים לניסוי. אנא הזינו את פרטיכם כדי להתחיל.</div>', unsafe_allow_html=True)
 
-# ==============================
-# SCREEN: WELCOME
-# ==============================
-if st.session_state.screen == "welcome":
-    st.markdown("""
-        <div style="max-width:820px;margin:2rem auto;">
-            <div class="welcome-card">
-                <div class="welcome-title">📊 ניסוי ניתוח נתונים</div>
-                <div class="welcome-subtitle">פרויקט גמר — המחלקה להנדסת תעשייה וניהול, אוניברסיטת בן-גוריון תשפ"ו</div>
-                <hr class="welcome-divider">
+    col1, col2 = st.columns(2)
+    with col1:
+        participant_id_input = st.text_input("מספר משתתף")
+    with col2:
+        experiment_group_input = st.selectbox("קבוצת ניסוי", ["control", "storytelling"])
 
-                <div class="welcome-section-title">מהו הניסוי?</div>
-                <div class="welcome-text">
-                    ניסוי זה בוחן כיצד אופן הצגת מידע בדשבורדים עסקיים משפיע על איכות קבלת ההחלטות
-                    ועל רמת המעורבות של המשתמש. תוצגו בפניכם ויזואליזציות נתונים עסקיים ותתבקשו
-                    לנתח אותם ולענות על שאלות.
-                </div>
-
-                <div class="welcome-section-title">מה עלי לעשות?</div>
-                <div class="welcome-text">
-                    יש לעיין בדשבורד האינטראקטיבי ולענות על <strong>10 שאלות</strong> המבוססות על הנתונים המוצגים.
-                    לאחר שליחת תשובה לא ניתן לחזור אליה. לא יינתן משוב בזמן אמת לגבי נכונות התשובה.
-                </div>
-
-                <div class="welcome-section-title">משך הניסוי</div>
-                <div class="welcome-text">
-                    הניסוי צפוי להימשך כ-<strong>15 דקות</strong>. אין הגבלת זמן לכל שאלה בנפרד.
-                </div>
-
-                <div class="welcome-section-title">תמריצים</div>
-                <div class="welcome-text">
-                    משתתפים יקבלו נקודת בונוס בקורס BI. בנוסף, פרס כספי יינתן על פי מספר התשובות הנכונות:
-                    פחות מ-3 — ללא פרס | 4–6 — 15 ₪ | 7–8 — 25 ₪ | 9–10 — 40 ₪
-                    <em>(בכפוף לאישור סופי)</em>.
-                </div>
-
-                <div class="welcome-highlight">
-                    🔒 <strong>פרטיות וסודיות:</strong> ההשתתפות אנונימית לחלוטין. לא נאסף מידע מזהה אישי.
-                    הנתונים ישמשו למחקר אקדמי בלבד ויפורסמו בצורה מצטברת בלבד.<br><br>
-                    ✋ <strong>הסכמה מדעת:</strong> לחיצה על "המשך" מהווה אישור לקראת של תנאים אלה
-                    והסכמה מרצון להשתתפות בניסוי. ניתן לעצור בכל עת — אולם עצירה לפני השלמת
-                    המשימה לא תזכה בנקודת הבונוס.
-                </div>
-
-                <hr class="welcome-divider">
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
-
-    col_l, col_btn, col_r = st.columns([2, 2, 2])
-    with col_btn:
-        if st.button("אני מסכים/ה — המשך ▶", use_container_width=True):
-            st.session_state.screen = "register"
+    if st.button("התחל ניסוי 🚀", use_container_width=True):
+        if participant_id_input.strip() == "":
+            st.warning("יש להזין מספר משתתף")
+        else:
+            st.session_state.participant_id = participant_id_input.strip()
+            st.session_state.experiment_group = experiment_group_input
+            st.session_state.experiment_started = True
+            st.session_state.session_start_time = time.time()
+            st.session_state.question_start_time = time.time()
+            st.session_state.db_saved = False
             st.rerun()
 
-
-# ==============================
-# SCREEN: REGISTER
-# ==============================
-elif st.session_state.screen == "register":
-    st.markdown("""
-        <div style="max-width:520px;margin:3rem auto 1rem auto;">
-            <div class="reg-card">
-                <div class="reg-title">פרטי משתתף</div>
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
-
-    col_l, col_form, col_r = st.columns([1, 2, 1])
-    with col_form:
-        participant_id_input = st.text_input("מספר משתתף", placeholder="הזינו את מספר המשתתף שלכם")
-        experiment_group_input = st.selectbox("קבוצת ניסוי", ["control", "storytelling"])
-        st.write("")
-        if st.button("התחל ניסוי 🚀", use_container_width=True):
-            if participant_id_input.strip() == "":
-                st.warning("יש להזין מספר משתתף")
-            else:
-                st.session_state.participant_id = participant_id_input.strip()
-                st.session_state.experiment_group = experiment_group_input
-                st.session_state.experiment_started = True
-                st.session_state.session_start_time = time.time()
-                st.session_state.question_start_time = time.time()
-                st.session_state.db_saved = False
-                st.session_state.screen = "experiment"
-                st.rerun()
-
-
-# ==============================
-# SCREEN: EXPERIMENT
-# ==============================
-elif st.session_state.screen == "experiment":
+# -----------------------------
+# Experiment screen
+# -----------------------------
+else:
     st.markdown('<div class="big-title">Business Analytics Dashboard</div>', unsafe_allow_html=True)
     st.markdown('<div class="sub-title">Decision support & performance analysis</div>', unsafe_allow_html=True)
 
-    # metric bar
     a, b, c, d = st.columns(4)
     with a:
         st.markdown(
-            f'<div class="metric-card"><div class="metric-label">Participant ID</div>'
-            f'<div class="metric-value">{st.session_state.participant_id}</div></div>',
+            f'<div class="metric-card"><div class="metric-label">Participant ID</div><div class="metric-value">{st.session_state.participant_id}</div></div>',
             unsafe_allow_html=True
         )
     with b:
         st.markdown(
-            f'<div class="metric-card"><div class="metric-label">Group</div>'
-            f'<div class="metric-value">{st.session_state.experiment_group.capitalize()}</div></div>',
+            f'<div class="metric-card"><div class="metric-label">Group</div><div class="metric-value">{st.session_state.experiment_group.capitalize()}</div></div>',
             unsafe_allow_html=True
         )
     with c:
         st.markdown(
-            f'<div class="metric-card"><div class="metric-label">Progress</div>'
-            f'<div class="metric-value">{min(st.session_state.current_question + 1, len(questions))} '
-            f'<span style="font-size:1rem;color:#94a3b8">/ {len(questions)}</span></div></div>',
+            f'<div class="metric-card"><div class="metric-label">Progress</div><div class="metric-value">{min(st.session_state.current_question + 1, len(questions))} <span style="font-size:1rem; color:#94a3b8">/ {len(questions)}</span></div></div>',
             unsafe_allow_html=True
         )
     with d:
         st.markdown(
-            f'<div class="metric-card"><div class="metric-label">Interactions</div>'
-            f'<div class="metric-value">{st.session_state.dashboard_interaction_clicks}</div></div>',
+            f'<div class="metric-card"><div class="metric-label">Interactions</div><div class="metric-value">{st.session_state.dashboard_interaction_clicks}</div></div>',
             unsafe_allow_html=True
         )
 
     # reveal logic
-    is_storytelling = (st.session_state.experiment_group == "storytelling")
-    cq = st.session_state.current_question
+    show_fig2 = False
+    show_fig3 = False
+    show_fig4 = False
 
-    if not is_storytelling:
-        show_fig2 = show_fig3 = show_fig4 = True
+    if st.session_state.experiment_group == "control":
+        show_fig2 = True
+        show_fig3 = True
+        show_fig4 = True
     else:
-        show_fig2 = cq >= 2
-        show_fig3 = cq >= 4
-        show_fig4 = cq >= 7
+        if st.session_state.current_question >= 2:
+            show_fig2 = True
+        if st.session_state.current_question >= 4:
+            show_fig3 = True
+        if st.session_state.current_question >= 7:
+            show_fig4 = True
 
-    # dashboard grid
     st.markdown('<div class="section-title">דשבורד אינטראקטיבי</div>', unsafe_allow_html=True)
 
     top_left, top_right = st.columns(2)
     bottom_left, bottom_right = st.columns(2)
 
     with top_left:
-        show_or_empty(True, show_chart1, is_storytelling)
+        show_or_empty(True, show_chart1)
     with top_right:
-        show_or_empty(show_fig2, show_chart2, is_storytelling)
+        show_or_empty(show_fig2, show_chart2)
     with bottom_left:
-        show_or_empty(show_fig3, show_chart3, is_storytelling)
+        show_or_empty(show_fig3, show_chart3)
     with bottom_right:
-        show_or_empty(show_fig4, show_chart4, is_storytelling)
+        show_or_empty(show_fig4, show_chart4)
 
     st.markdown(
         '<div class="dashboard-note">💡 שים לב! ניתן לשנות את הבחירה לפני לחיצה על "שלח/י תשובה"</div>',
@@ -1045,33 +981,22 @@ elif st.session_state.screen == "experiment":
 
     st.divider()
 
-    # question block
-    if cq < len(questions):
-        q = questions[cq]
-
-        # new chart badge (storytelling only, at trigger questions)
-        if is_storytelling and cq in NEW_CHART_AT:
-            st.markdown(
-                f'<div class="new-chart-badge">✨ {NEW_CHART_AT[cq]} — עיינו בדשבורד לפני המענה</div>',
-                unsafe_allow_html=True
-            )
+    if st.session_state.current_question < len(questions):
+        q = questions[st.session_state.current_question]
 
         st.markdown(
-            f'<div class="rtl-title" style="font-size:1.35rem;font-weight:700;margin-bottom:0.4rem;">'
-            f'שאלה {q["id"]}</div>',
+            f'<div class="rtl-title" style="font-size:1.4rem;font-weight:700;margin-bottom:0.5rem;">שאלה {q["id"]}</div>',
             unsafe_allow_html=True
         )
         st.markdown(
-            f'<div class="rtl-question" style="font-size:1.1rem;font-weight:600;margin-bottom:1rem;">'
-            f'{q["text"]}</div>',
-            unsafe_allow_html=True
-        )
-        st.markdown(
-            '<div class="rtl-label" style="font-weight:600;margin-bottom:0.4rem;">'
-            'בחר/י את התשובה הנכונה ביותר:</div>',
+            f'<div class="rtl-question" style="font-size:1.15rem;font-weight:600;margin-bottom:1rem;">{q["text"]}</div>',
             unsafe_allow_html=True
         )
 
+        st.markdown(
+            '<div class="rtl-label" style="font-weight:600;margin-bottom:0.4rem;">בחר/י את התשובה הנכונה ביותר:</div>',
+            unsafe_allow_html=True
+        )
         selected = st.radio(
             "",
             q["options"],
@@ -1100,101 +1025,58 @@ elif st.session_state.screen == "experiment":
             st.rerun()
 
     else:
-        st.session_state.screen = "summary"
-        st.rerun()
+        total_duration = time.time() - st.session_state.session_start_time
+        export_df = build_export_df(total_duration)
+        interactions_df = build_interactions_df()
 
+        if not st.session_state.db_saved:
+            save_session_to_db(total_duration)
+            save_responses_to_db()
+            st.session_state.db_saved = True
 
-# ==============================
-# SCREEN: SUMMARY
-# ==============================
-elif st.session_state.screen == "summary":
-    total_duration = time.time() - st.session_state.session_start_time
-    export_df = build_export_df(total_duration)
-    interactions_df = build_interactions_df()
+        st.balloons()
+        st.success("🎉 הניסוי הסתיים בהצלחה! תודה על השתתפותך.")
 
-    if not st.session_state.db_saved:
-        save_session_to_db(total_duration)
-        save_responses_to_db()
-        st.session_state.db_saved = True
+        x, y, z = st.columns(3)
+        with x:
+            st.markdown(
+                f'<div class="metric-card"><div class="metric-label">זמן כולל (שניות)</div><div class="metric-value">{round(total_duration, 2)}</div></div>',
+                unsafe_allow_html=True
+            )
+        with y:
+            st.markdown(
+                f'<div class="metric-card"><div class="metric-label">סה"כ אינטראקציות</div><div class="metric-value">{st.session_state.dashboard_interaction_clicks}</div></div>',
+                unsafe_allow_html=True
+            )
+        with z:
+            st.markdown(
+                f'<div class="metric-card"><div class="metric-label">תשובות נכונות</div><div class="metric-value">{st.session_state.correct_count} / {len(questions)}</div></div>',
+                unsafe_allow_html=True
+            )
 
-    st.balloons()
-    st.markdown('<div class="big-title">📋 סיכום ביצועים</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-title">הניסוי הסתיים — להלן תוצאות הסשן שלך</div>', unsafe_allow_html=True)
+        st.subheader("סיכום תוצאות")
+        st.dataframe(export_df, use_container_width=True)
 
-    x, y, z = st.columns(3)
-    with x:
-        st.markdown(
-            f'<div class="metric-card"><div class="metric-label">זמן כולל (שניות)</div>'
-            f'<div class="metric-value">{round(total_duration, 2)}</div></div>',
-            unsafe_allow_html=True
-        )
-    with y:
-        st.markdown(
-            f'<div class="metric-card"><div class="metric-label">סה״כ אינטראקציות</div>'
-            f'<div class="metric-value">{st.session_state.dashboard_interaction_clicks}</div></div>',
-            unsafe_allow_html=True
-        )
-    with z:
-        st.markdown(
-            f'<div class="metric-card"><div class="metric-label">תשובות נכונות</div>'
-            f'<div class="metric-value">{st.session_state.correct_count} / {len(questions)}</div></div>',
-            unsafe_allow_html=True
-        )
+        c1, c2 = st.columns(2)
+        with c1:
+            csv_results = export_df.to_csv(index=False).encode("utf-8-sig")
+            st.download_button(
+                "📥 הורדת תוצאות CSV",
+                data=csv_results,
+                file_name=f"results_{st.session_state.participant_id}.csv",
+                mime="text/csv",
+                use_container_width=True
+            )
+        with c2:
+            csv_interactions = interactions_df.to_csv(index=False).encode("utf-8-sig")
+            st.download_button(
+                "📥 הורדת לוג אינטראקציות",
+                data=csv_interactions,
+                file_name=f"interactions_{st.session_state.participant_id}.csv",
+                mime="text/csv",
+                use_container_width=True
+            )
 
-    st.subheader("סיכום תשובות")
-    st.dataframe(export_df, use_container_width=True)
-
-    c1, c2 = st.columns(2)
-    with c1:
-        csv_results = export_df.to_csv(index=False).encode("utf-8-sig")
-        st.download_button(
-            "📥 הורדת תוצאות CSV",
-            data=csv_results,
-            file_name=f"results_{st.session_state.participant_id}.csv",
-            mime="text/csv",
-            use_container_width=True
-        )
-    with c2:
-        csv_interactions = interactions_df.to_csv(index=False).encode("utf-8-sig")
-        st.download_button(
-            "📥 הורדת לוג אינטראקציות",
-            data=csv_interactions,
-            file_name=f"interactions_{st.session_state.participant_id}.csv",
-            mime="text/csv",
-            use_container_width=True
-        )
-
-    st.markdown("<br>", unsafe_allow_html=True)
-    btn1, btn2, btn3 = st.columns([1, 2, 1])
-    with btn2:
-        if st.button("✅ לחץ לסיום", use_container_width=True):
-            st.session_state.screen = "thankyou"
-            st.rerun()
-        st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("התחל מחדש 🔄", use_container_width=True):
-            for key in list(st.session_state.keys()):
-                del st.session_state[key]
-            st.rerun()
-
-
-# ==============================
-# SCREEN: THANK YOU
-# ==============================
-elif st.session_state.screen == "thankyou":
-    st.markdown("""
-        <div class="thankyou-card">
-            <div class="thankyou-emoji">🎉</div>
-            <div class="thankyou-title">תודה על השתתפותך!</div>
-            <div class="thankyou-sub">
-                השתתפותך בניסוי זה תורמת למחקר אקדמי חשוב בתחום מערכות מידע עסקיות.<br>
-                התוצאות ישמשו לבחינת ההשפעה של נרטיבים מבוססי בינה מלאכותית על קבלת החלטות.<br><br>
-                ניתן לסגור את הדפדפן.
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
-
-    col_l, col_btn, col_r = st.columns([2, 2, 2])
-    with col_btn:
         if st.button("התחל מחדש 🔄", use_container_width=True):
             for key in list(st.session_state.keys()):
                 del st.session_state[key]
