@@ -800,31 +800,30 @@ def show_chart3():
         drill_df = category_monthly_totals(st.session_state.chart3_category)
         months_list = drill_df["Month"].astype(str).tolist()
 
-        # Dual Y-axis: Revenue (primary) | Profit (secondary)
-        fig = make_subplots(specs=[[{"secondary_y": True}]])
+        fig = go.Figure()
 
         fig.add_trace(
             go.Bar(
-                x=months_list, y=drill_df["Revenue"],
-                name="Revenue", marker_color="#3b82f6", opacity=0.85
-            ),
-            secondary_y=False
+                x=months_list,
+                y=drill_df["Revenue"],
+                name="Revenue"
+            )
         )
+
         fig.add_trace(
             go.Bar(
-                x=months_list, y=drill_df["Profit"],
-                name="Profit", marker_color="#10b981", opacity=0.85
-            ),
-            secondary_y=True
+                x=months_list,
+                y=drill_df["Profit"],
+                name="Profit"
+            )
         )
 
         fig.update_layout(barmode="group")
-        fig.update_yaxes(title_text="Revenue", secondary_y=False,
-                         showgrid=True, gridcolor="#f1f5f9")
-        fig.update_yaxes(title_text="Profit", secondary_y=True, showgrid=False)
         fig = apply_common_layout(
-            fig, f"{st.session_state.chart3_category} — Monthly Revenue vs Profit"
+            fig,
+            f"{st.session_state.chart3_category} — Monthly Revenue vs Profit"
         )
+
         st.plotly_chart(fig, use_container_width=True)
 
         if st.button("⬅️ חזרה", key="chart3_back_btn", use_container_width=True):
