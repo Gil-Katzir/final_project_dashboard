@@ -214,12 +214,24 @@ st.markdown("""
 
     div[data-testid="stRadio"] > div {
         direction: rtl;
+        align-items: flex-end;
     }
 
     div[data-testid="stRadio"] label {
         direction: rtl;
         text-align: right;
         justify-content: flex-end;
+        flex-direction: row-reverse;
+    }
+
+    div[data-testid="stRadio"] label span {
+        direction: rtl;
+        text-align: right;
+    }
+
+    div[data-testid="stRadio"] p {
+        direction: rtl;
+        text-align: right;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -780,9 +792,6 @@ def show_chart3():
                 st.session_state.chart3_category
             )
             st.rerun()
-
-
-
 def show_chart4():
     panel_header("גרף 4: הנחה ורווח ב-Dress", chart_narratives["chart4"])
 
@@ -974,101 +983,101 @@ else:
 
     if st.session_state.current_question < len(questions):
         q = questions[st.session_state.current_question]
-        
-    st.markdown(
-        f'<div class="rtl-title" style="font-size:1.4rem;font-weight:700;margin-bottom:0.5rem;">שאלה {q["id"]}</div>',
-        unsafe_allow_html=True
-    )
-    st.markdown(
-        f'<div class="rtl-question" style="font-size:1.15rem;font-weight:600;margin-bottom:1rem;">{q["text"]}</div>',
-        unsafe_allow_html=True
-    )
 
-    st.markdown(
-        '<div class="rtl-label" style="font-weight:600;margin-bottom:0.4rem;">בחר/י את התשובה הנכונה ביותר:</div>',
-        unsafe_allow_html=True
-    )
-    selected = st.radio(
-        "",
-        q["options"],
-        key=f"question_{q['id']}",
-        label_visibility="collapsed"
-    )
-
-    if st.button("שלח/י תשובה ✨", use_container_width=True):
-        response_time = time.time() - st.session_state.question_start_time
-        is_correct = selected == q["correct_answer"]
-
-        st.session_state.answers.append({
-            "question_id": q["id"],
-            "question_text": q["text"],
-            "selected_answer": selected,
-            "correct_answer": q["correct_answer"],
-            "is_correct": is_correct,
-            "response_time_seconds": round(response_time, 2)
-        })
-
-        if is_correct:
-            st.session_state.correct_count += 1
-
-        st.session_state.current_question += 1
-        st.session_state.question_start_time = time.time()
-        st.rerun()
-
-else:
-    total_duration = time.time() - st.session_state.session_start_time
-    export_df = build_export_df(total_duration)
-    interactions_df = build_interactions_df()
-
-    if not st.session_state.db_saved:
-        save_session_to_db(total_duration)
-        save_responses_to_db()
-        st.session_state.db_saved = True
-
-    st.balloons()
-    st.success("🎉 הניסוי הסתיים בהצלחה! תודה על השתתפותך.")
-
-    x, y, z = st.columns(3)
-    with x:
         st.markdown(
-            f'<div class="metric-card"><div class="metric-label">זמן כולל (שניות)</div><div class="metric-value">{round(total_duration, 2)}</div></div>',
+            f'<div class="rtl-title" style="font-size:1.4rem;font-weight:700;margin-bottom:0.5rem;">שאלה {q["id"]}</div>',
             unsafe_allow_html=True
         )
-    with y:
         st.markdown(
-            f'<div class="metric-card"><div class="metric-label">סה"כ אינטראקציות</div><div class="metric-value">{st.session_state.dashboard_interaction_clicks}</div></div>',
-            unsafe_allow_html=True
-        )
-    with z:
-        st.markdown(
-            f'<div class="metric-card"><div class="metric-label">תשובות נכונות</div><div class="metric-value">{st.session_state.correct_count} / {len(questions)}</div></div>',
+            f'<div class="rtl-question" style="font-size:1.15rem;font-weight:600;margin-bottom:1rem;">{q["text"]}</div>',
             unsafe_allow_html=True
         )
 
-    st.subheader("סיכום תוצאות")
-    st.dataframe(export_df, use_container_width=True)
-
-    c1, c2 = st.columns(2)
-    with c1:
-        csv_results = export_df.to_csv(index=False).encode("utf-8-sig")
-        st.download_button(
-            "📥 הורדת תוצאות CSV",
-            data=csv_results,
-            file_name=f"results_{st.session_state.participant_id}.csv",
-            mime="text/csv",
-            use_container_width=True
+        st.markdown(
+            '<div class="rtl-label" style="font-weight:600;margin-bottom:0.4rem;">בחר/י את התשובה הנכונה ביותר:</div>',
+            unsafe_allow_html=True
         )
-    with c2:
-        csv_interactions = interactions_df.to_csv(index=False).encode("utf-8-sig")
-        st.download_button(
-            "📥 הורדת לוג אינטראקציות",
-            data=csv_interactions,
-            file_name=f"interactions_{st.session_state.participant_id}.csv",
-            mime="text/csv",
-            use_container_width=True
+        selected = st.radio(
+            "",
+            q["options"],
+            key=f"question_{q['id']}",
+            label_visibility="collapsed"
         )
 
-    if st.button("התחל מחדש 🔄", use_container_width=True):
-        for key in list(st.session_state.keys()):
-            del st.session_state[key]
-        st.rerun()
+        if st.button("שלח/י תשובה ✨", use_container_width=True):
+            response_time = time.time() - st.session_state.question_start_time
+            is_correct = selected == q["correct_answer"]
+
+            st.session_state.answers.append({
+                "question_id": q["id"],
+                "question_text": q["text"],
+                "selected_answer": selected,
+                "correct_answer": q["correct_answer"],
+                "is_correct": is_correct,
+                "response_time_seconds": round(response_time, 2)
+            })
+
+            if is_correct:
+                st.session_state.correct_count += 1
+
+            st.session_state.current_question += 1
+            st.session_state.question_start_time = time.time()
+            st.rerun()
+
+    else:
+        total_duration = time.time() - st.session_state.session_start_time
+        export_df = build_export_df(total_duration)
+        interactions_df = build_interactions_df()
+
+        if not st.session_state.db_saved:
+            save_session_to_db(total_duration)
+            save_responses_to_db()
+            st.session_state.db_saved = True
+
+        st.balloons()
+        st.success("🎉 הניסוי הסתיים בהצלחה! תודה על השתתפותך.")
+
+        x, y, z = st.columns(3)
+        with x:
+            st.markdown(
+                f'<div class="metric-card"><div class="metric-label">זמן כולל (שניות)</div><div class="metric-value">{round(total_duration, 2)}</div></div>',
+                unsafe_allow_html=True
+            )
+        with y:
+            st.markdown(
+                f'<div class="metric-card"><div class="metric-label">סה"כ אינטראקציות</div><div class="metric-value">{st.session_state.dashboard_interaction_clicks}</div></div>',
+                unsafe_allow_html=True
+            )
+        with z:
+            st.markdown(
+                f'<div class="metric-card"><div class="metric-label">תשובות נכונות</div><div class="metric-value">{st.session_state.correct_count} / {len(questions)}</div></div>',
+                unsafe_allow_html=True
+            )
+
+        st.subheader("סיכום תוצאות")
+        st.dataframe(export_df, use_container_width=True)
+
+        c1, c2 = st.columns(2)
+        with c1:
+            csv_results = export_df.to_csv(index=False).encode("utf-8-sig")
+            st.download_button(
+                "📥 הורדת תוצאות CSV",
+                data=csv_results,
+                file_name=f"results_{st.session_state.participant_id}.csv",
+                mime="text/csv",
+                use_container_width=True
+            )
+        with c2:
+            csv_interactions = interactions_df.to_csv(index=False).encode("utf-8-sig")
+            st.download_button(
+                "📥 הורדת לוג אינטראקציות",
+                data=csv_interactions,
+                file_name=f"interactions_{st.session_state.participant_id}.csv",
+                mime="text/csv",
+                use_container_width=True
+            )
+
+        if st.button("התחל מחדש 🔄", use_container_width=True):
+            for key in list(st.session_state.keys()):
+                del st.session_state[key]
+            st.rerun()
