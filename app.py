@@ -842,7 +842,9 @@ def show_chart4():
             go.Bar(
                 x=monthly_dress["Month"],
                 y=monthly_dress["Profit Dress"],
-                name="Profit"
+                name="Profit",
+                marker=dict(color="#f43f5e"),
+                width=0.4  #
             ),
             secondary_y=False
         )
