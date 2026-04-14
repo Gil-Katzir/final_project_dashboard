@@ -837,22 +837,27 @@ def show_chart4():
 
     if not st.session_state.chart4_drilled:
         fig = make_subplots(specs=[[{"secondary_y": True}]])
+        
         fig.add_trace(
-            go.barr(
-                x=monthly_dress["Month"], y=monthly_dress["Profit Dress"],
-                mode="lines+markers", name="Profit",
-                line=dict(color="#f43f5e", width=3)
+            go.Bar(
+                x=monthly_dress["Month"],
+                y=monthly_dress["Profit Dress"],
+                name="Profit"
             ),
             secondary_y=False
         )
+        
         fig.add_trace(
             go.Scatter(
-                x=monthly_dress["Month"], y=monthly_dress["Discount Dress"],
-                mode="lines+markers", name="Discount %",
-                line=dict(color="#fbbf24", width=3, dash='dot')
+                x=monthly_dress["Month"],
+                y=monthly_dress["Discount Dress"],
+                mode="lines+markers",
+                name="Discount %",
+                line=dict(color="#fbbf24", width=3, dash="dot")
             ),
             secondary_y=True
         )
+
         fig.update_yaxes(title_text="Profit", secondary_y=False)
         fig.update_yaxes(title_text="Discount (%)", secondary_y=True)
         fig = apply_common_layout(fig, "Dress: Discount vs Profit")
@@ -876,24 +881,34 @@ def show_chart4():
     else:
         drill_df = dress_month_daily(st.session_state.chart4_month)
         fig = make_subplots(specs=[[{"secondary_y": True}]])
+        
         fig.add_trace(
             go.Scatter(
-                x=drill_df["Day"], y=drill_df["Profit"],
-                mode="lines+markers", name="Profit",
+                x=drill_df["Day"],
+                y=drill_df["Profit"],
+                mode="lines+markers",
+                name="Profit",
                 line=dict(color="#f43f5e", width=2)
             ),
             secondary_y=False
         )
+        
         fig.add_trace(
             go.Scatter(
-                x=drill_df["Day"], y=drill_df["Discount"],
-                mode="lines+markers", name="Discount %",
+                x=drill_df["Day"],
+                y=drill_df["Discount"],
+                mode="lines+markers",
+                name="Discount %",
                 line=dict(color="#fbbf24", width=2)
             ),
             secondary_y=True
         )
+
+        fig.update_yaxes(title_text="Profit", secondary_y=False)
+        fig.update_yaxes(title_text="Discount (%)", secondary_y=True)
         fig = apply_common_layout(fig, f"Dress: Daily Stats ({st.session_state.chart4_month})")
         st.plotly_chart(fig, use_container_width=True)
+
         if st.button("⬅️ חזרה", key="chart4_back_btn", use_container_width=True):
             st.session_state.chart4_drilled = False
             track_dashboard_click("chart4_back", st.session_state.chart4_month)
