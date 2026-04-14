@@ -843,7 +843,7 @@ def show_chart4():
                 x=monthly_dress["Month"],
                 y=monthly_dress["Profit Dress"],
                 name="Profit",
-                marker=dict(color="#f43f5e"),
+                marker=dict(color="#3F8C7E"),
                 width=0.4  #
             ),
             secondary_y=False
