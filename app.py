@@ -914,57 +914,59 @@ def show_or_empty(show_flag, func, is_storytelling=False):
 # SCREEN: WELCOME
 # ==============================
 if st.session_state.screen == "welcome":
-    st.markdown("""
-        <div style="max-width:820px;margin:2rem auto;">
-            <div class="welcome-card">
-                <div class="welcome-title">📊 ניסוי ניתוח נתונים</div>
-                <div class="welcome-subtitle">פרויקט גמר — המחלקה להנדסת תעשייה וניהול, אוניברסיטת בן-גוריון תשפ"ו</div>
-                <hr class="welcome-divider">
+    st.markdown(
+        """
+<div style="max-width:820px;margin:2rem auto;">
+    <div class="welcome-card">
+        <div class="welcome-title">📊 ניסוי ניתוח נתונים</div>
+        <div class="welcome-subtitle">פרויקט גמר — המחלקה להנדסת תעשייה וניהול, אוניברסיטת בן-גוריון תשפ"ו</div>
+        <hr class="welcome-divider">
 
-                <div class="welcome-section-title">מהו הניסוי?</div>
-                <div class="welcome-text">
-                    ניסוי זה בוחן כיצד אופן הצגת מידע בדשבורדים עסקיים משפיע על איכות קבלת ההחלטות
-                    ועל רמת המעורבות של המשתמש. תוצגו בפניכם ויזואליזציות נתונים עסקיים ותתבקשו
-                    לנתח אותם ולענות על שאלות.
-                </div>
-
-                <div class="welcome-section-title">מה עלי לעשות?</div>
-                <div class="welcome-text">
-                    יש לעיין בדשבורד האינטראקטיבי ולענות על <strong>10 שאלות</strong> המבוססות על הנתונים המוצגים.
-                    לאחר שליחת תשובה לא ניתן לחזור אליה. לא יינתן משוב בזמן אמת לגבי נכונות התשובה.
-                </div>
-
-                <div class="welcome-section-title">משך הניסוי</div>
-                <div class="welcome-text">
-                    הניסוי צפוי להימשך כ-<strong>15 דקות</strong>. אין הגבלת זמן לכל שאלה בנפרד.
-                </div>
-
-                <div class="welcome-section-title">תמריצים</div>
-                <div class="welcome-text">
-                    משתתפים יקבלו נקודת בונוס בקורס BI. בנוסף, פרס כספי יינתן על פי מספר התשובות הנכונות:
-                    פחות מ-3 — ללא פרס | 4–6 — 15 ₪ | 7–8 — 25 ₪ | 9–10 — 40 ₪
-                    <em>(בכפוף לאישור סופי)</em>.
-                </div>
-
-                <div class="welcome-highlight">
-                    🔒 <strong>פרטיות וסודיות:</strong> ההשתתפות אנונימית לחלוטין. לא נאסף מידע מזהה אישי.
-                    הנתונים ישמשו למחקר אקדמי בלבד ויפורסמו בצורה מצטברת בלבד.<br><br>
-                    ✋ <strong>הסכמה מדעת:</strong> לחיצה על "המשך" מהווה אישור לקריאת תנאים אלה
-                    והסכמה מרצון להשתתפות בניסוי. ניתן לעצור בכל עת — אולם עצירה לפני השלמת
-                    המשימה לא תזכה בנקודת הבונוס.
-                </div>
-
-                <hr class="welcome-divider">
-            </div>
+        <div class="welcome-section-title">מהו הניסוי?</div>
+        <div class="welcome-text">
+            ניסוי זה בוחן כיצד אופן הצגת מידע בדשבורדים עסקיים משפיע על איכות קבלת ההחלטות
+            ועל רמת המעורבות של המשתמש. תוצגו בפניכם ויזואליזציות נתונים עסקיים ותתבקשו
+            לנתח אותם ולענות על שאלות.
         </div>
-    """, unsafe_allow_html=True)
+
+        <div class="welcome-section-title">מה עלי לעשות?</div>
+        <div class="welcome-text">
+            יש לעיין בדשבורד האינטראקטיבי ולענות על <strong>10 שאלות</strong> המבוססות על הנתונים המוצגים.
+            לאחר שליחת תשובה לא ניתן לחזור אליה. לא יינתן משוב בזמן אמת לגבי נכונות התשובה.
+        </div>
+
+        <div class="welcome-section-title">משך הניסוי</div>
+        <div class="welcome-text">
+            הניסוי צפוי להימשך כ-<strong>15 דקות</strong>. אין הגבלת זמן לכל שאלה בנפרד.
+        </div>
+
+        <div class="welcome-section-title">תמריצים</div>
+        <div class="welcome-text">
+            משתתפים יקבלו נקודת בונוס בקורס BI. בנוסף, פרס כספי יינתן על פי מספר התשובות הנכונות:
+            פחות מ-3 — ללא פרס | 4–6 — 15 ₪ | 7–8 — 25 ₪ | 9–10 — 40 ₪
+            <em>(בכפוף לאישור סופי)</em>.
+        </div>
+
+        <div class="welcome-highlight">
+            🔒 <strong>פרטיות וסודיות:</strong> ההשתתפות אנונימית לחלוטין. לא נאסף מידע מזהה אישי.
+            הנתונים ישמשו למחקר אקדמי בלבד ויפורסמו בצורה מצטברת בלבד.<br><br>
+            ✋ <strong>הסכמה מדעת:</strong> לחיצה על "המשך" מהווה אישור לקריאת תנאים אלה
+            והסכמה מרצון להשתתפות בניסוי. ניתן לעצור בכל עת — אולם עצירה לפני השלמת
+            המשימה לא תזכה בנקודת הבונוס.
+        </div>
+
+        <hr class="welcome-divider">
+    </div>
+</div>
+        """,
+        unsafe_allow_html=True
+    )
 
     col_l, col_btn, col_r = st.columns([2, 2, 2])
     with col_btn:
         if st.button("אני מסכים/ה — המשך ▶", use_container_width=True):
             st.session_state.screen = "register"
             st.rerun()
-
 
 # ==============================
 # SCREEN: REGISTER
