@@ -838,7 +838,7 @@ def show_chart4():
     if not st.session_state.chart4_drilled:
         fig = make_subplots(specs=[[{"secondary_y": True}]])
         fig.add_trace(
-            go.Scatter(
+            go.barr(
                 x=monthly_dress["Month"], y=monthly_dress["Profit Dress"],
                 mode="lines+markers", name="Profit",
                 line=dict(color="#f43f5e", width=3)
