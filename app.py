@@ -917,7 +917,7 @@ if st.session_state.screen == "welcome":
     st.markdown(
 """<div style="max-width:820px;margin:2rem auto;">
 <div class="welcome-card">
-<div class="welcome-title">📊 ניסוי ניתוח נתונים</div>
+<div class="welcome-title">ברוך הבא</div>
 <div class="welcome-subtitle">פרויקט גמר — המחלקה להנדסת תעשייה וניהול, אוניברסיטת בן-גוריון תשפ"ו</div>
 <hr class="welcome-divider">
 
@@ -939,17 +939,11 @@ if st.session_state.screen == "welcome":
 הניסוי צפוי להימשך כ-<strong>15 דקות</strong>. אין הגבלת זמן לכל שאלה בנפרד.
 </div>
 
-<div class="welcome-section-title">תמריצים</div>
-<div class="welcome-text">
-משתתפים יקבלו נקודת בונוס בקורס BI. בנוסף, פרס כספי יינתן על פי מספר התשובות הנכונות:
-פחות מ-3 — ללא פרס | 4–6 — 15 ₪ | 7–8 — 25 ₪ | 9–10 — 40 ₪
-<em>(בכפוף לאישור סופי)</em>.
-</div>
 
 <div class="welcome-highlight">
 🔒 <strong>פרטיות וסודיות:</strong> ההשתתפות אנונימית לחלוטין. לא נאסף מידע מזהה אישי.
 הנתונים ישמשו למחקר אקדמי בלבד ויפורסמו בצורה מצטברת בלבד.<br><br>
-✋ <strong>הסכמה מדעת:</strong> לחיצה על "המשך" מהווה אישור לקריאת תנאים אלה
+✋ <strong>הסכמה:</strong> לחיצה על "המשך" מהווה אישור לקריאת תנאים אלה
 והסכמה מרצון להשתתפות בניסוי. ניתן לעצור בכל עת — אולם עצירה לפני השלמת
 המשימה לא תזכה בנקודת הבונוס.
 </div>
