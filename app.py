@@ -1016,7 +1016,7 @@ elif st.session_state.screen == "welcome":
     col_l, col_btn, col_r = st.columns([2, 2, 2])
     with col_btn:
         if st.button("אני מסכים/ה — המשך ▶", use_container_width=True):
-            st.session_state.screen = "experiment" experiment
+            st.session_state.screen = "experiment" 
             st.rerun()
 
 
