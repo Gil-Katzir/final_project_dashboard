@@ -942,7 +942,7 @@ def show_or_empty(show_flag, func, is_storytelling=False):
 # ==============================
 # SCREEN: REGISTER
 # ==============================
-elif st.session_state.screen == "register":
+if st.session_state.screen == "register":
     st.markdown("""
         <div style="max-width:520px;margin:3rem auto 1rem auto;">
             <div class="reg-card">
@@ -972,7 +972,7 @@ elif st.session_state.screen == "register":
 # ==============================
 # SCREEN: WELCOME
 # ==============================
-if st.session_state.screen == "welcome":
+elif st.session_state.screen == "welcome":
     st.markdown(
 """<div style="max-width:820px;margin:2rem auto;">
 <div class="welcome-card">
