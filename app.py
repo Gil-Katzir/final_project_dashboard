@@ -27,7 +27,7 @@ supabase: Client = create_client(
 # -----------------------------
 # Helpers / constants
 # -----------------------------
-TEST_PARTICIPANT_ID = "999"
+TEST_PARTICIPANT_ID = "9999"
 
 
 def is_test_mode() -> bool:
@@ -40,10 +40,8 @@ def is_test_mode() -> bool:
 st.markdown(
     """
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
-    html, body, [class*="css"] {
-        font-family: 'Inter', 'Segoe UI', sans-serif;
+    html, body, [class*="css"], input, textarea, select, button, label, p, div, span {
+        font-family: Arial, 'Arial', sans-serif !important;
     }
 
     .stApp {
@@ -54,8 +52,8 @@ st.markdown(
     }
 
     .block-container {
-        max-width: 1420px;
-        padding: 2rem 3rem 3rem 3rem;
+        max-width: 1360px;
+        padding: 1.2rem 2.2rem 2rem 2.2rem;
     }
 
     .big-title {
@@ -92,7 +90,7 @@ st.markdown(
 
     .hero-card {
         padding: 42px 48px;
-        max-width: 900px;
+        max-width: 640px;
         margin: 1rem auto 0 auto;
         direction: rtl;
         text-align: right;
@@ -101,7 +99,7 @@ st.markdown(
     .hero-title {
         font-size: 2.25rem;
         font-weight: 800;
-        text-align: center;
+        text-align: right;
         margin-bottom: 0.35rem;
         color: #0f172a;
     }
@@ -109,8 +107,8 @@ st.markdown(
     .hero-subtitle {
         font-size: 0.98rem;
         color: #64748b;
-        text-align: center;
-        margin-bottom: 1.8rem;
+        text-align: right;
+        margin-bottom: 1.2rem;
     }
 
     .section-chip {
@@ -155,7 +153,7 @@ st.markdown(
     }
 
     .form-card {
-        max-width: 620px;
+        max-width: 560px;
         margin: 2rem auto;
         padding: 34px 36px;
         direction: rtl;
@@ -240,12 +238,14 @@ st.markdown(
     }
 
     .chart-title {
-        font-size: 1.28rem;
-        font-weight: 800;
+        font-size: 1.42rem;
+        font-weight: 700;
         color: #0f172a;
-        margin-bottom: 0.95rem;
+        margin-bottom: 0.8rem;
         direction: rtl;
         text-align: right;
+        font-family: Arial, sans-serif !important;
+        letter-spacing: 0;
     }
 
     .story-box {
@@ -264,6 +264,8 @@ st.markdown(
 
     .new-chart-badge {
         display: inline-flex;
+        justify-content: flex-end;
+        text-align: right;
         align-items: center;
         gap: 8px;
         background: linear-gradient(135deg, #0ea5e9, #2563eb);
@@ -275,6 +277,7 @@ st.markdown(
         margin-bottom: 1rem;
         box-shadow: 0 12px 24px -14px rgba(37,99,235,0.95);
         direction: rtl;
+        text-align: right;
     }
 
     .dashboard-note {
@@ -287,6 +290,7 @@ st.markdown(
         margin-top: 1rem;
         display: inline-block;
         direction: rtl;
+        text-align: right;
         line-height: 1.7;
     }
 
@@ -325,7 +329,7 @@ st.markdown(
 
     .thankyou-card,
     .summary-card {
-        max-width: 900px;
+        max-width: 640px;
         margin: 2rem auto;
         padding: 38px 42px;
         direction: rtl;
@@ -428,6 +432,46 @@ st.markdown(
         text-align: center;
         margin-top: 0.8rem;
     }
+
+    div[data-testid="stTextInput"] label,
+    div[data-testid="stSelectbox"] label,
+    div[data-testid="stNumberInput"] label {
+        direction: rtl !important;
+        text-align: right !important;
+        width: 100%;
+        justify-content: flex-end;
+        font-weight: 700;
+        color: #334155;
+    }
+
+    div[data-testid="stTextInput"] input {
+        text-align: right;
+    }
+
+    div[data-testid="stSelectbox"] {
+        direction: rtl;
+        text-align: right;
+    }
+
+    div[data-testid="stSelectbox"] [data-baseweb="select"] * {
+        text-align: right !important;
+    }
+
+    .narrow-button {
+        max-width: 260px;
+        margin: 0 auto;
+    }
+
+    .narrow-button-wide {
+        max-width: 320px;
+        margin: 0 auto;
+    }
+
+    .compact-center {
+        max-width: 560px;
+        margin: 0 auto;
+    }
+
 </style>
 """,
     unsafe_allow_html=True
@@ -799,28 +843,29 @@ def category_monthly_totals(category_name):
 
 
 
-def apply_common_layout(fig, title_text):
+def apply_common_layout(fig, title_text=""):
     fig.update_layout(
-        title=dict(text=title_text, font=dict(size=20, color="#334155")),
+        title=dict(text=title_text or "", font=dict(size=1, color="#334155", family="Arial")),
         template="plotly_white",
         hovermode="x unified",
-        margin=dict(l=12, r=12, t=62, b=12),
+        margin=dict(l=12, r=12, t=18, b=12),
         legend=dict(
             orientation="h",
             yanchor="bottom",
             y=1.02,
             xanchor="right",
             x=1,
-            bgcolor="rgba(255,255,255,0.7)"
+            bgcolor="rgba(255,255,255,0.7)",
+            font=dict(family="Arial", size=12)
         ),
-        font=dict(family="Inter, sans-serif", size=13, color="#334155"),
+        font=dict(family="Arial, sans-serif", size=13, color="#334155"),
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
     )
     fig.update_xaxes(
         showgrid=False,
         showline=False,
-        tickfont=dict(size=12, color="#475569"),
+        tickfont=dict(size=12, color="#475569", family="Arial"),
         title=None,
         zeroline=False
     )
@@ -828,9 +873,27 @@ def apply_common_layout(fig, title_text):
         showgrid=True,
         gridcolor='rgba(148,163,184,0.16)',
         gridwidth=1,
-        tickfont=dict(size=12, color="#475569"),
-        zeroline=False
+        tickfont=dict(size=12, color="#475569", family="Arial"),
+        zeroline=False,
+        rangemode="normal"
     )
+    return fig
+
+def set_padded_yaxis(fig, values, secondary_y=False, is_percent=False):
+    vals = pd.Series(values).dropna()
+    if vals.empty:
+        return fig
+    vmin = float(vals.min())
+    vmax = float(vals.max())
+    if vmin == vmax:
+        pad = abs(vmax) * 0.08 if vmax != 0 else 1
+    else:
+        pad = (vmax - vmin) * 0.18
+    lower = vmin - pad
+    upper = vmax + pad
+    if is_percent:
+        lower = max(0, lower)
+    fig.update_yaxes(range=[lower, upper], secondary_y=secondary_y)
     return fig
 
 
@@ -866,24 +929,24 @@ def show_chart1():
                 name="Revenue",
                 line=dict(color="#2563eb", width=4, shape="spline", smoothing=0.7),
                 marker=dict(size=9, color="#ffffff", line=dict(color="#2563eb", width=3)),
-                fill="tozeroy",
-                fillcolor="rgba(37,99,235,0.10)",
+                fill="none",
                 hovertemplate="חודש: %{x}<br>הכנסות: $%{y:,.0f}<extra></extra>"
             )
         )
-        fig = apply_common_layout(fig, "Total Revenue by Month")
+        fig = apply_common_layout(fig)
         fig.update_yaxes(tickprefix="$", separatethousands=True, title_text="Revenue")
+        fig = set_padded_yaxis(fig, monthly_total["Revenue Total"])
         st.plotly_chart(fig, use_container_width=True)
 
-        c1, c2 = st.columns([2.2, 1])
-        with c1:
+        c1, c2 = st.columns([1, 2.2])
+        with c2:
             st.selectbox(
                 "בחר/י חודש לפירוט:", months_order,
                 key="chart1_month_select",
                 on_change=track_filter_change,
                 args=("chart1_month_select", "chart1_filter_month_change")
             )
-        with c2:
+        with c1:
             st.write("")
             if st.button("Drill Down 🔍", key="chart1_drill_btn", use_container_width=True):
                 st.session_state.chart1_month = st.session_state.chart1_month_select
@@ -902,8 +965,9 @@ def show_chart1():
                 hovertemplate="יום: %{x}<br>הכנסות: $%{y:,.0f}<extra></extra>"
             )
         )
-        fig = apply_common_layout(fig, f"Daily Revenue — {st.session_state.chart1_month}")
+        fig = apply_common_layout(fig)
         fig.update_yaxes(tickprefix="$", separatethousands=True, title_text="Revenue")
+        fig = set_padded_yaxis(fig, drill_df["Revenue"])
         st.plotly_chart(fig, use_container_width=True)
         if st.button("⬅️ חזרה", key="chart1_back_btn", use_container_width=True):
             st.session_state.chart1_drilled = False
@@ -925,24 +989,24 @@ def show_chart2():
                 name="Profit",
                 line=dict(color="#10b981", width=4, shape="spline", smoothing=0.7),
                 marker=dict(size=9, color="#ffffff", line=dict(color="#10b981", width=3)),
-                fill="tozeroy",
-                fillcolor="rgba(16,185,129,0.10)",
+                fill="none",
                 hovertemplate="חודש: %{x}<br>רווח: $%{y:,.0f}<extra></extra>"
             )
         )
-        fig = apply_common_layout(fig, "Total Profit by Month")
+        fig = apply_common_layout(fig)
         fig.update_yaxes(tickprefix="$", separatethousands=True, title_text="Profit")
+        fig = set_padded_yaxis(fig, monthly_total["Profit Total"])
         st.plotly_chart(fig, use_container_width=True)
 
-        c1, c2 = st.columns([2.2, 1])
-        with c1:
+        c1, c2 = st.columns([1, 2.2])
+        with c2:
             st.selectbox(
                 "בחר/י חודש לפירוט:", months_order,
                 key="chart2_month_select",
                 on_change=track_filter_change,
                 args=("chart2_month_select", "chart2_filter_month_change")
             )
-        with c2:
+        with c1:
             st.write("")
             if st.button("Drill Down 🔍", key="chart2_drill_btn", use_container_width=True):
                 st.session_state.chart2_month = st.session_state.chart2_month_select
@@ -961,8 +1025,9 @@ def show_chart2():
                 hovertemplate="יום: %{x}<br>רווח: $%{y:,.0f}<extra></extra>"
             )
         )
-        fig = apply_common_layout(fig, f"Daily Profit — {st.session_state.chart2_month}")
+        fig = apply_common_layout(fig)
         fig.update_yaxes(tickprefix="$", separatethousands=True, title_text="Profit")
+        fig = set_padded_yaxis(fig, drill_df["Profit"])
         st.plotly_chart(fig, use_container_width=True)
         if st.button("⬅️ חזרה", key="chart2_back_btn", use_container_width=True):
             st.session_state.chart2_drilled = False
@@ -984,20 +1049,21 @@ def show_chart3():
             color_discrete_map={"T-shirt": "#2563eb", "Dress": "#ec4899", "Jeans": "#8b5cf6"}
         )
         fig.update_traces(line=dict(width=4, shape="spline"), marker=dict(size=8))
-        fig = apply_common_layout(fig, "Revenue by Category and Month")
+        fig = apply_common_layout(fig)
         fig.update_yaxes(tickprefix="$", separatethousands=True, title_text="Revenue")
+        fig = set_padded_yaxis(fig, monthly_category["Revenue"])
         fig.update_traces(hovertemplate="חודש: %{x}<br>הכנסות: $%{y:,.0f}<extra></extra>")
         st.plotly_chart(fig, use_container_width=True)
 
-        c1, c2 = st.columns([2.2, 1])
-        with c1:
+        c1, c2 = st.columns([1, 2.2])
+        with c2:
             st.selectbox(
                 "קטגוריה:", ["T-shirt", "Dress", "Jeans"],
                 key="chart3_category_select",
                 on_change=track_filter_change,
                 args=("chart3_category_select", "chart3_filter_category_change")
             )
-        with c2:
+        with c1:
             st.write("")
             if st.button("הכנסות מול רווח 🔍", key="chart3_drill_btn", use_container_width=True):
                 st.session_state.chart3_category = st.session_state.chart3_category_select
@@ -1028,8 +1094,9 @@ def show_chart3():
             )
         )
         fig.update_layout(barmode="group")
-        fig = apply_common_layout(fig, f"{st.session_state.chart3_category} — Monthly Revenue vs Profit")
+        fig = apply_common_layout(fig)
         fig.update_yaxes(tickprefix="$", separatethousands=True, title_text="Amount")
+        fig = set_padded_yaxis(fig, pd.concat([drill_df["Revenue"], drill_df["Profit"]]))
         st.plotly_chart(fig, use_container_width=True)
 
         if st.button("⬅️ חזרה", key="chart3_back_btn", use_container_width=True):
@@ -1069,18 +1136,20 @@ def show_chart4():
         )
         fig.update_yaxes(title_text="Profit", tickprefix="$", separatethousands=True, secondary_y=False)
         fig.update_yaxes(title_text="Discount (%)", ticksuffix="%", secondary_y=True)
-        fig = apply_common_layout(fig, "Dress: Discount vs Profit")
+        fig = apply_common_layout(fig)
+        fig = set_padded_yaxis(fig, monthly_dress["Profit Dress"], secondary_y=False)
+        fig = set_padded_yaxis(fig, monthly_dress["Discount Dress"], secondary_y=True, is_percent=True)
         st.plotly_chart(fig, use_container_width=True)
 
-        c1, c2 = st.columns([2.2, 1])
-        with c1:
+        c1, c2 = st.columns([1, 2.2])
+        with c2:
             st.selectbox(
                 "בחר/י חודש לפירוט:", months_order,
                 key="chart4_month_select",
                 on_change=track_filter_change,
                 args=("chart4_month_select", "chart4_filter_month_change")
             )
-        with c2:
+        with c1:
             st.write("")
             if st.button("Drill Down 🔍", key="chart4_drill_btn", use_container_width=True):
                 st.session_state.chart4_month = st.session_state.chart4_month_select
@@ -1114,7 +1183,9 @@ def show_chart4():
         )
         fig.update_yaxes(title_text="Profit", tickprefix="$", separatethousands=True, secondary_y=False)
         fig.update_yaxes(title_text="Discount (%)", ticksuffix="%", secondary_y=True)
-        fig = apply_common_layout(fig, f"Dress: Daily Stats ({st.session_state.chart4_month})")
+        fig = apply_common_layout(fig)
+        fig = set_padded_yaxis(fig, drill_df["Profit"], secondary_y=False)
+        fig = set_padded_yaxis(fig, drill_df["Discount"], secondary_y=True, is_percent=True)
         st.plotly_chart(fig, use_container_width=True)
 
         if st.button("⬅️ חזרה", key="chart4_back_btn", use_container_width=True):
@@ -1140,12 +1211,10 @@ if st.session_state.screen == "participant":
     st.markdown(
         """
         <div class="hero-card">
-            <div class="section-chip">שלב 1 מתוך 3 · זיהוי משתתף וקבוצת ניסוי</div>
             <div class="hero-title">תחילת הניסוי</div>
-            <div class="hero-subtitle">פרויקט גמר — המחלקה להנדסת תעשייה וניהול, אוניברסיטת בן-גוריון</div>
-            <div class="hero-text" style="text-align:center;">
-                בשלב זה יש להזין מספר משתתף ולבחור את קבוצת הניסוי. מספר משתתף <strong>999</strong>
-                מפעיל מצב בדיקה שבו יוצגו באנר המעקב ומסך הסיכום המלא בסיום.
+            <div class="hero-subtitle">יש להזין מספר משתתף ולבחור את קבוצת הניסוי.</div>
+            <div class="hero-text">
+                מספר משתתף <strong>9999</strong> מפעיל מצב בדיקה שבו יוצגו באנר המעקב ומסך הסיכום המלא בסיום.
             </div>
         </div>
         """,
@@ -1156,9 +1225,12 @@ if st.session_state.screen == "participant":
     st.markdown('<div class="form-title">פרטי פתיחה</div>', unsafe_allow_html=True)
     st.markdown('<div class="form-subtitle">הזיני את פרטי המשתתף לפני המעבר לשאלון הדמוגרפי.</div>', unsafe_allow_html=True)
 
-    participant_id_input = st.text_input("מספר משתתף", placeholder="למשל 105 או 999")
-    experiment_group_input = st.selectbox("קבוצת ניסוי", ["control", "storytelling"])
+    side_l, center, side_r = st.columns([1.2, 2, 1.2])
+    with center:
+        participant_id_input = st.text_input("מספר משתתף", placeholder="למשל 105 או 9999")
+        experiment_group_input = st.selectbox("קבוצת ניסוי", ["control", "storytelling"])
 
+    st.markdown('<div class="narrow-button-wide">', unsafe_allow_html=True)
     if st.button("המשך לשאלון הדמוגרפי", use_container_width=True):
         if participant_id_input.strip() == "":
             st.warning("יש להזין מספר משתתף.")
@@ -1169,6 +1241,7 @@ if st.session_state.screen == "participant":
             st.session_state.screen = "demographics"
             st.rerun()
     st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
 # ==============================
 # SCREEN: DEMOGRAPHICS
@@ -1177,47 +1250,44 @@ elif st.session_state.screen == "demographics":
     st.markdown(
         """
         <div class="form-card">
-            <div class="section-chip">שלב 2 מתוך 3 · שאלון דמוגרפי בסיסי</div>
             <div class="form-title">שאלון דמוגרפי קצר</div>
-            <div class="form-subtitle">אפשר לשנות את השאלות בהמשך, וכרגע הן יישמרו בזיכרון הסשן וגם יישלחו למסד אם קיימת טבלת demographics.</div>
+            <div class="form-subtitle">לפני תחילת הניסוי נבקש ממך לענות על כמה שאלות כלליות וקצרות. המענה אנונימי ומשמש לצורכי המחקר בלבד.</div>
         </div>
         """,
         unsafe_allow_html=True
     )
 
-    gender = st.selectbox(
-        "מגדר",
-        ["", "נקבה", "זכר", "אחר", "מעדיפ/ה לא לציין"],
-        index=["", "נקבה", "זכר", "אחר", "מעדיפ/ה לא לציין"].index(st.session_state.demographics.get("gender", ""))
-            if st.session_state.demographics.get("gender", "") in ["", "נקבה", "זכר", "אחר", "מעדיפ/ה לא לציין"] else 0
-    )
-    age_range = st.selectbox(
-        "טווח גיל",
-        ["", "18-24", "25-34", "35-44", "45+", "מעדיפ/ה לא לציין"],
-        index=["", "18-24", "25-34", "35-44", "45+", "מעדיפ/ה לא לציין"].index(st.session_state.demographics.get("age_range", ""))
-            if st.session_state.demographics.get("age_range", "") in ["", "18-24", "25-34", "35-44", "45+", "מעדיפ/ה לא לציין"] else 0
-    )
-    experience_level = st.selectbox(
-        "עד כמה יש לך ניסיון קודם בקריאת דשבורדים או גרפים עסקיים?",
-        ["", "ללא ניסיון", "מעט", "בינוני", "גבוה"],
-        index=["", "ללא ניסיון", "מעט", "בינוני", "גבוה"].index(st.session_state.demographics.get("experience_level", ""))
-            if st.session_state.demographics.get("experience_level", "") in ["", "ללא ניסיון", "מעט", "בינוני", "גבוה"] else 0
-    )
+    side_l, center, side_r = st.columns([1.2, 2, 1.2])
+    with center:
+        gender = st.selectbox(
+            "מגדר",
+            ["", "נקבה", "זכר", "אחר", "מעדיפ/ה לא לציין"],
+            index=["", "נקבה", "זכר", "אחר", "מעדיפ/ה לא לציין"].index(st.session_state.demographics.get("gender", ""))
+                if st.session_state.demographics.get("gender", "") in ["", "נקבה", "זכר", "אחר", "מעדיפ/ה לא לציין"] else 0
+        )
+        age_range = st.selectbox(
+            "טווח גיל",
+            ["", "18-24", "25-34", "35-44", "45+", "מעדיפ/ה לא לציין"],
+            index=["", "18-24", "25-34", "35-44", "45+", "מעדיפ/ה לא לציין"].index(st.session_state.demographics.get("age_range", ""))
+                if st.session_state.demographics.get("age_range", "") in ["", "18-24", "25-34", "35-44", "45+", "מעדיפ/ה לא לציין"] else 0
+        )
+        experience_level = st.selectbox(
+            "עד כמה יש לך ניסיון קודם בקריאת דשבורדים או גרפים עסקיים?",
+            ["", "ללא ניסיון", "מעט", "בינוני", "גבוה"],
+            index=["", "ללא ניסיון", "מעט", "בינוני", "גבוה"].index(st.session_state.demographics.get("experience_level", ""))
+                if st.session_state.demographics.get("experience_level", "") in ["", "ללא ניסיון", "מעט", "בינוני", "גבוה"] else 0
+        )
 
-    c1, c2 = st.columns(2)
-    with c1:
-        if st.button("חזרה", use_container_width=True):
-            st.session_state.screen = "participant"
-            st.rerun()
-    with c2:
-        if st.button("המשך לטופס ההסכמה", use_container_width=True):
-            st.session_state.demographics = {
-                "gender": gender,
-                "age_range": age_range,
-                "experience_level": experience_level,
-            }
-            st.session_state.screen = "consent"
-            st.rerun()
+    st.markdown('<div class="narrow-button-wide">', unsafe_allow_html=True)
+    if st.button("המשך לטופס ההסכמה", use_container_width=True):
+        st.session_state.demographics = {
+            "gender": gender,
+            "age_range": age_range,
+            "experience_level": experience_level,
+        }
+        st.session_state.screen = "consent"
+        st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
 
 # ==============================
 # SCREEN: CONSENT + WELCOME
@@ -1226,7 +1296,6 @@ elif st.session_state.screen == "consent":
     st.markdown(
         """
 <div class="hero-card">
-<div class="section-chip">שלב 3 מתוך 3 · טופס הסכמה והנחיות</div>
 <div class="hero-title">ברוך/ה הבא/ה לניסוי</div>
 <div class="hero-subtitle">לפני תחילת המשימה, חשוב לקרוא את ההנחיות בקצרה</div>
 
@@ -1260,34 +1329,31 @@ elif st.session_state.screen == "consent":
         unsafe_allow_html=True
     )
 
-    left, middle, right = st.columns([1.2, 1.8, 1.2])
-    with middle:
-        if st.button("אני מסכים/ה — התחל ניסוי", use_container_width=True):
-            st.session_state.consent_given = True
-            st.session_state.experiment_started = True
-            st.session_state.session_start_time = time.time()
-            st.session_state.session_end_time = None
-            st.session_state.question_start_time = time.time()
-            st.session_state.current_question = 0
-            st.session_state.answers = []
-            st.session_state.correct_count = 0
-            st.session_state.dashboard_interaction_clicks = 0
-            st.session_state.interaction_log = []
-            st.session_state.db_saved = False
-            st.session_state.chart1_drilled = False
-            st.session_state.chart2_drilled = False
-            st.session_state.chart3_drilled = False
-            st.session_state.chart4_drilled = False
-            st.session_state.screen = "experiment"
-            st.rerun()
+    st.markdown('<div class="narrow-button">', unsafe_allow_html=True)
+    if st.button("אני מסכים/ה — התחל ניסוי", use_container_width=True):
+        st.session_state.consent_given = True
+        st.session_state.experiment_started = True
+        st.session_state.session_start_time = time.time()
+        st.session_state.session_end_time = None
+        st.session_state.question_start_time = time.time()
+        st.session_state.current_question = 0
+        st.session_state.answers = []
+        st.session_state.correct_count = 0
+        st.session_state.dashboard_interaction_clicks = 0
+        st.session_state.interaction_log = []
+        st.session_state.db_saved = False
+        st.session_state.chart1_drilled = False
+        st.session_state.chart2_drilled = False
+        st.session_state.chart3_drilled = False
+        st.session_state.chart4_drilled = False
+        st.session_state.screen = "experiment"
+        st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
 
 # ==============================
 # SCREEN: EXPERIMENT
 # ==============================
 elif st.session_state.screen == "experiment":
-    st.markdown('<div class="big-title">Business Analytics Dashboard</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-title">Examine the data, explore the charts, and answer the questions step by step.</div>', unsafe_allow_html=True)
-
     if is_test_mode():
         a, b, c, d = st.columns(4)
         with a:
@@ -1330,8 +1396,6 @@ elif st.session_state.screen == "experiment":
         show_fig3 = cq >= 4
         show_fig4 = cq >= 7
 
-    st.markdown('<div class="section-title">דשבורד אינטראקטיבי</div>', unsafe_allow_html=True)
-
     top_left, top_right = st.columns(2)
     bottom_left, bottom_right = st.columns(2)
 
@@ -1348,8 +1412,6 @@ elif st.session_state.screen == "experiment":
         '<div class="dashboard-note">💡 אפשר לחקור את הגרפים דרך בחירה בשדות הסינון ולחיצה על 🔍. התשובה ננעלת רק אחרי לחיצה על "שלח/י תשובה".</div>',
         unsafe_allow_html=True
     )
-
-    st.markdown('<div style="height:18px"></div>', unsafe_allow_html=True)
 
     if cq < len(questions):
         q = questions[cq]
@@ -1422,7 +1484,7 @@ elif st.session_state.screen == "summary":
         <div class="summary-card">
             <div class="summary-emoji">📋</div>
             <div class="summary-title">סיכום מצב בדיקה</div>
-            <div class="summary-sub">המסך הזה מוצג רק עבור משתתף 999, כדי שתוכלי לבדוק מדדים, תשובות ולוג אינטראקציות.</div>
+            <div class="summary-sub">המסך הזה מוצג רק עבור משתתף 9999, כדי שתוכלי לבדוק מדדים, תשובות ולוג אינטראקציות.</div>
         </div>
         """,
         unsafe_allow_html=True
@@ -1495,7 +1557,7 @@ elif st.session_state.screen == "thankyou":
             <div class="thankyou-title">תודה רבה על השתתפותך</div>
             <div class="thankyou-sub">
                 השלמת את הניסוי בהצלחה.<br>
-                תשובותיך נשמרו לצורכי המחקר האקדמי, והשהייה הכוללת בדשבורד נעצרה מיד עם סיום שאלה 10.<br><br>
+                תשובותיך נשמרו לצורכי המחקר האקדמי.<br><br>
                 אפשר לסגור את הדפדפן או להתחיל מחדש.
             </div>
         </div>
