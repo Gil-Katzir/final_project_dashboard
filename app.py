@@ -64,15 +64,7 @@ st.markdown("""
         text-align: right;
     }
 
-    div[data-testid="stTextInput"] label {
-        direction: rtl;
-        text-align: right;
-    }
 
-    div[data-testid="stSelectbox"] label {
-        direction: rtl;
-        text-align: right;
-    }
 
     /* ---- Welcome screen ---- */
     .welcome-card {
