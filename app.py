@@ -64,8 +64,6 @@ st.markdown("""
         text-align: right;
     }
 
-
-
     /* ---- Welcome screen ---- */
     .welcome-card {
         background: #ffffff;
@@ -487,7 +485,7 @@ NEW_CHART_AT = {2: "גרף 2 נוסף", 4: "גרף 3 נוסף", 7: "גרף 4 נ�
 # Session state
 # -----------------------------
 defaults = {
-    "screen": "register",   #  register | welcome | experiment | summary | thankyou
+    "screen": "welcome",   # welcome | register | experiment | summary | thankyou
     "experiment_started": False,
     "participant_id": "",
     "experiment_group": "",
@@ -929,46 +927,14 @@ def show_or_empty(show_flag, func, is_storytelling=False):
         st.markdown('<div class="chart-card-empty"></div>', unsafe_allow_html=True)
 
 
-
-
-# ==============================
-# SCREEN: REGISTER
-# ==============================
-if st.session_state.screen == "register":
-    st.markdown("""
-        <div style="max-width:520px;margin:3rem auto 1rem auto;">
-            <div class="reg-card">
-                <div class="reg-title">פרטי משתתף</div>
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
-
-    col_l, col_form, col_r = st.columns([1, 2, 1])
-    with col_form:
-        participant_id_input = st.text_input("מספר משתתף", placeholder="הזינו את מספר המשתתף שלכם")
-        experiment_group_input = st.selectbox("קבוצת ניסוי", ["control", "storytelling"])
-        st.write("")
-        if st.button("התחל ניסוי 🚀", use_container_width=True):
-            if participant_id_input.strip() == "":
-                st.warning("יש להזין מספר משתתף")
-            else:
-                st.session_state.participant_id = participant_id_input.strip()
-                st.session_state.experiment_group = experiment_group_input
-                st.session_state.experiment_started = True
-                st.session_state.session_start_time = time.time()
-                st.session_state.question_start_time = time.time()
-                st.session_state.db_saved = False
-                st.session_state.screen = "welcome"
-                st.rerun()
-
 # ==============================
 # SCREEN: WELCOME
 # ==============================
-elif st.session_state.screen == "welcome":
+if st.session_state.screen == "welcome":
     st.markdown(
 """<div style="max-width:820px;margin:2rem auto;">
 <div class="welcome-card">
-<div class="welcome-title">Welcome! /div>
+<div class="welcome-title">ברוך הבא</div>
 <div class="welcome-subtitle">פרויקט גמר — המחלקה להנדסת תעשייה וניהול, אוניברסיטת בן-גוריון תשפ"ו</div>
 <hr class="welcome-divider">
 
@@ -1008,11 +974,40 @@ elif st.session_state.screen == "welcome":
     col_l, col_btn, col_r = st.columns([2, 2, 2])
     with col_btn:
         if st.button("אני מסכים/ה — המשך ▶", use_container_width=True):
-            st.session_state.screen = "experiment" 
+            st.session_state.screen = "register"
             st.rerun()
 
+# ==============================
+# SCREEN: REGISTER
+# ==============================
+elif st.session_state.screen == "register":
+    st.markdown("""
+        <div style="max-width:520px;margin:3rem auto 1rem auto;">
+            <div class="reg-card">
+                <div class="reg-title">פרטי משתתף</div>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
 
-            
+    col_l, col_form, col_r = st.columns([1, 2, 1])
+    with col_form:
+        participant_id_input = st.text_input("מספר משתתף", placeholder="הזינו את מספר המשתתף שלכם")
+        experiment_group_input = st.selectbox("קבוצת ניסוי", ["control", "storytelling"])
+        st.write("")
+        if st.button("התחל ניסוי 🚀", use_container_width=True):
+            if participant_id_input.strip() == "":
+                st.warning("יש להזין מספר משתתף")
+            else:
+                st.session_state.participant_id = participant_id_input.strip()
+                st.session_state.experiment_group = experiment_group_input
+                st.session_state.experiment_started = True
+                st.session_state.session_start_time = time.time()
+                st.session_state.question_start_time = time.time()
+                st.session_state.db_saved = False
+                st.session_state.screen = "experiment"
+                st.rerun()
+
+
 # ==============================
 # SCREEN: EXPERIMENT
 # ==============================
