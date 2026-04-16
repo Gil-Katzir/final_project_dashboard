@@ -74,17 +74,6 @@ st.markdown("""
         text-align: right;
     }
 
-    div[data-testid="stTextInput"] input {
-        direction: rtl;
-        text-align: right;
-    }
-
-    /* selectbox עצמו */
-    div[data-testid="stSelectbox"] div {
-        direction: rtl;
-        text-align: right;
-    }
-
     /* ---- Welcome screen ---- */
     .welcome-card {
         background: #ffffff;
@@ -987,7 +976,7 @@ elif st.session_state.screen == "welcome":
     st.markdown(
 """<div style="max-width:820px;margin:2rem auto;">
 <div class="welcome-card">
-<div class="welcome-title">Welcome!/div>
+<div class="welcome-title">Welcome! /div>
 <div class="welcome-subtitle">פרויקט גמר — המחלקה להנדסת תעשייה וניהול, אוניברסיטת בן-גוריון תשפ"ו</div>
 <hr class="welcome-divider">
 
