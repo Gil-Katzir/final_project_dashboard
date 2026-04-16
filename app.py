@@ -64,6 +64,16 @@ st.markdown("""
         text-align: right;
     }
 
+    div[data-testid="stTextInput"] label {
+        direction: rtl;
+        text-align: right;
+    }
+
+    div[data-testid="stSelectbox"] label {
+        direction: rtl;
+        text-align: right;
+    }
+
     /* ---- Welcome screen ---- */
     .welcome-card {
         background: #ffffff;
@@ -927,6 +937,38 @@ def show_or_empty(show_flag, func, is_storytelling=False):
         st.markdown('<div class="chart-card-empty"></div>', unsafe_allow_html=True)
 
 
+
+
+# ==============================
+# SCREEN: REGISTER
+# ==============================
+elif st.session_state.screen == "register":
+    st.markdown("""
+        <div style="max-width:520px;margin:3rem auto 1rem auto;">
+            <div class="reg-card">
+                <div class="reg-title">פרטי משתתף</div>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
+    col_l, col_form, col_r = st.columns([1, 2, 1])
+    with col_form:
+        participant_id_input = st.text_input("מספר משתתף", placeholder="הזינו את מספר המשתתף שלכם")
+        experiment_group_input = st.selectbox("קבוצת ניסוי", ["control", "storytelling"])
+        st.write("")
+        if st.button("התחל ניסוי 🚀", use_container_width=True):
+            if participant_id_input.strip() == "":
+                st.warning("יש להזין מספר משתתף")
+            else:
+                st.session_state.participant_id = participant_id_input.strip()
+                st.session_state.experiment_group = experiment_group_input
+                st.session_state.experiment_started = True
+                st.session_state.session_start_time = time.time()
+                st.session_state.question_start_time = time.time()
+                st.session_state.db_saved = False
+                st.session_state.screen = "welcome"
+                st.rerun()
+
 # ==============================
 # SCREEN: WELCOME
 # ==============================
@@ -974,40 +1016,11 @@ if st.session_state.screen == "welcome":
     col_l, col_btn, col_r = st.columns([2, 2, 2])
     with col_btn:
         if st.button("אני מסכים/ה — המשך ▶", use_container_width=True):
-            st.session_state.screen = "register"
+            st.session_state.screen = "experiment" experiment
             st.rerun()
 
-# ==============================
-# SCREEN: REGISTER
-# ==============================
-elif st.session_state.screen == "register":
-    st.markdown("""
-        <div style="max-width:520px;margin:3rem auto 1rem auto;">
-            <div class="reg-card">
-                <div class="reg-title">פרטי משתתף</div>
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
 
-    col_l, col_form, col_r = st.columns([1, 2, 1])
-    with col_form:
-        participant_id_input = st.text_input("מספר משתתף", placeholder="הזינו את מספר המשתתף שלכם")
-        experiment_group_input = st.selectbox("קבוצת ניסוי", ["control", "storytelling"])
-        st.write("")
-        if st.button("התחל ניסוי 🚀", use_container_width=True):
-            if participant_id_input.strip() == "":
-                st.warning("יש להזין מספר משתתף")
-            else:
-                st.session_state.participant_id = participant_id_input.strip()
-                st.session_state.experiment_group = experiment_group_input
-                st.session_state.experiment_started = True
-                st.session_state.session_start_time = time.time()
-                st.session_state.question_start_time = time.time()
-                st.session_state.db_saved = False
-                st.session_state.screen = "experiment"
-                st.rerun()
-
-
+            
 # ==============================
 # SCREEN: EXPERIMENT
 # ==============================
