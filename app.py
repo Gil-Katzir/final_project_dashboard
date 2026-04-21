@@ -86,6 +86,7 @@ st.markdown("""
         -webkit-text-fill-color: transparent;
         margin-bottom: 0.3rem;
         text-align: center;
+        font-family: 'Varela Round', sans-serif;
     }
 
     .welcome-subtitle {
@@ -194,6 +195,7 @@ st.markdown("""
         border-right: 5px solid #3b82f6;
         direction: rtl;
         text-align: right;
+        font-family: 'Varela Round', sans-serif;
     }
 
     /* ---- Chart cards ---- */
@@ -975,7 +977,7 @@ elif st.session_state.screen == "welcome":
     st.markdown(
 """<div style="max-width:820px;margin:2rem auto;">
 <div class="welcome-card">
-<div class="welcome-title">ברוך הבא</div>
+<div class="welcome-title"ברוכים הבאים</div>
 <div class="welcome-subtitle">פרויקט גמר — המחלקה להנדסת תעשייה וניהול, אוניברסיטת בן-גוריון תשפ"ו</div>
 <hr class="welcome-divider">
 
@@ -1024,8 +1026,8 @@ elif st.session_state.screen == "welcome":
 # SCREEN: EXPERIMENT
 # ==============================
 elif st.session_state.screen == "experiment":
-    st.markdown('<div class="big-title">Business Analytics Dashboard</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-title">Decision support & performance analysis</div>', unsafe_allow_html=True)
+    st.markdown('<div class="big-title" style="direction:ltr; text-align:left;">Business Analytics Dashboard</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-title" style="direction:ltr; text-align:left;">Decision support & Performance analysis</div>', unsafe_allow_html=True)
 
     # metric bar - visible only for participant 999
     if is_admin_participant():
@@ -1068,7 +1070,7 @@ elif st.session_state.screen == "experiment":
         show_fig4 = cq >= 7
 
     # dashboard grid
-    st.markdown('<div class="section-title">המידע המוצג מתאר את התנהגות המכירות בחנות בגדים <--- </div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title"> ---> המידע המוצג מתאר את התנהגות המכירות בחנות בגדים  </div>', unsafe_allow_html=True)
 
     top_left, top_right = st.columns(2)
     bottom_left, bottom_right = st.columns(2)
