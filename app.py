@@ -123,6 +123,7 @@ st.markdown("""
         font-size: 0.93rem;
         margin: 1.3rem 0;
         line-height: 1.75;
+        font-family: 'Varela Round', sans-serif;
     }
 
     .welcome-divider {
@@ -308,6 +309,7 @@ st.markdown("""
         color: #1e293b;
         border: 1.5px solid #e2e8f0;
         transition: all 0.18s ease;
+        font-family: 'Varela Round', sans-serif;
     }
 
     div.stButton > button:hover {
