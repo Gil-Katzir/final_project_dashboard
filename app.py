@@ -1166,7 +1166,7 @@ elif st.session_state.screen == "experiment":
         )
 
         selected = st.radio(
-            q["options"],
+            label="",
             q["options"],
             key=f"question_{q['id']}",
             label_visibility="collapsed"
