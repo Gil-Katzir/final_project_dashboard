@@ -272,7 +272,7 @@ st.markdown("""
     /* ---- Inputs & Buttons ---- */
 
  /* ---- Modern radio answers ---- */
- 
+
     div[data-testid="stRadio"] {
         direction: rtl;
         text-align: right;
@@ -1164,7 +1164,6 @@ elif st.session_state.screen == "experiment":
         )
 
         selected = st.radio(
-            "",
             q["options"],
             key=f"question_{q['id']}",
             label_visibility="collapsed"
