@@ -332,6 +332,30 @@ st.markdown("""
         display: none !important;
     }
 
+
+        /* כל קומפוננטת הרדיו */
+    div[data-testid="stRadio"] {
+        direction: rtl;
+        text-align: right;
+    }
+
+    /* הקונטיינר הפנימי */
+    div[data-testid="stRadio"] > div {
+        align-items: flex-end !important;
+    }
+
+    /* קבוצת התשובות */
+    div[data-testid="stRadio"] [role="radiogroup"] {
+        direction: rtl;
+    }
+
+    /* כל תשובה */
+    div[data-testid="stRadio"] label {
+        text-align: right !important;
+        justify-content: flex-end !important;
+        flex-direction: row-reverse !important;
+    }
+
     /* כל סוגי הכפתורים ב-Streamlit */
     div.stButton > button,
     div[data-testid="stButton"] button,
