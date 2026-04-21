@@ -213,8 +213,8 @@ st.markdown("""
     }
 
     .chart-title {
-        font-size: 1.08rem;
-        font-weight: 700;
+        font-size: 1.5rem;
+        font-weight: 800;
         color: #1e293b;
         margin-bottom: 0.9rem;
         direction: rtl;
@@ -700,7 +700,7 @@ def panel_header(title: str, narrative: str):
 # Chart renderers
 # -----------------------------
 def show_chart1():
-    panel_header("גרף 1: מגמת הכנסות", chart_narratives["chart1"])
+    panel_header("מגמת הכנסות", chart_narratives["chart1"])
 
     if not st.session_state.chart1_drilled:
         fig = px.line(
@@ -737,7 +737,7 @@ def show_chart1():
 
 
 def show_chart2():
-    panel_header("גרף 2: מגמת רווח", chart_narratives["chart2"])
+    panel_header("מגמת רווח", chart_narratives["chart2"])
 
     if not st.session_state.chart2_drilled:
         fig = px.line(
@@ -774,7 +774,7 @@ def show_chart2():
 
 
 def show_chart3():
-    panel_header("גרף 3: הכנסות לפי קטגוריה", chart_narratives["chart3"])
+    panel_header("הכנסות לפי קטגוריה", chart_narratives["chart3"])
 
     if not st.session_state.chart3_drilled:
         fig = px.line(
@@ -837,7 +837,7 @@ def show_chart3():
 
 
 def show_chart4():
-    panel_header("גרף 4: הנחה ורווח ב-Dress", chart_narratives["chart4"])
+    panel_header("גרף המציג רווחים ואחוזי הנחה בקטגוריית שמלות", chart_narratives["chart4"])
 
     if not st.session_state.chart4_drilled:
         fig = make_subplots(specs=[[{"secondary_y": True}]])
