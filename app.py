@@ -869,13 +869,7 @@ def apply_common_layout(fig, title_text):
 
 def panel_header(title: str, narrative: str):
     st.markdown(f'<div class="chart-title">{title}</div>', unsafe_allow_html=True)
-
-    # מציג נרטיב רק אם יש באמת טקסט + רק בקבוצת storytelling
-    if (
-        st.session_state.experiment_group == "storytelling"
-        and narrative
-        and narrative.strip() != ""
-    ):
+    if st.session_state.experiment_group == "storytelling":
         st.markdown(f'<div class="story-box">{narrative}</div>', unsafe_allow_html=True)
 
 
@@ -1142,12 +1136,9 @@ def show_chart4():
 
 def show_or_empty(show_flag, func, is_storytelling=False):
     if show_flag:
-        st.markdown('<div class="chart-card">', unsafe_allow_html=True)
         func()
-        st.markdown('</div>', unsafe_allow_html=True)
     else:
-        # storytelling: completely blank; control: should not reach here (all shown)
-        st.markdown('<div class="chart-card-empty"></div>', unsafe_allow_html=True)
+        pass
 
 
 # ==============================
