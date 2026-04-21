@@ -245,6 +245,7 @@ st.markdown("""
         margin-bottom: 1.1rem;
         direction: rtl;
         text-align: right;
+        font-family: 'Varela Round', sans-serif;
     }
 
     /* ---- New chart badge ---- */
@@ -440,6 +441,32 @@ st.markdown("""
         font-size: 1rem;
         color: #64748b;
         line-height: 1.8;
+    }
+
+        /* selectbox טקסט כללי */
+    div[data-testid="stSelectbox"] {
+        direction: rtl;
+        text-align: right;
+        font-family: 'Varela Round', sans-serif;
+    }
+
+    /* הטקסט שנבחר */
+    div[data-testid="stSelectbox"] div {
+        text-align: right !important;
+        direction: rtl;
+        font-family: 'Varela Round', sans-serif !important;
+    }
+
+    /* dropdown options */
+    ul[role="listbox"] li {
+        text-align: right !important;
+        direction: rtl;
+        font-family: 'Varela Round', sans-serif !important;
+    }
+
+        /* תיבת הבחירה עצמה */
+    div[data-testid="stSelectbox"] > div {
+        border-radius: 12px;
     }
 
 
