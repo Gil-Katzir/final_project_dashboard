@@ -270,39 +270,61 @@ st.markdown("""
     }
 
     /* ---- Inputs & Buttons ---- */
+
+ /* ---- Modern radio answers ---- */
+ 
     div[data-testid="stRadio"] {
         direction: rtl;
         text-align: right;
     }
 
     div[data-testid="stRadio"] > div {
+        gap: 12px;
+    }
+
+    div[data-testid="stRadio"] [role="radiogroup"] {
         direction: rtl;
-        align-items: flex-end;
-        gap: 8px;
     }
 
     div[data-testid="stRadio"] label {
-        background: #f8fafc;
-        border: 1.5px solid #e2e8f0;
-        border-radius: 12px;
-        padding: 11px 18px !important;
-        transition: all 0.18s ease;
+        display: flex !important;
+        flex-direction: row-reverse !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
+        gap: 12px !important;
+
+        width: 100% !important;
+        min-height: 56px;
+        box-sizing: border-box;
+
+        background: #ffffff;
+        border: 1.5px solid #dbe4ee;
+        border-radius: 16px;
+        padding: 14px 18px !important;
+        margin: 0 !important;
+
+        transition: all 0.2s ease;
         cursor: pointer;
-        direction: rtl;
-        text-align: right;
-        justify-content: flex-end;
-        flex-direction: row-reverse;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
     }
 
     div[data-testid="stRadio"] label:hover {
         border-color: #3b82f6;
-        background: #eff6ff;
+        background: #f8fbff;
+        box-shadow: 0 6px 18px rgba(59, 130, 246, 0.10);
+        transform: translateY(-1px);
     }
 
-    div[data-testid="stRadio"] label span,
-    div[data-testid="stRadio"] p {
-        direction: rtl;
-        text-align: right;
+    div[data-testid="stRadio"] label p,
+    div[data-testid="stRadio"] label span {
+        direction: rtl !important;
+        text-align: right !important;
+        width: 100%;
+        margin: 0 !important;
+        font-family: 'Varela Round', sans-serif !important;
+        font-size: 0.98rem !important;
+        color: #1e293b !important;
+        line-height: 1.5 !important;
     }
 
     /* כל סוגי הכפתורים ב-Streamlit */
