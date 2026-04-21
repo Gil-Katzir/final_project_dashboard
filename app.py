@@ -366,6 +366,22 @@ st.markdown("""
         color: #64748b;
         line-height: 1.8;
     }
+
+        /* טקסט בתוך שדות קלט */
+    input {
+        font-family: 'Varela Round', sans-serif !important;
+    }
+
+    /* dropdown (selectbox) */
+    div[data-baseweb="select"] * {
+        font-family: 'Varela Round', sans-serif !important;
+    }
+
+    /* label (הטקסט "מספר משתתף") */
+    label {
+        font-family: 'Varela Round', sans-serif !important;
+    }
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -954,7 +970,7 @@ if st.session_state.screen == "register":
 
     col_l, col_form, col_r = st.columns([1, 2, 1])
     with col_form:
-        participant_id_input = st.text_input("מספר משתתף", placeholder="הזינו את מספר המשתתף שלכם")
+        participant_id_input = st.text_input("מספר משתתף", placeholder="הזינו את מספר המשתתף המוקצה ברשימה")
         experiment_group_input = st.selectbox("קבוצת ניסוי", ["control", "storytelling"])
         st.write("")
         if st.button("התחל ניסוי 🚀", use_container_width=True):
@@ -1070,7 +1086,7 @@ elif st.session_state.screen == "experiment":
         show_fig4 = cq >= 7
 
     # dashboard grid
-    st.markdown('<div class="section-title"> ---> המידע המוצג מתאר את התנהגות המכירות בחנות בגדים  </div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title">  המידע המוצג מתאר את התנהגות המכירות בחנות בגדים ---> </div>', unsafe_allow_html=True)
 
     top_left, top_right = st.columns(2)
     bottom_left, bottom_right = st.columns(2)
