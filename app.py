@@ -272,37 +272,36 @@ st.markdown("""
 
     /* ---- Inputs & Buttons ---- */
 
-/* ---- Modern radio answers ---- */
+ /* ---- Modern radio answers ---- */
+ 
     div[data-testid="stRadio"] {
         direction: rtl;
         text-align: right;
         width: 100%;
     }
 
-    /* מסתיר את ה-label הריק של הרדיו */
-    div[data-testid="stRadio"] > label {
-        display: none !important;
-    }
-
-    /* הקונטיינר של כל התשובות */
-    div[data-testid="stRadio"] [role="radiogroup"] {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        width: 100%;
+    div[data-testid="stRadio"] > div {
         gap: 12px;
+        align-items: flex-end !important;
+        width: 100%;
     }
 
-    /* כל תשובה */
+    div[data-testid="stRadio"] [role="radiogroup"] {
+        direction: rtl;
+        width: 100%;
+    }
+
     div[data-testid="stRadio"] label {
         display: flex !important;
         flex-direction: row-reverse !important;
-        align-items: center !important;
         justify-content: flex-start !important;
+        align-items: center !important;
         gap: 12px !important;
 
-        width: 320px;
-        max-width: 100%;
+        width: 100% !important;
+        text-align: right !important;
+        justify-content: flex-end !important;
+        flex-direction: row-reverse !important;
         min-height: 56px;
         box-sizing: border-box;
 
@@ -317,7 +316,11 @@ st.markdown("""
         box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
     }
 
-    /* hover */
+    div[data-testid="stRadio"] label p {
+        text-align: right !important;
+        direction: rtl;
+    }
+
     div[data-testid="stRadio"] label:hover {
         border-color: #3b82f6;
         background: #f8fbff;
@@ -325,7 +328,6 @@ st.markdown("""
         transform: translateY(-1px);
     }
 
-    /* הטקסט של התשובה */
     div[data-testid="stRadio"] label p,
     div[data-testid="stRadio"] label span {
         direction: rtl !important;
@@ -336,6 +338,39 @@ st.markdown("""
         font-size: 0.98rem !important;
         color: #1e293b !important;
         line-height: 1.5 !important;
+    }
+    
+        /* מסתיר את ה-label הריק של הרדיו */
+    div[data-testid="stRadio"] > label {
+        display: none !important;
+    }
+
+
+        /* כל קומפוננטת הרדיו */
+    div[data-testid="stRadio"] {
+        direction: rtl;
+        text-align: right;
+        width: 100%;
+    }
+
+    /* הקונטיינר הפנימי */
+    div[data-testid="stRadio"] > div {
+        align-items: flex-end !important;
+        width: 100%;
+    }
+
+    /* קבוצת התשובות */
+    div[data-testid="stRadio"] [role="radiogroup"] {
+        direction: rtl;
+        width: 100%;
+    }
+
+    /* כל תשובה */
+    div[data-testid="stRadio"] label {
+        width: 100% !important;
+        text-align: right !important;
+        justify-content: flex-end !important;
+        flex-direction: row-reverse !important;
     }
 
     /* כל סוגי הכפתורים ב-Streamlit */
