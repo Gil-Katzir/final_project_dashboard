@@ -297,6 +297,7 @@ st.markdown("""
     div[data-testid="stRadio"] [role="radiogroup"] label {
         display: block !important;
         width: 100% !important;
+        max-width: 100% !important;
         box-sizing: border-box !important;
 
         background: #ffffff !important;
