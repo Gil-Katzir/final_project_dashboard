@@ -869,7 +869,13 @@ def apply_common_layout(fig, title_text):
 
 def panel_header(title: str, narrative: str):
     st.markdown(f'<div class="chart-title">{title}</div>', unsafe_allow_html=True)
-    if st.session_state.experiment_group == "storytelling":
+
+    # מציג נרטיב רק אם יש באמת טקסט + רק בקבוצת storytelling
+    if (
+        st.session_state.experiment_group == "storytelling"
+        and narrative
+        and narrative.strip() != ""
+    ):
         st.markdown(f'<div class="story-box">{narrative}</div>', unsafe_allow_html=True)
 
 
