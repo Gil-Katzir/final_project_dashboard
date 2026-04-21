@@ -1021,7 +1021,7 @@ def show_chart4():
                 y=monthly_dress["Profit Dress"],
                 name="Profit",
                 marker=dict(
-                    color="#a402d6",
+                    color="#8b5cf6",
                     line=dict(width=0)
                 ),
                 width=0.45
