@@ -282,7 +282,7 @@ st.markdown("""
 
     div[data-testid="stRadio"] > div {
         gap: 12px;
-        align-items: flex-end !important;
+        align-items: flex-end;
         width: 100%;
     }
 
@@ -316,10 +316,6 @@ st.markdown("""
         box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
     }
 
-    div[data-testid="stRadio"] label p {
-        text-align: right !important;
-        direction: rtl;
-    }
 
     div[data-testid="stRadio"] label:hover {
         border-color: #3b82f6;
@@ -346,18 +342,6 @@ st.markdown("""
     }
 
 
-        /* כל קומפוננטת הרדיו */
-    div[data-testid="stRadio"] {
-        direction: rtl;
-        text-align: right;
-        width: 100%;
-    }
-
-    /* הקונטיינר הפנימי */
-    div[data-testid="stRadio"] > div {
-        align-items: flex-end !important;
-        width: 100%;
-    }
 
     /* קבוצת התשובות */
     div[data-testid="stRadio"] [role="radiogroup"] {
@@ -365,13 +349,6 @@ st.markdown("""
         width: 100%;
     }
 
-    /* כל תשובה */
-    div[data-testid="stRadio"] label {
-        width: 100% !important;
-        text-align: right !important;
-        justify-content: flex-end !important;
-        flex-direction: row-reverse !important;
-    }
 
     /* כל סוגי הכפתורים ב-Streamlit */
     div.stButton > button,
