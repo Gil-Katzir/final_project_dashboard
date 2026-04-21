@@ -65,6 +65,7 @@ st.markdown("""
         text-align: right;
     }
 
+ 
     /* ---- Welcome screen ---- */
     .welcome-card {
         background: #ffffff;
@@ -105,6 +106,7 @@ st.markdown("""
     }
 
     .welcome-text {
+
         font-size: 0.95rem;
         color: #475569;
         line-height: 1.85;
@@ -126,6 +128,7 @@ st.markdown("""
         border-top: 1px solid #e2e8f0;
         margin: 1.8rem 0;
     }
+
 
     /* ---- Registration ---- */
     .reg-card {
