@@ -311,17 +311,24 @@ st.markdown("""
     button[kind="primary"],
     button[kind="secondary"],
     button {
-
         font-family: 'Varela Round', sans-serif !important;
         font-weight: 600 !important;
         font-size: 1rem !important;
-
         border-radius: 12px;
         padding: 0.6rem 2rem;
         background-color: #ffffff;
         color: #1e293b;
         border: 1.5px solid #e2e8f0;
         transition: all 0.18s ease;
+    }
+
+    /* הטקסט שבתוך הכפתור */
+    div.stButton > button *,
+    div[data-testid="stButton"] button *,
+    button[kind="primary"] *,
+    button[kind="secondary"] *,
+    button * {
+        font-family: 'Varela Round', sans-serif !important;
     }
 
     div.stButton > button:hover {
