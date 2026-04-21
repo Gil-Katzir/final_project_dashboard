@@ -795,17 +795,44 @@ def category_monthly_totals(category_name):
 
 def apply_common_layout(fig, title_text):
     fig.update_layout(
-        title=dict(text=title_text, font=dict(size=13, color="#475569")),
+        title=dict(
+            text=title_text,
+            font=dict(size=15, color="#334155", family="Inter, sans-serif")
+        ),
         template="plotly_white",
         hovermode="x unified",
-        margin=dict(l=10, r=10, t=50, b=10),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-        font=dict(family="Inter, sans-serif"),
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
+        margin=dict(l=10, r=10, t=55, b=10),
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1,
+            bgcolor="rgba(255,255,255,0.75)",
+            borderwidth=0,
+            font=dict(size=11, color="#475569")
+        ),
+        font=dict(family="Inter, sans-serif", color="#334155"),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="#fcfdff",
     )
-    fig.update_xaxes(showgrid=False)
-    fig.update_yaxes(showgrid=True, gridcolor='#f1f5f9')
+
+    fig.update_xaxes(
+        showgrid=False,
+        showline=False,
+        tickfont=dict(size=11, color="#64748b"),
+        zeroline=False
+    )
+
+    fig.update_yaxes(
+        showgrid=True,
+        gridcolor="#eaf0f6",
+        gridwidth=1,
+        showline=False,
+        tickfont=dict(size=11, color="#64748b"),
+        zeroline=False
+    )
+
     return fig
 
 
@@ -914,7 +941,7 @@ def show_chart3():
             )
         with c2:
             st.write("")
-            if st.button("הכנסות מול רווח 🔍", key="chart3_drill_btn", use_container_width=True):
+            if st.button("הכנסות vs. רווח 🔍", key="chart3_drill_btn", use_container_width=True):
                 st.session_state.chart3_category = st.session_state.chart3_category_select
                 st.session_state.chart3_drilled = True
                 track_dashboard_click("chart3_drill_down", st.session_state.chart3_category)
