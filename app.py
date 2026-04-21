@@ -367,20 +367,7 @@ st.markdown("""
         line-height: 1.8;
     }
 
-        /* טקסט בתוך שדות קלט */
-    input {
-        font-family: 'Varela Round', sans-serif !important;
-    }
 
-    /* dropdown (selectbox) */
-    div[data-baseweb="select"] * {
-        font-family: 'Varela Round', sans-serif !important;
-    }
-
-    /* label (הטקסט "מספר משתתף") */
-    label {
-        font-family: 'Varela Round', sans-serif !important;
-    }
 
 </style>
 """, unsafe_allow_html=True)
