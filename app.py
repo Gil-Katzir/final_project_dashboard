@@ -861,6 +861,8 @@ def show_chart1():
             line=dict(width=3),
             marker=dict(size=7, line=dict(width=2, color="white"))
         )
+
+        
         fig = apply_common_layout(fig, "Revenue Total by Month")
         st.plotly_chart(fig, use_container_width=True)
 
@@ -895,9 +897,18 @@ def show_chart2():
 
     if not st.session_state.chart2_drilled:
         fig = px.line(
-            monthly_total, x="Month", y="Profit Total",
-            markers=True, color_discrete_sequence=['#10b981']
+            monthly_total,
+            x="Month",
+            y="Profit Total",
+            markers=True,
+            color_discrete_sequence=["#10b981"],
+            line_shape="spline"
         )
+        fig.update_traces(
+            line=dict(width=3),
+            marker=dict(size=7, line=dict(width=2, color="white"))
+        )
+
         fig = apply_common_layout(fig, "Profit Total by Month")
         st.plotly_chart(fig, use_container_width=True)
 
@@ -936,6 +947,14 @@ def show_chart3():
             markers=True,
             color_discrete_map={"T-shirt": "#3b82f6", "Dress": "#f43f5e", "Jeans": "#8b5cf6"}
         )
+
+        fig.update_traces(
+            line=dict(width=3),
+            marker=dict(size=7, line=dict(width=2, color="white"))
+        )
+
+        fig.update_layout(legend_title_text="")
+
         fig = apply_common_layout(fig, "Revenue by Category and Month")
         st.plotly_chart(fig, use_container_width=True)
 
@@ -1001,19 +1020,23 @@ def show_chart4():
                 x=monthly_dress["Month"],
                 y=monthly_dress["Profit Dress"],
                 name="Profit",
-                marker=dict(color="#75187A"),
-                width=0.4  #
+                marker=dict(
+                    color="#7c3aed",
+                    line=dict(width=0)
+                ),
+                width=0.45
             ),
             secondary_y=False
         )
-        
+
         fig.add_trace(
             go.Scatter(
                 x=monthly_dress["Month"],
                 y=monthly_dress["Discount Dress"],
                 mode="lines+markers",
                 name="Discount %",
-                line=dict(color="#fbbf24", width=3, dash="dot")
+                line=dict(color="#f59e0b", width=3, dash="dot"),
+                marker=dict(size=7, line=dict(width=2, color="white"))
             ),
             secondary_y=True
         )
