@@ -291,13 +291,15 @@ st.markdown("""
         display: flex !important;
         flex-direction: row-reverse !important;
         align-items: center !important;
+        justify-content: flex-end !important;
         gap: 12px !important;
 
         width: 320px;
         max-width: 100%;
+        margin-left: auto !important;   /* זה החשוב */
+        margin-right: 0 !important;
+
         text-align: right !important;
-        justify-content: flex-end !important;
-        flex-direction: row-reverse !important;
         min-height: 56px;
         box-sizing: border-box;
 
@@ -305,7 +307,6 @@ st.markdown("""
         border: 1.5px solid #dbe4ee;
         border-radius: 16px;
         padding: 14px 18px !important;
-        margin: 0 !important;
 
         transition: all 0.2s ease;
         cursor: pointer;
@@ -343,8 +344,8 @@ st.markdown("""
     div[data-testid="stRadio"] [role="radiogroup"] {
         display: flex;
         flex-direction: column;
-        align-items: flex-end;  /* זה מה שמצמיד לימין */
         width: 100%;
+        gap: 12px;
     }
 
 
