@@ -93,6 +93,7 @@ st.markdown("""
         color: #94a3b8;
         text-align: center;
         margin-bottom: 2rem;
+        font-family: 'Varela Round', sans-serif;
     }
 
     .welcome-section-title {
@@ -102,12 +103,14 @@ st.markdown("""
         margin: 1.4rem 0 0.45rem 0;
         border-right: 4px solid #3b82f6;
         padding-right: 10px;
+        font-family: 'Varela Round', sans-serif;
     }
 
     .welcome-text {
         font-size: 0.95rem;
         color: #475569;
         line-height: 1.85;
+        font-family: 'Varela Round', sans-serif;
     }
 
     .welcome-highlight {
@@ -119,6 +122,7 @@ st.markdown("""
         font-size: 0.93rem;
         margin: 1.3rem 0;
         line-height: 1.75;
+        font-family: 'Varela Round', sans-serif;
     }
 
     .welcome-divider {
@@ -147,6 +151,7 @@ st.markdown("""
         margin-bottom: 1.4rem;
         border-right: 4px solid #3b82f6;
         padding-right: 10px;
+        font-family: 'Varela Round', sans-serif;
     }
 
     /* ---- Metric cards ---- */
