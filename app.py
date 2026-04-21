@@ -336,6 +336,7 @@ st.markdown("""
         /* כל קומפוננטת הרדיו */
     div[data-testid="stRadio"] {
         direction: rtl;
+        text-align: right;
         width: 100%;
     }
 
@@ -354,6 +355,7 @@ st.markdown("""
     /* כל תשובה */
     div[data-testid="stRadio"] label {
         width: 100% !important;
+        text-align: right !important;
         justify-content: flex-end !important;
         flex-direction: row-reverse !important;
     }
@@ -1179,17 +1181,19 @@ elif st.session_state.screen == "experiment":
             )
 
         st.markdown(
-            f'<div class="rtl-title" style="font-size:1.35rem;font-weight:700;margin-bottom:0.4rem;">'
+            f'<div class="rtl-title" style="font-size:1.35rem;font-weight:700;margin-bottom:0.4rem;font-family:Varela Round, sans-serif;">'
             f'שאלה {q["id"]}</div>',
             unsafe_allow_html=True
         )
+
         st.markdown(
-            f'<div class="rtl-question" style="font-size:1.1rem;font-weight:600;margin-bottom:1rem;">'
+            f'<div class="rtl-question" style="font-size:1.1rem;font-weight:600;margin-bottom:1rem;font-family:Varela Round, sans-serif;">'
             f'{q["text"]}</div>',
             unsafe_allow_html=True
         )
+
         st.markdown(
-            '<div class="rtl-label" style="font-weight:600;margin-bottom:0.4rem;">'
+            '<div class="rtl-label" style="font-weight:600;margin-bottom:0.4rem;font-family:Varela Round, sans-serif;">'
             'בחר/י את התשובה הנכונה ביותר:</div>',
             unsafe_allow_html=True
         )
