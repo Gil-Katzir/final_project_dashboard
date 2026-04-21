@@ -65,7 +65,6 @@ st.markdown("""
         text-align: right;
     }
 
- 
     /* ---- Welcome screen ---- */
     .welcome-card {
         background: #ffffff;
@@ -87,6 +86,7 @@ st.markdown("""
         -webkit-text-fill-color: transparent;
         margin-bottom: 0.3rem;
         text-align: center;
+        font-family: 'Varela Round', sans-serif;
     }
 
     .welcome-subtitle {
@@ -94,6 +94,7 @@ st.markdown("""
         color: #94a3b8;
         text-align: center;
         margin-bottom: 2rem;
+        font-family: 'Varela Round', sans-serif;
     }
 
     .welcome-section-title {
@@ -103,13 +104,14 @@ st.markdown("""
         margin: 1.4rem 0 0.45rem 0;
         border-right: 4px solid #3b82f6;
         padding-right: 10px;
+        font-family: 'Varela Round', sans-serif;
     }
 
     .welcome-text {
-
         font-size: 0.95rem;
         color: #475569;
         line-height: 1.85;
+        font-family: 'Varela Round', sans-serif;
     }
 
     .welcome-highlight {
@@ -128,7 +130,6 @@ st.markdown("""
         border-top: 1px solid #e2e8f0;
         margin: 1.8rem 0;
     }
-
 
     /* ---- Registration ---- */
     .reg-card {
