@@ -37,7 +37,9 @@ st.markdown("""
     }
 
     .main {
-        background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+        background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%),
+        radial-gradient(circle at top left, #eef6ff 0%, transparent 30%),
+        linear-gradient(180deg, #f8fbff 0%, #edf3f8 100%);
     }
 
     .block-container {
@@ -204,13 +206,16 @@ st.markdown("""
 
     /* ---- Chart cards ---- */
     .chart-card {
-        background: #ffffff;
-        border: 1px solid #e2e8f0;
-        border-radius: 24px;
-        padding: 22px;
-        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.06);
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid rgba(226, 232, 240, 0.9);
+        border-radius: 28px;
+        padding: 24px;
+        box-shadow:
+            0 10px 30px rgba(15, 23, 42, 0.06),
+            0 2px 8px rgba(15, 23, 42, 0.04);
+        backdrop-filter: blur(10px);
         height: 100%;
-        animation: fadeIn 0.5s cubic-bezier(0.16,1,0.3,1);
+        animation: fadeIn 0.45s ease;
     }
 
     .chart-card-empty {
@@ -225,23 +230,25 @@ st.markdown("""
     }
 
     .chart-title {
-        font-size: 1.5rem;
+        font-size: 1.35rem;
         font-weight: 800;
-        color: #1e293b;
+        color: #0f172a;
         margin-bottom: 0.9rem;
         direction: rtl;
         text-align: right;
         font-family: 'Varela Round', sans-serif;
+        letter-spacing: -0.02em;
     }
 
     .story-box {
-        background: #eff6ff;
+        background: linear-gradient(180deg, #f8fbff 0%, #eef6ff 100%);
+        border: 1px solid #dbeafe;
         border-right: 4px solid #3b82f6;
-        border-radius: 10px;
-        padding: 11px 15px;
+        border-radius: 14px;
+        padding: 12px 15px;
         color: #1e40af;
         font-size: 0.93rem;
-        line-height: 1.65;
+        line-height: 1.7;
         margin-bottom: 1.1rem;
         direction: rtl;
         text-align: right;
@@ -800,34 +807,35 @@ def apply_common_layout(fig, title_text):
     fig.update_layout(
         title=dict(
             text=title_text,
-            font=dict(size=14, color="#334155", family="Inter, sans-serif"),
-            x=0,  # מיישר את הכותרת לשמאל (מודרני יותר)
+            x=0.02,
+            xanchor="left",
+            font=dict(
+                size=15,
+                color="#1e293b",
+                family="Inter, sans-serif"
+            )
         ),
-
         template="plotly_white",
         hovermode="x unified",
-
-        margin=dict(l=10, r=10, t=50, b=10),
-
+        margin=dict(l=8, r=8, t=52, b=8),
         font=dict(
             family="Inter, sans-serif",
-            color="#334155"
+            color="#334155",
+            size=12
         ),
-
         legend=dict(
             orientation="h",
             yanchor="bottom",
             y=1.02,
             xanchor="right",
             x=1,
-            bgcolor="rgba(255,255,255,0.8)",
-            borderwidth=0,
+            bgcolor="rgba(255,255,255,0.72)",
+            bordercolor="rgba(226,232,240,0.8)",
+            borderwidth=1,
             font=dict(size=11, color="#475569")
         ),
-
         paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="#fcfdff",
-
+        plot_bgcolor="#fbfdff",
         hoverlabel=dict(
             bgcolor="white",
             bordercolor="#dbe4ee",
@@ -836,23 +844,25 @@ def apply_common_layout(fig, title_text):
                 size=11,
                 color="#334155"
             )
-        ),
+        )
     )
 
     fig.update_xaxes(
         showgrid=False,
         showline=False,
         tickfont=dict(size=11, color="#64748b"),
-        zeroline=False
+        zeroline=False,
+        ticks=""
     )
 
     fig.update_yaxes(
         showgrid=True,
-        gridcolor="#eaf0f6",
+        gridcolor="#edf2f7",
         gridwidth=1,
         showline=False,
         tickfont=dict(size=11, color="#64748b"),
-        zeroline=False
+        zeroline=False,
+        ticks=""
     )
 
     return fig
