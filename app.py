@@ -126,6 +126,10 @@ st.markdown("""
         font-family: 'Varela Round', sans-serif;
     }
 
+    .welcome-highlight strong {
+        font-family: 'Varela Round', sans-serif;
+    }
+
     .welcome-divider {
         border: none;
         border-top: 1px solid #e2e8f0;
