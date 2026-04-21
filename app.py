@@ -272,7 +272,7 @@ st.markdown("""
     /* ---- Inputs & Buttons ---- */
 
  /* ---- Modern radio answers ---- */
-
+ 
     div[data-testid="stRadio"] {
         direction: rtl;
         text-align: right;
@@ -325,6 +325,14 @@ st.markdown("""
         font-size: 0.98rem !important;
         color: #1e293b !important;
         line-height: 1.5 !important;
+    }
+
+    div[data-testid="stRadio"] > label {
+        display: none !important;
+    }
+
+    div[data-testid="stRadio"] > div > label:first-child {
+        display: none !important;
     }
 
     /* כל סוגי הכפתורים ב-Streamlit */
@@ -1164,6 +1172,7 @@ elif st.session_state.screen == "experiment":
         )
 
         selected = st.radio(
+            "",
             q["options"],
             key=f"question_{q['id']}",
             label_visibility="collapsed"
