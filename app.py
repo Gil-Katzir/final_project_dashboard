@@ -286,19 +286,15 @@ st.markdown("""
         width: 100%;
     }
 
-    div[data-testid="stRadio"] [role="radiogroup"] {
-        direction: rtl;
-        width: 100%;
-    }
 
     div[data-testid="stRadio"] label {
         display: flex !important;
         flex-direction: row-reverse !important;
-        justify-content: flex-start !important;
         align-items: center !important;
         gap: 12px !important;
 
-        width: 100% !important;
+        width: 320px;
+        max-width: 100%;
         text-align: right !important;
         justify-content: flex-end !important;
         flex-direction: row-reverse !important;
@@ -345,7 +341,9 @@ st.markdown("""
 
     /* קבוצת התשובות */
     div[data-testid="stRadio"] [role="radiogroup"] {
-        direction: rtl;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;  /* זה מה שמצמיד לימין */
         width: 100%;
     }
 
