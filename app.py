@@ -979,7 +979,7 @@ elif st.session_state.screen == "welcome":
     st.markdown(
 """<div style="max-width:820px;margin:2rem auto;">
 <div class="welcome-card">
-<div class="welcome-title"ברוכים הבאים</div>
+<div class="welcome-title">ברוכים הבאים</div>
 <div class="welcome-subtitle">פרויקט גמר — המחלקה להנדסת תעשייה וניהול, אוניברסיטת בן-גוריון תשפ"ו</div>
 <hr class="welcome-divider">
 
