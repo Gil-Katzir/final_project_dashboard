@@ -1021,7 +1021,7 @@ def show_chart4():
                 y=monthly_dress["Profit Dress"],
                 name="Profit",
                 marker=dict(
-                    color="###9d02e0",
+                    color="#a402d6",
                     line=dict(width=0)
                 ),
                 width=0.45
@@ -1238,7 +1238,7 @@ elif st.session_state.screen == "experiment":
         show_fig4 = cq >= 7
 
     # dashboard grid
-    st.markdown('<div class="section-title">  🛍️ המידע המוצג מתאר את התנהגות המכירות בחנות בגדים ---> </div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title">  המידע המוצג מתאר את התנהגות המכירות בחנות בגדים 🛍️---> </div>', unsafe_allow_html=True)
 
     top_left, top_right = st.columns(2)
     bottom_left, bottom_right = st.columns(2)
