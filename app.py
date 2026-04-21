@@ -219,6 +219,7 @@ st.markdown("""
         margin-bottom: 0.9rem;
         direction: rtl;
         text-align: right;
+        font-family: 'Inter', 'Segoe UI', sans-serif;
     }
 
     .story-box {
@@ -1061,7 +1062,7 @@ elif st.session_state.screen == "experiment":
         show_fig4 = cq >= 7
 
     # dashboard grid
-    st.markdown('<div class="section-title">דשבורד אינטראקטיבי</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title">המידע המוצג מתאר את התנהגות המכירות בחנות בגדים <--- </div>', unsafe_allow_html=True)
 
     top_left, top_right = st.columns(2)
     bottom_left, bottom_right = st.columns(2)
