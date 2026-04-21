@@ -485,7 +485,7 @@ NEW_CHART_AT = {2: "גרף 2 נוסף", 4: "גרף 3 נוסף", 7: "גרף 4 נ�
 # Session state
 # -----------------------------
 defaults = {
-    "screen": "welcome",   # welcome | register | experiment | summary | thankyou
+    "screen": "register",   # welcome | register | experiment | summary | thankyou
     "experiment_started": False,
     "participant_id": "",
     "experiment_group": "",
