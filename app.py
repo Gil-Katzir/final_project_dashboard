@@ -326,8 +326,11 @@ st.markdown("""
         color: #1e293b !important;
         line-height: 1.5 !important;
     }
-
     
+        /* מסתיר את ה-label הריק של הרדיו */
+    div[data-testid="stRadio"] > label {
+        display: none !important;
+    }
 
     /* כל סוגי הכפתורים ב-Streamlit */
     div.stButton > button,
@@ -1166,7 +1169,7 @@ elif st.session_state.screen == "experiment":
         )
 
         selected = st.radio(
-            label="",
+            "",
             q["options"],
             key=f"question_{q['id']}",
             label_visibility="collapsed"
