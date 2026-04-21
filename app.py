@@ -406,6 +406,7 @@ st.markdown("""
         margin: 4rem auto;
         animation: fadeIn 0.6s ease;
         direction: rtl;
+        font-family: 'Varela Round', sans-serif;
     }
 
     .thankyou-emoji { font-size: 4rem; margin-bottom: 1rem; }
@@ -415,12 +416,14 @@ st.markdown("""
         font-weight: 800;
         color: #1e293b;
         margin-bottom: 0.8rem;
+        font-family: 'Varela Round', sans-serif;
     }
 
     .thankyou-sub {
         font-size: 1rem;
         color: #64748b;
         line-height: 1.8;
+        font-family: 'Varela Round', sans-serif;
     }
 
         /* selectbox טקסט כללי */
