@@ -539,6 +539,10 @@ for key, value in prev_defaults.items():
 # -----------------------------
 # Helper functions
 # -----------------------------
+def is_admin_participant() -> bool:
+    return str(st.session_state.participant_id).strip() == "999"
+
+
 def track_dashboard_click(action_type: str, action_value: str = ""):
     if not st.session_state.experiment_started:
         return
@@ -953,7 +957,7 @@ if st.session_state.screen == "welcome":
 
 <div class="welcome-section-title">משך הניסוי</div>
 <div class="welcome-text">
-הניסוי צפוי להימשך כ-<strong>15 דקות</strong>. אין הגבלת זמן לכל שאלה בנפרד.
+הניסוי צפוי להימשך כ-<strong>10 דקות</strong>. אין הגבלת זמן לכל שאלה בנפרד.
 </div>
 
 
@@ -961,8 +965,7 @@ if st.session_state.screen == "welcome":
 🔒 <strong>פרטיות וסודיות:</strong> ההשתתפות אנונימית לחלוטין. לא נאסף מידע מזהה אישי.
 הנתונים ישמשו למחקר אקדמי בלבד ויפורסמו בצורה מצטברת בלבד.<br><br>
 ✋ <strong>הסכמה:</strong> לחיצה על "המשך" מהווה אישור לקריאת תנאים אלה
-והסכמה מרצון להשתתפות בניסוי. ניתן לעצור בכל עת — אולם עצירה לפני השלמת
-המשימה לא תזכה בנקודת הבונוס.
+והסכמה מרצון להשתתפות בניסוי. ניתן לעצור בכל עת.
 </div>
 
 <hr class="welcome-divider">
@@ -1015,33 +1018,34 @@ elif st.session_state.screen == "experiment":
     st.markdown('<div class="big-title">Business Analytics Dashboard</div>', unsafe_allow_html=True)
     st.markdown('<div class="sub-title">Decision support & performance analysis</div>', unsafe_allow_html=True)
 
-    # metric bar
-    a, b, c, d = st.columns(4)
-    with a:
-        st.markdown(
-            f'<div class="metric-card"><div class="metric-label">Participant ID</div>'
-            f'<div class="metric-value">{st.session_state.participant_id}</div></div>',
-            unsafe_allow_html=True
-        )
-    with b:
-        st.markdown(
-            f'<div class="metric-card"><div class="metric-label">Group</div>'
-            f'<div class="metric-value">{st.session_state.experiment_group.capitalize()}</div></div>',
-            unsafe_allow_html=True
-        )
-    with c:
-        st.markdown(
-            f'<div class="metric-card"><div class="metric-label">Progress</div>'
-            f'<div class="metric-value">{min(st.session_state.current_question + 1, len(questions))} '
-            f'<span style="font-size:1rem;color:#94a3b8">/ {len(questions)}</span></div></div>',
-            unsafe_allow_html=True
-        )
-    with d:
-        st.markdown(
-            f'<div class="metric-card"><div class="metric-label">Interactions</div>'
-            f'<div class="metric-value">{st.session_state.dashboard_interaction_clicks}</div></div>',
-            unsafe_allow_html=True
-        )
+    # metric bar - visible only for participant 999
+    if is_admin_participant():
+        a, b, c, d = st.columns(4)
+        with a:
+            st.markdown(
+                f'<div class="metric-card"><div class="metric-label">Participant ID</div>'
+                f'<div class="metric-value">{st.session_state.participant_id}</div></div>',
+                unsafe_allow_html=True
+            )
+        with b:
+            st.markdown(
+                f'<div class="metric-card"><div class="metric-label">Group</div>'
+                f'<div class="metric-value">{st.session_state.experiment_group.capitalize()}</div></div>',
+                unsafe_allow_html=True
+            )
+        with c:
+            st.markdown(
+                f'<div class="metric-card"><div class="metric-label">Progress</div>'
+                f'<div class="metric-value">{min(st.session_state.current_question + 1, len(questions))} '
+                f'<span style="font-size:1rem;color:#94a3b8">/ {len(questions)}</span></div></div>',
+                unsafe_allow_html=True
+            )
+        with d:
+            st.markdown(
+                f'<div class="metric-card"><div class="metric-label">Interactions</div>'
+                f'<div class="metric-value">{st.session_state.dashboard_interaction_clicks}</div></div>',
+                unsafe_allow_html=True
+            )
 
     # reveal logic
     is_storytelling = (st.session_state.experiment_group == "storytelling")
@@ -1131,7 +1135,18 @@ elif st.session_state.screen == "experiment":
             st.rerun()
 
     else:
-        st.session_state.screen = "summary"
+        total_duration = time.time() - st.session_state.session_start_time
+
+        if not st.session_state.db_saved:
+            session_ok, _ = save_session_to_db(total_duration)
+            responses_ok, _ = save_responses_to_db()
+
+            if session_ok and responses_ok:
+                st.session_state.db_saved = True
+            else:
+                st.warning("השמירה למסד לא הושלמה, אבל הניסוי הסתיים.")
+
+        st.session_state.screen = "summary" if is_admin_participant() else "thankyou"
         st.rerun()
 
 
@@ -1139,6 +1154,10 @@ elif st.session_state.screen == "experiment":
 # SCREEN: SUMMARY
 # ==============================
 elif st.session_state.screen == "summary":
+    if not is_admin_participant():
+        st.session_state.screen = "thankyou"
+        st.rerun()
+
     total_duration = time.time() - st.session_state.session_start_time
     export_df = build_export_df(total_duration)
     interactions_df = build_interactions_df()
