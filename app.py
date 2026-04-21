@@ -850,8 +850,16 @@ def show_chart1():
 
     if not st.session_state.chart1_drilled:
         fig = px.line(
-            monthly_total, x="Month", y="Revenue Total",
-            markers=True, color_discrete_sequence=['#3b82f6']
+            monthly_total,
+            x="Month",
+            y="Revenue Total",
+            markers=True,
+            color_discrete_sequence=["#3b82f6"],
+            line_shape="spline"
+        )
+        fig.update_traces(
+            line=dict(width=3),
+            marker=dict(size=7, line=dict(width=2, color="white"))
         )
         fig = apply_common_layout(fig, "Revenue Total by Month")
         st.plotly_chart(fig, use_container_width=True)
