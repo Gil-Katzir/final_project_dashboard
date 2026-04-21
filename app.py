@@ -327,13 +327,7 @@ st.markdown("""
         line-height: 1.5 !important;
     }
 
-    div[data-testid="stRadio"] > label {
-        display: none !important;
-    }
-
-    div[data-testid="stRadio"] > div > label:first-child {
-        display: none !important;
-    }
+    
 
     /* כל סוגי הכפתורים ב-Streamlit */
     div.stButton > button,
