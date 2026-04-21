@@ -797,7 +797,7 @@ def apply_common_layout(fig, title_text):
     fig.update_layout(
         title=dict(
             text=title_text,
-            font=dict(size=15, color="#334155", family="Inter, sans-serif")
+            font=dict(size=11, color="#334155", family="Inter, sans-serif", bordercolor="#dbe4ee")
         ),
         template="plotly_white",
         hovermode="x unified",
@@ -984,7 +984,9 @@ def show_chart3():
                 x=months_list,
                 y=drill_df["Revenue"],
                 name="Revenue"
-            )
+            ),
+                opacity=0.9
+
         )
 
         fig.add_trace(
@@ -992,7 +994,9 @@ def show_chart3():
                 x=months_list,
                 y=drill_df["Profit"],
                 name="Profit"
-            )
+            ),
+                opacity=0.9
+
         )
 
         fig.update_layout(barmode="group")
@@ -1024,7 +1028,8 @@ def show_chart4():
                     color="#8b5cf6",
                     line=dict(width=0)
                 ),
-                width=0.45
+                width=0.45,
+                opacity=0.9
             ),
             secondary_y=False
         )
