@@ -797,24 +797,43 @@ def apply_common_layout(fig, title_text):
     fig.update_layout(
         title=dict(
             text=title_text,
-            font=dict(size=11, color="#334155", family="Inter, sans-serif", bordercolor="#dbe4ee")
+            font=dict(size=14, color="#334155", family="Inter, sans-serif"),
+            x=0,  # מיישר את הכותרת לשמאל (מודרני יותר)
         ),
+
         template="plotly_white",
         hovermode="x unified",
-        margin=dict(l=10, r=10, t=55, b=10),
+
+        margin=dict(l=10, r=10, t=50, b=10),
+
+        font=dict(
+            family="Inter, sans-serif",
+            color="#334155"
+        ),
+
         legend=dict(
             orientation="h",
             yanchor="bottom",
             y=1.02,
             xanchor="right",
             x=1,
-            bgcolor="rgba(255,255,255,0.75)",
+            bgcolor="rgba(255,255,255,0.8)",
             borderwidth=0,
             font=dict(size=11, color="#475569")
         ),
-        font=dict(family="Inter, sans-serif", color="#334155"),
+
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="#fcfdff",
+
+        hoverlabel=dict(
+            bgcolor="white",
+            bordercolor="#dbe4ee",
+            font=dict(
+                family="Inter, sans-serif",
+                size=11,
+                color="#334155"
+            )
+        ),
     )
 
     fig.update_xaxes(
@@ -834,7 +853,6 @@ def apply_common_layout(fig, title_text):
     )
 
     return fig
-
 
 def panel_header(title: str, narrative: str):
     st.markdown(f'<div class="chart-title">{title}</div>', unsafe_allow_html=True)
@@ -983,9 +1001,9 @@ def show_chart3():
             go.Bar(
                 x=months_list,
                 y=drill_df["Revenue"],
-                name="Revenue"
-            ),
+                name="Revenue",
                 opacity=0.9
+            ),
 
         )
 
@@ -993,9 +1011,9 @@ def show_chart3():
             go.Bar(
                 x=months_list,
                 y=drill_df["Profit"],
-                name="Profit"
-            ),
+                name="Profit",
                 opacity=0.9
+            ),
 
         )
 
