@@ -272,80 +272,71 @@ st.markdown("""
 
     /* ---- Inputs & Buttons ---- */
 
- /* ---- Modern radio answers ---- */
- 
+    /* ---- Modern radio answers ---- */
     div[data-testid="stRadio"] {
         direction: rtl;
         text-align: right;
         width: 100%;
     }
 
-    div[data-testid="stRadio"] > div {
-        gap: 12px;
-        align-items: flex-end;
-        width: 100%;
+    /* מסתיר את ה-label הריק של הקומפוננטה */
+    div[data-testid="stRadio"] > label {
+        display: none !important;
     }
 
-
-    div[data-testid="stRadio"] label {
+    /* זה הקונטיינר האמיתי של כל התשובות */
+    div[data-testid="stRadio"] div[role="radiogroup"] {
         display: flex !important;
-        flex-direction: row-reverse !important;
+        flex-direction: column !important;
+        align-items: flex-end !important;
+        width: 100% !important;
+        gap: 12px !important;
+    }
+
+    /* כל תשובה */
+    div[data-testid="stRadio"] div[role="radiogroup"] > label {
+        display: flex !important;
+        flex-direction: row-reverse !important;   /* העיגול מימין */
         align-items: center !important;
         justify-content: flex-end !important;
         gap: 12px !important;
 
-        width: 320px;
-        max-width: 100%;
-        margin-left: auto !important;   /* זה החשוב */
-        margin-right: 0 !important;
+        width: 320px !important;
+        max-width: 100% !important;
+        margin: 0 0 0 auto !important;            /* מצמיד לימין */
 
         text-align: right !important;
-        min-height: 56px;
-        box-sizing: border-box;
+        min-height: 56px !important;
+        box-sizing: border-box !important;
 
-        background: #ffffff;
-        border: 1.5px solid #dbe4ee;
-        border-radius: 16px;
+        background: #ffffff !important;
+        border: 1.5px solid #dbe4ee !important;
+        border-radius: 16px !important;
         padding: 14px 18px !important;
 
-        transition: all 0.2s ease;
-        cursor: pointer;
-        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+        transition: all 0.2s ease !important;
+        cursor: pointer !important;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
     }
 
-
-    div[data-testid="stRadio"] label:hover {
-        border-color: #3b82f6;
-        background: #f8fbff;
-        box-shadow: 0 6px 18px rgba(59, 130, 246, 0.10);
-        transform: translateY(-1px);
+    div[data-testid="stRadio"] div[role="radiogroup"] > label:hover {
+        border-color: #3b82f6 !important;
+        background: #f8fbff !important;
+        box-shadow: 0 6px 18px rgba(59, 130, 246, 0.10) !important;
+        transform: translateY(-1px) !important;
     }
 
-    div[data-testid="stRadio"] label p,
-    div[data-testid="stRadio"] label span {
+    /* הטקסט של התשובה */
+    div[data-testid="stRadio"] div[role="radiogroup"] > label p,
+    div[data-testid="stRadio"] div[role="radiogroup"] > label span {
         direction: rtl !important;
         text-align: right !important;
-        width: 100%;
+        width: 100% !important;
         margin: 0 !important;
         font-family: 'Varela Round', sans-serif !important;
         font-size: 0.98rem !important;
         color: #1e293b !important;
         line-height: 1.5 !important;
-    }
-    
-        /* מסתיר את ה-label הריק של הרדיו */
-    div[data-testid="stRadio"] > label {
-        display: none !important;
-    }
-
-
-
-    /* קבוצת התשובות */
-    div[data-testid="stRadio"] [role="radiogroup"] {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        gap: 12px;
     }
 
 
