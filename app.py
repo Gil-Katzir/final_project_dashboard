@@ -30,6 +30,7 @@ supabase: Client = create_client(
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
 
     html, body, [class*="css"] {
         font-family: 'Inter', "Segoe UI", sans-serif;
@@ -219,7 +220,7 @@ st.markdown("""
         margin-bottom: 0.9rem;
         direction: rtl;
         text-align: right;
-        font-family: 'Inter', 'Segoe UI', sans-serif;
+        font-family: 'Varela Round', sans-serif;
     }
 
     .story-box {
