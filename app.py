@@ -469,7 +469,32 @@ st.markdown("""
         border-radius: 12px;
     }
 
+    /* כל ה-text input */
+    div[data-testid="stTextInput"] {
+        direction: rtl;
+        text-align: right;
+        font-family: 'Varela Round', sans-serif;
+    }
 
+    /* ה-input עצמו (מה שכותבים בו) */
+    div[data-testid="stTextInput"] input {
+        text-align: right !important;
+        direction: rtl;
+        font-family: 'Varela Round', sans-serif !important;
+    }
+
+    /* ה-placeholder */
+    div[data-testid="stTextInput"] input::placeholder {
+        text-align: right;
+        direction: rtl;
+        font-family: 'Varela Round', sans-serif;
+    }
+
+    div[data-testid="stTextInput"] label {
+        direction: rtl;
+        text-align: right;
+        font-family: 'Varela Round', sans-serif;
+    }
 
 </style>
 """, unsafe_allow_html=True)
