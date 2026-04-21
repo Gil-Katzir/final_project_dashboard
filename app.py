@@ -336,22 +336,24 @@ st.markdown("""
         /* כל קומפוננטת הרדיו */
     div[data-testid="stRadio"] {
         direction: rtl;
-        text-align: right;
+        width: 100%;
     }
 
     /* הקונטיינר הפנימי */
     div[data-testid="stRadio"] > div {
         align-items: flex-end !important;
+        width: 100%;
     }
 
     /* קבוצת התשובות */
     div[data-testid="stRadio"] [role="radiogroup"] {
         direction: rtl;
+        width: 100%;
     }
 
     /* כל תשובה */
     div[data-testid="stRadio"] label {
-        text-align: right !important;
+        width: 100% !important;
         justify-content: flex-end !important;
         flex-direction: row-reverse !important;
     }
