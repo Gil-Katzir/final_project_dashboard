@@ -313,7 +313,7 @@ st.markdown("""
         color: #1e293b;
         border: 1.5px solid #e2e8f0;
         transition: all 0.18s ease;
-        font-family: 'Varela Round', sans-serif;
+        font-family: 'Varela Round', sans-serif !important;
     }
 
     div.stButton > button:hover {
