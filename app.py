@@ -281,65 +281,51 @@ st.markdown("""
 
     /* ---- Inputs & Buttons ---- */
 
-   /* ---- פתרון סופי ליישור ורוחב מלא של התשובות ---- */
-    
-    /* 1. מוודא שהרכיב עצמו תופס 100% מהעמודה */
-    div[data-testid="stRadio"] {
-        width: 100% !important;
-        direction: rtl !important;
+   /* ---- מעטפת השאלה והתשובות ---- */
+    .question-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; /* שומר שהכל יתחיל מצד ימין (בגלל ה-RTL הכללי) */
+        direction: rtl;
     }
 
-    /* 2. זה החלק הקריטי: מכריח את קבוצת האפשרויות להימתח לכל הרוחב */
-    div[data-testid="stRadio"] > div[role="radiogroup"] {
+    /* מוודא שהרדיו בתוך המעטפת תופס את כל הרוחב */
+    .question-container [data-testid="stRadio"] {
         width: 100% !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: stretch !important; /* גורם לכל כפתור "להימרח" על כל הרוחב הזמין */
-        gap: 12px !important;
     }
 
-    /* 3. עיצוב ה"כרטיס" של התשובה */
-    div[data-testid="stRadio"] [role="radiogroup"] label {
-        width: 100% !important;
-        max-width: 100% !important;
-        display: flex !important;
+    /* עיצוב התשובות ככרטיסים רחבים */
+    .question-container [role="radiogroup"] label {
+        display: block !important;
+        width: 100% !important; /* פריסה ל-100% רוחב */
         background: #ffffff !important;
         border: 1.5px solid #dbe4ee !important;
-        border-radius: 16px !important;
-        padding: 16px 20px !important;
-        margin: 0 !important;
-        cursor: pointer !important;
-        transition: all 0.2s ease !important;
-        
-        /* יישור תוכן לימין */
-        justify-content: flex-start !important; 
+        border-radius: 12px !important;
+        padding: 14px 20px !important;
+        margin-bottom: 8px !important;
         text-align: right !important;
-        direction: rtl !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
     }
 
-    /* 4. טיפול בטקסט שבתוך הכפתור - Streamlit עוטפת אותו בתוך div ו-p */
-    div[data-testid="stRadio"] [role="radiogroup"] label div[data-testid="stMarkdownContainer"] {
-        width: 100% !important;
-    }
-    
-    div[data-testid="stRadio"] [role="radiogroup"] label div[data-testid="stMarkdownContainer"] p {
-        width: 100% !important;
-        text-align: right !important; /* מבטיח שהטקסט יהיה צמוד לימין */
-        margin: 0 !important;
-        font-family: 'Varela Round', sans-serif !important;
-        color: #1e293b !important;
-    }
-
-    /* אפקט מעבר (Hover) */
-    div[data-testid="stRadio"] [role="radiogroup"] label:hover {
+    /* אפקט מעבר */
+    .question-container [role="radiogroup"] label:hover {
         border-color: #3b82f6 !important;
-        background: #f8fbff !important;
-        box-shadow: 0 6px 18px rgba(59, 130, 246, 0.10) !important;
+        background-color: #f8fbff !important;
     }
 
-    /* הסתרת העיגול המקורי של הרדיו */
-    div[data-testid="stRadio"] input[type="radio"] {
+    /* הסתרת העיגול המקורי */
+    .question-container input[type="radio"] {
         display: none !important;
+    }
+
+    /* תיקון טקסט השאלה */
+    .question-container p {
+        text-align: right !important;
+        width: 100% !important;
+        font-family: 'Varela Round', sans-serif !important;
     }
 
 
@@ -1460,12 +1446,16 @@ elif st.session_state.screen == "experiment":
             unsafe_allow_html=True
         )
 
+        st.markdown('<div class="question-container">', unsafe_allow_html=True) # המעטפת החדשה
+
         selected = st.radio(
             "",
             q["options"],
             key=f"question_{q['id']}",
             label_visibility="collapsed"
         )
+
+        st.markdown('</div>', unsafe_allow_html=True) # סגירת המעטפת
 
         if st.button("שלח/י תשובה ✨", use_container_width=True):
             response_time = time.time() - st.session_state.question_start_time
