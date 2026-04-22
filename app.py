@@ -4,6 +4,7 @@ import plotly.express as px
 import time
 import uuid
 from datetime import datetime
+from zoneinfo import ZoneInfo
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from supabase import create_client, Client
@@ -1201,7 +1202,7 @@ if st.session_state.screen == "register":
                 st.session_state.experiment_group = experiment_group_input
                 st.session_state.experiment_started = True
                 st.session_state.session_start_time = time.time()
-                st.session_state.started_at = datetime.utcnow().isoformat()
+                st.session_state.started_at = datetime.now(ZoneInfo("Asia/Jerusalem")).isoformat()
                 st.session_state.question_start_time = time.time()
                 st.session_state.db_saved = False
                 st.session_state.screen = "demographics"
@@ -1448,7 +1449,7 @@ elif st.session_state.screen == "experiment":
 
     else:
         total_duration = time.time() - st.session_state.session_start_time
-        st.session_state.ended_at = datetime.utcnow().isoformat()
+        st.session_state.ended_at = datetime.now(ZoneInfo("Asia/Jerusalem")).isoformat()
 
         if not st.session_state.db_saved:
             session_ok, _ = save_session_to_db(total_duration)
@@ -1472,7 +1473,7 @@ elif st.session_state.screen == "summary":
         st.rerun()
 
     total_duration = time.time() - st.session_state.session_start_time
-    st.session_state.ended_at = datetime.utcnow().isoformat()
+    st.session_state.ended_at = datetime.now(ZoneInfo("Asia/Jerusalem")).isoformat()
 
     export_df = build_export_df(total_duration)
     interactions_df = build_interactions_df()
