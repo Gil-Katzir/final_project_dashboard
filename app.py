@@ -923,6 +923,7 @@ def show_chart1():
         drill_df = month_daily_totals(st.session_state.chart1_month)
         fig = px.line(drill_df, x="Day", y="Revenue", color_discrete_sequence=['#60a5fa'])
         fig = apply_common_layout(fig, f"Daily Revenue — {st.session_state.chart1_month}")
+        fig.update_yaxes(tickprefix="$")
         st.plotly_chart(fig, use_container_width=True)
         if st.button("⬅️ חזרה", key="chart1_back_btn", use_container_width=True):
             st.session_state.chart1_drilled = False
@@ -970,6 +971,7 @@ def show_chart2():
         drill_df = month_daily_totals(st.session_state.chart2_month)
         fig = px.line(drill_df, x="Day", y="Profit", color_discrete_sequence=['#34d399'])
         fig = apply_common_layout(fig, f"Daily Profit — {st.session_state.chart2_month}")
+        fig.update_yaxes(tickprefix="$")
         st.plotly_chart(fig, use_container_width=True)
         if st.button("⬅️ חזרה", key="chart2_back_btn", use_container_width=True):
             st.session_state.chart2_drilled = False
