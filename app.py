@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.express as px
 import time
 import uuid
+from datetime import datetime
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from supabase import create_client, Client
@@ -619,19 +620,30 @@ NEW_CHART_AT = {2: "גרף 2 נוסף", 4: "גרף 3 נוסף", 7: "גרף 4 נ�
 # Session state
 # -----------------------------
 defaults = {
-    "screen": "register",   # welcome | register | experiment | summary | thankyou
+    "screen": "register",   # welcome | demographics | register | experiment | summary | thankyou
     "experiment_started": False,
     "participant_id": "",
     "experiment_group": "",
+
+    "demographic_age": "",
+    "demographic_gender": "",
+    "demographic_experience": "",
+    "demographic_education": "",
+
     "session_id": str(uuid.uuid4()),
     "session_start_time": None,
+    "started_at": None,
+    "ended_at": None,
     "question_start_time": None,
     "current_question": 0,
     "answers": [],
     "correct_count": 0,
     "dashboard_interaction_clicks": 0,
     "interaction_log": [],
+
+    
     "db_saved": False,
+    
 
     "chart1_drilled": False,
     "chart1_month": months_order[0],
@@ -712,6 +724,10 @@ def build_export_df(total_duration: float) -> pd.DataFrame:
         "dashboard_interaction_clicks": st.session_state.dashboard_interaction_clicks,
         "correct_answers_count": st.session_state.correct_count,
         "total_questions": len(questions),
+        "demographic_age": st.session_state.demographic_age,
+        "demographic_gender": st.session_state.demographic_gender,
+        "demographic_experience": st.session_state.demographic_experience,
+        "demographic_education": st.session_state.demographic_education,
     }
     rows = []
     for answer in st.session_state.answers:
@@ -736,10 +752,16 @@ def save_session_to_db(total_duration):
         "session_id": str(st.session_state.session_id),
         "participant_id": str(st.session_state.participant_id),
         "experiment_group": str(st.session_state.experiment_group),
+        "started_at": st.session_state.started_at,
+        "ended_at": st.session_state.ended_at,
         "total_duration_seconds": float(round(total_duration, 2)),
         "dashboard_interaction_clicks": int(st.session_state.dashboard_interaction_clicks),
         "correct_answers_count": int(st.session_state.correct_count),
         "total_questions": int(len(questions)),
+        "demographic_age": str(st.session_state.demographic_age),
+        "demographic_gender": str(st.session_state.demographic_gender),
+        "demographic_experience": str(st.session_state.demographic_experience),
+        "demographic_education": str(st.session_state.demographic_education),
     }
 
     try:
@@ -1179,10 +1201,73 @@ if st.session_state.screen == "register":
                 st.session_state.experiment_group = experiment_group_input
                 st.session_state.experiment_started = True
                 st.session_state.session_start_time = time.time()
+                st.session_state.started_at = datetime.utcnow().isoformat()
                 st.session_state.question_start_time = time.time()
                 st.session_state.db_saved = False
+                st.session_state.screen = "demographics"
+                st.rerun()
+
+
+# ==============================
+# SCREEN: DEMOGRAPHICS
+# ==============================
+elif st.session_state.screen == "demographics":
+    st.markdown(
+"""
+<div style="max-width:820px;margin:2rem auto;">
+<div class="welcome-card">
+<div class="welcome-title">שאלון דמוגרפי</div>
+<div class="welcome-subtitle">השאלון מיועד לצורכי מחקר בלבד ונשמר באופן אנונימי</div>
+<hr class="welcome-divider">
+
+<div class="welcome-text">
+לפני תחילת הניסוי, נבקש למלא מספר פרטים כלליים.  
+המידע ישמש לצורכי מחקר בלבד ולא יאפשר זיהוי אישי.
+</div>
+</div>
+</div>
+""",
+        unsafe_allow_html=True
+    )
+
+    col_l, col_form, col_r = st.columns([1, 2, 1])
+
+    with col_form:
+        age = st.selectbox(
+            "טווח גילאים",
+            ["", "18–24", "25–34", "35–44", "45 ומעלה"]
+        )
+
+        gender = st.selectbox(
+            "מגדר",
+            ["", "אישה", "גבר", "אחר", "מעדיפ/ה לא לציין"]
+        )
+
+        experience = st.selectbox(
+            "מהי רמת ההיכרות שלך עם דשבורדים או גרפים עסקיים?",
+            ["", "ללא ניסיון", "ניסיון מועט", "ניסיון בינוני", "ניסיון רב"]
+        )
+
+        education = st.selectbox(
+            "מהו הרקע העיקרי שלך?",
+            ["", "סטודנט/ית", "עובד/ת בתחום עסקי", "עובד/ת בתחום טכנולוגי", "אחר"]
+        )
+
+        st.write("")
+
+        if st.button("שלח/י והמשך ▶", use_container_width=True):
+            if age == "" or gender == "" or experience == "" or education == "":
+                st.warning("יש למלא את כל השאלות לפני ההמשך")
+            else:
+                st.session_state.demographic_age = age
+                st.session_state.demographic_gender = gender
+                st.session_state.demographic_experience = experience
+                st.session_state.demographic_education = education
+
                 st.session_state.screen = "welcome"
                 st.rerun()
+
+
 
 # ==============================
 # SCREEN: WELCOME
@@ -1363,6 +1448,7 @@ elif st.session_state.screen == "experiment":
 
     else:
         total_duration = time.time() - st.session_state.session_start_time
+        st.session_state.ended_at = datetime.utcnow().isoformat()
 
         if not st.session_state.db_saved:
             session_ok, _ = save_session_to_db(total_duration)
@@ -1386,6 +1472,8 @@ elif st.session_state.screen == "summary":
         st.rerun()
 
     total_duration = time.time() - st.session_state.session_start_time
+    st.session_state.ended_at = datetime.utcnow().isoformat()
+
     export_df = build_export_df(total_duration)
     interactions_df = build_interactions_df()
 
