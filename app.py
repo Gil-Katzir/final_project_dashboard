@@ -925,6 +925,12 @@ def show_chart1():
         
         fig = apply_common_layout(fig, "Revenue Total by Month")
         fig.update_yaxes(tickprefix="$")
+
+        fig.update_layout(
+            plot_bgcolor="#f7f7f7",
+            paper_bgcolor="#f7f7f7"
+        )
+
         st.plotly_chart(fig, use_container_width=True)
 
         c1, c2 = st.columns([2.2, 1])
