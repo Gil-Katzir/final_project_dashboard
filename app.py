@@ -279,37 +279,31 @@ st.markdown("""
         to   { opacity: 1; transform: scale(1); }
     }
 
+
+
     /* ---- Inputs & Buttons ---- */
 
-    /* ---- Modern radio answers ---- */
-    /* ---- Radio answers as full cards ---- */
+    /* ---- Modern radio answers - Fixed Width & Alignment ---- */
+    
+    /* מוודא שהקומפוננטה עצמה תופסת 100% */
     div[data-testid="stRadio"] {
+        width: 100% !important;
         direction: rtl !important;
-        text-align: right !important;
+    }
+
+    /* מוודא שהמיכל הפנימי (הקבוצה) תופס 100% */
+    div[data-testid="stRadio"] > div[role="radiogroup"] {
         width: 100% !important;
-    }
-
-    div[data-testid="stRadio"] > div {
-        width: 100% !important;
-    }
-
-    /* מסתיר את הלייבל הריק של הקומפוננטה */
-    div[data-testid="stRadio"] > label {
-        display: none !important;
-    }
-
-    /* קבוצת התשובות */
-    div[data-testid="stRadio"] [role="radiogroup"] {
         display: flex !important;
         flex-direction: column !important;
         gap: 12px !important;
-        width: 100% !important;
     }
 
-    /* כל תשובה */
+    /* הכפתור עצמו - הופך אותו לבלוק מלא שמתנהג כמו כפתור */
     div[data-testid="stRadio"] [role="radiogroup"] label {
-        display: block !important;
+        display: flex !important; /* שינוי מ-block ל-flex */
         width: 100% !important;
+        min-width: 100% !important;
         max-width: 100% !important;
         box-sizing: border-box !important;
 
@@ -321,39 +315,41 @@ st.markdown("""
 
         cursor: pointer !important;
         transition: all 0.2s ease !important;
-
+        
+        /* יישור לימין */
+        justify-content: flex-start !important;
         text-align: right !important;
         direction: rtl !important;
-
         box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
-
     }
 
-    /* hover */
+    /* שינוי צבע ב-Hover */
     div[data-testid="stRadio"] [role="radiogroup"] label:hover {
         border-color: #3b82f6 !important;
         background: #f8fbff !important;
         box-shadow: 0 6px 18px rgba(59, 130, 246, 0.10) !important;
     }
 
-    /* מסתיר את העיגול */
+    /* הסתרת עיגול הבחירה המקורי */
     div[data-testid="stRadio"] input[type="radio"] {
         display: none !important;
     }
 
-    /* הטקסט של התשובה */
+    /* עיצוב הטקסט בתוך הכפתור */
     div[data-testid="stRadio"] [role="radiogroup"] label p,
     div[data-testid="stRadio"] [role="radiogroup"] label span {
-        margin: 0 !important;
         width: 100% !important;
         text-align: right !important;
         direction: rtl !important;
         font-family: 'Varela Round', sans-serif !important;
         font-size: 0.98rem !important;
         color: #1e293b !important;
-        line-height: 1.5 !important;
+        margin: 0 !important;
         display: block !important;
     }
+
+
+
 
 
     /* כל סוגי הכפתורים ב-Streamlit */
