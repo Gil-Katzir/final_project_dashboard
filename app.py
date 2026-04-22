@@ -1264,7 +1264,7 @@ elif st.session_state.screen == "demographics":
 """
 <div style="max-width:820px;margin:2rem auto;">
 <div class="welcome-card">
-<div class="welcome-title">שאלון דמוגרפי</div>
+<div class="welcome-title">שאלון קצר לפני שמתחילים... </div>
 <div class="welcome-subtitle">השאלון מיועד לצורכי מחקר בלבד ונשמר באופן אנונימי</div>
 <hr class="welcome-divider">
 
