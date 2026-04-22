@@ -281,72 +281,68 @@ st.markdown("""
 
     /* ---- Inputs & Buttons ---- */
 
-    /* ---- Modern radio answers - Fixed Width & Alignment ---- */
+   /* ---- פתרון סופי ליישור ורוחב מלא של התשובות ---- */
     
-    /* מוודא שהקומפוננטה עצמה תופסת 100% */
+    /* 1. מוודא שהרכיב עצמו תופס 100% מהעמודה */
     div[data-testid="stRadio"] {
         width: 100% !important;
         direction: rtl !important;
     }
 
-    /* מוודא שהמיכל הפנימי (הקבוצה) תופס 100% */
+    /* 2. זה החלק הקריטי: מכריח את קבוצת האפשרויות להימתח לכל הרוחב */
     div[data-testid="stRadio"] > div[role="radiogroup"] {
         width: 100% !important;
         display: flex !important;
         flex-direction: column !important;
+        align-items: stretch !important; /* גורם לכל כפתור "להימרח" על כל הרוחב הזמין */
         gap: 12px !important;
     }
 
-    /* הכפתור עצמו - הופך אותו לבלוק מלא שמתנהג כמו כפתור */
+    /* 3. עיצוב ה"כרטיס" של התשובה */
     div[data-testid="stRadio"] [role="radiogroup"] label {
-        display: flex !important; /* שינוי מ-block ל-flex */
         width: 100% !important;
-        min-width: 100% !important;
         max-width: 100% !important;
-        box-sizing: border-box !important;
-
+        display: flex !important;
         background: #ffffff !important;
         border: 1.5px solid #dbe4ee !important;
         border-radius: 16px !important;
         padding: 16px 20px !important;
         margin: 0 !important;
-
         cursor: pointer !important;
         transition: all 0.2s ease !important;
         
-        /* יישור לימין */
-        justify-content: flex-start !important;
+        /* יישור תוכן לימין */
+        justify-content: flex-start !important; 
         text-align: right !important;
         direction: rtl !important;
-        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
     }
 
-    /* שינוי צבע ב-Hover */
+    /* 4. טיפול בטקסט שבתוך הכפתור - Streamlit עוטפת אותו בתוך div ו-p */
+    div[data-testid="stRadio"] [role="radiogroup"] label div[data-testid="stMarkdownContainer"] {
+        width: 100% !important;
+    }
+    
+    div[data-testid="stRadio"] [role="radiogroup"] label div[data-testid="stMarkdownContainer"] p {
+        width: 100% !important;
+        text-align: right !important; /* מבטיח שהטקסט יהיה צמוד לימין */
+        margin: 0 !important;
+        font-family: 'Varela Round', sans-serif !important;
+        color: #1e293b !important;
+    }
+
+    /* אפקט מעבר (Hover) */
     div[data-testid="stRadio"] [role="radiogroup"] label:hover {
         border-color: #3b82f6 !important;
         background: #f8fbff !important;
         box-shadow: 0 6px 18px rgba(59, 130, 246, 0.10) !important;
     }
 
-    /* הסתרת עיגול הבחירה המקורי */
+    /* הסתרת העיגול המקורי של הרדיו */
     div[data-testid="stRadio"] input[type="radio"] {
         display: none !important;
     }
 
-    /* עיצוב הטקסט בתוך הכפתור */
-    div[data-testid="stRadio"] [role="radiogroup"] label p,
-    div[data-testid="stRadio"] [role="radiogroup"] label span {
-        width: 100% !important;
-        text-align: right !important;
-        direction: rtl !important;
-        font-family: 'Varela Round', sans-serif !important;
-        font-size: 0.98rem !important;
-        color: #1e293b !important;
-        margin: 0 !important;
-        display: block !important;
-    }
 
-    
 
 
     /* כל סוגי הכפתורים ב-Streamlit */
