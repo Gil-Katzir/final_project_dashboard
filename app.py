@@ -870,7 +870,6 @@ def apply_common_layout(fig, title_text):
         ticks=""
     )
 
-    fig.update_yaxes(tickprefix="$")
 
     return fig
 
@@ -902,6 +901,7 @@ def show_chart1():
 
         
         fig = apply_common_layout(fig, "Revenue Total by Month")
+        fig.update_yaxes(tickprefix="$")
         st.plotly_chart(fig, use_container_width=True)
 
         c1, c2 = st.columns([2.2, 1])
@@ -948,6 +948,7 @@ def show_chart2():
         )
 
         fig = apply_common_layout(fig, "Profit Total by Month")
+        fig.update_yaxes(tickprefix="$")
         st.plotly_chart(fig, use_container_width=True)
 
         c1, c2 = st.columns([2.2, 1])
@@ -994,6 +995,7 @@ def show_chart3():
         fig.update_layout(legend_title_text="")
 
         fig = apply_common_layout(fig, "Revenue by Category and Month")
+        fig.update_yaxes(tickprefix="$")
         st.plotly_chart(fig, use_container_width=True)
 
         c1, c2 = st.columns([2.2, 1])
@@ -1042,6 +1044,8 @@ def show_chart3():
             fig,
             f"{st.session_state.chart3_category} — Monthly Revenue vs Profit"
         )
+
+        fig.update_yaxes(tickprefix="$")
 
         st.plotly_chart(fig, use_container_width=True)
 
