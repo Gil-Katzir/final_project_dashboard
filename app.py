@@ -308,7 +308,24 @@ st.markdown("""
 
     /* כל תשובה */
     div[data-testid="stRadio"] [role="radiogroup"] label {
-        display: block !important;
+
+
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 60px !important;
+
+        background: #ffffff !important;
+        border: 1.5px solid #dbe4ee !important;
+        border-radius: 16px !important;
+        padding: 16px 20px !important;
+
+
+
+        /*display: block !important;
         width: 100% !important;
         max-width: 100% !important;
         box-sizing: border-box !important;
@@ -325,7 +342,7 @@ st.markdown("""
         text-align: right !important;
         direction: rtl !important;
 
-        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;*/
 
     }
 
@@ -1270,7 +1287,7 @@ elif st.session_state.screen == "demographics":
 
 <div class="welcome-text">
 לפני תחילת הניסוי, נבקש למלא מספר פרטים כלליים.  
-המידע ישמש לצורכי מחקר בלבד ולא יאפשר זיהוי אישי.
+המידע ישמש לצורכי מחקר בלבד.
 </div>
 </div>
 </div>
