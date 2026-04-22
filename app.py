@@ -281,68 +281,72 @@ st.markdown("""
 
     /* ---- Inputs & Buttons ---- */
 
-   /* ---- פתרון בשימוש בשם הקלאס: question-container ---- */
-    .question-container {
+    /* ---- Modern radio answers - Fixed Width & Alignment ---- */
+    
+    /* מוודא שהקומפוננטה עצמה תופסת 100% */
+    div[data-testid="stRadio"] {
         width: 100% !important;
         direction: rtl !important;
-        text-align: right !important;
     }
 
-    /* הכרחת כל שכבות המבנה של Streamlit להיפתח לרוחב מלא */
-    .question-container div[data-testid="stRadio"],
-    .question-container div[data-testid="stRadio"] > div,
-    .question-container div[data-testid="stWidgetStack"] {
+    /* מוודא שהמיכל הפנימי (הקבוצה) תופס 100% */
+    div[data-testid="stRadio"] > div[role="radiogroup"] {
         width: 100% !important;
-    }
-
-    /* עיצוב התשובות ככרטיסים רחבים */
-    .question-container div[role="radiogroup"] {
         display: flex !important;
         flex-direction: column !important;
         gap: 12px !important;
-        width: 100% !important;
-        align-items: stretch !important;
     }
 
-    .question-container div[role="radiogroup"] label {
-        display: flex !important;
+    /* הכפתור עצמו - הופך אותו לבלוק מלא שמתנהג כמו כפתור */
+    div[data-testid="stRadio"] [role="radiogroup"] label {
+        display: flex !important; /* שינוי מ-block ל-flex */
         width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+
         background: #ffffff !important;
-        border: 1.5px solid #e2e8f0 !important;
-        border-radius: 14px !important;
+        border: 1.5px solid #dbe4ee !important;
+        border-radius: 16px !important;
         padding: 16px 20px !important;
         margin: 0 !important;
+
         cursor: pointer !important;
         transition: all 0.2s ease !important;
-        box-shadow: 0 2px 6px rgba(15,23,42,0.04) !important;
         
-        /* יישור הטקסט לימין בתוך הכרטיס */
+        /* יישור לימין */
         justify-content: flex-start !important;
         text-align: right !important;
         direction: rtl !important;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
     }
 
-    /* תיקון הטקסט בתוך התיבה */
-    .question-container div[role="radiogroup"] label p {
-        width: 100% !important;
-        text-align: right !important;
-        margin: 0 !important;
-        font-family: 'Varela Round', sans-serif !important;
-        color: #1e293b !important;
+    /* שינוי צבע ב-Hover */
+    div[data-testid="stRadio"] [role="radiogroup"] label:hover {
+        border-color: #3b82f6 !important;
+        background: #f8fbff !important;
+        box-shadow: 0 6px 18px rgba(59, 130, 246, 0.10) !important;
     }
 
-    /* הסתרת העיגול המקורי */
-    .question-container input[type="radio"] {
+    /* הסתרת עיגול הבחירה המקורי */
+    div[data-testid="stRadio"] input[type="radio"] {
         display: none !important;
     }
 
-    /* אפקט Hover */
-    .question-container div[role="radiogroup"] label:hover {
-        border-color: #3b82f6 !important;
-        background: #f8fbff !important;
+    /* עיצוב הטקסט בתוך הכפתור */
+    div[data-testid="stRadio"] [role="radiogroup"] label p,
+    div[data-testid="stRadio"] [role="radiogroup"] label span {
+        width: 100% !important;
+        text-align: right !important;
+        direction: rtl !important;
+        font-family: 'Varela Round', sans-serif !important;
+        font-size: 0.98rem !important;
+        color: #1e293b !important;
+        margin: 0 !important;
+        display: block !important;
     }
 
-
+    
 
 
     /* כל סוגי הכפתורים ב-Streamlit */
@@ -1460,16 +1464,12 @@ elif st.session_state.screen == "experiment":
             unsafe_allow_html=True
         )
 
-        st.markdown('<div class="question-container">', unsafe_allow_html=True) # המעטפת החדשה
-
         selected = st.radio(
             "",
             q["options"],
             key=f"question_{q['id']}",
             label_visibility="collapsed"
         )
-
-        st.markdown('</div>', unsafe_allow_html=True) # סגירת המעטפת
 
         if st.button("שלח/י תשובה ✨", use_container_width=True):
             response_time = time.time() - st.session_state.question_start_time
