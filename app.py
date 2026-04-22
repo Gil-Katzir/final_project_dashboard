@@ -281,63 +281,69 @@ st.markdown("""
 
     /* ---- Inputs & Buttons ---- */
 
-   /* ---- פתרון סופי ליישור ורוחב מלא של התשובות ---- */
+/* ---- פתרון "כוח גס" ליישור ורוחב מלא ---- */
     
-    /* 1. מוודא שהרכיב עצמו תופס 100% מהעמודה */
-    div[data-testid="stRadio"] {
+    /* 1. טיפול במיכל החיצוני ביותר של הרדיו */
+    div[data-testid="stRadio"], 
+    div[data-testid="stRadio"] > div {
         width: 100% !important;
+        max-width: 100% !important;
         direction: rtl !important;
     }
 
-    /* 2. זה החלק הקריטי: מכריח את קבוצת האפשרויות להימתח לכל הרוחב */
-    div[data-testid="stRadio"] > div[role="radiogroup"] {
+    /* 2. טיפול ב-Stack הפנימי ש-Streamlit יוצרת (האשם העיקרי) */
+    div[data-testid="stRadio"] div[data-testid="stWidgetStack"] {
+        width: 100% !important;
+    }
+
+    /* 3. הגדרת קבוצת הכפתורים כעמודה שנמתחת עד הסוף */
+    div[data-testid="stRadio"] div[role="radiogroup"] {
         width: 100% !important;
         display: flex !important;
         flex-direction: column !important;
-        align-items: stretch !important; /* גורם לכל כפתור "להימרח" על כל הרוחב הזמין */
+        align-items: stretch !important; /* זה מה שמכריח אותם להימתח */
         gap: 12px !important;
     }
 
-    /* 3. עיצוב ה"כרטיס" של התשובה */
-    div[data-testid="stRadio"] [role="radiogroup"] label {
-        width: 100% !important;
-        max-width: 100% !important;
+    /* 4. עיצוב ה"כרטיס" עצמו */
+    div[data-testid="stRadio"] div[role="radiogroup"] label {
         display: flex !important;
-        background: #ffffff !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 16px 20px !important;
+        background-color: #ffffff !important;
         border: 1.5px solid #dbe4ee !important;
         border-radius: 16px !important;
-        padding: 16px 20px !important;
-        margin: 0 !important;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
         cursor: pointer !important;
         transition: all 0.2s ease !important;
         
-        /* יישור תוכן לימין */
-        justify-content: flex-start !important; 
+        /* יישור התוכן לימין בתוך ה-Flex */
+        flex-direction: row-reverse !important; 
+        justify-content: flex-end !important;
+    }
+
+    /* 5. הכרחת הטקסט בפנים להיצמד לימין */
+    div[data-testid="stRadio"] div[role="radiogroup"] label div[data-testid="stMarkdownContainer"] {
+        width: 100% !important;
         text-align: right !important;
-        direction: rtl !important;
     }
 
-    /* 4. טיפול בטקסט שבתוך הכפתור - Streamlit עוטפת אותו בתוך div ו-p */
-    div[data-testid="stRadio"] [role="radiogroup"] label div[data-testid="stMarkdownContainer"] {
-        width: 100% !important;
-    }
-    
-    div[data-testid="stRadio"] [role="radiogroup"] label div[data-testid="stMarkdownContainer"] p {
-        width: 100% !important;
-        text-align: right !important; /* מבטיח שהטקסט יהיה צמוד לימין */
+    div[data-testid="stRadio"] div[role="radiogroup"] label div[data-testid="stMarkdownContainer"] p {
         margin: 0 !important;
+        text-align: right !important;
+        width: 100% !important;
         font-family: 'Varela Round', sans-serif !important;
-        color: #1e293b !important;
+        font-size: 1rem !important;
     }
 
-    /* אפקט מעבר (Hover) */
-    div[data-testid="stRadio"] [role="radiogroup"] label:hover {
+    /* אפקט Hover */
+    div[data-testid="stRadio"] div[role="radiogroup"] label:hover {
         border-color: #3b82f6 !important;
-        background: #f8fbff !important;
-        box-shadow: 0 6px 18px rgba(59, 130, 246, 0.10) !important;
+        background-color: #f8fbff !important;
     }
 
-    /* הסתרת העיגול המקורי של הרדיו */
+    /* הסתרת העיגול המקורי */
     div[data-testid="stRadio"] input[type="radio"] {
         display: none !important;
     }
