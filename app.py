@@ -380,6 +380,8 @@ st.markdown("""
         font-size: 0.98rem !important;
         color: #1e293b !important;
         line-height: 1.5 !important;
+        display: block !important;
+        flex: 1 !important;
     }
 
 
