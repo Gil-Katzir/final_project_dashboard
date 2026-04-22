@@ -312,16 +312,27 @@ st.markdown("""
 
         display: flex !important;
         align-items: center !important;
-        justify-content: space-between !important;
+        justify-content: flex-start !important;
 
         width: 100% !important;
         max-width: 100% !important;
         min-height: 60px !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
 
         background: #ffffff !important;
         border: 1.5px solid #dbe4ee !important;
         border-radius: 16px !important;
         padding: 16px 20px !important;
+
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+
+        text-align: right !important;
+        direction: rtl !important;
+
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
+
 
 
 
