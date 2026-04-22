@@ -1340,6 +1340,9 @@ elif st.session_state.screen == "welcome":
 יש לעיין בדשבורד האינטראקטיבי ולענות על <strong>10 שאלות</strong> המבוססות על הנתונים המוצגים.
 לאחר שליחת תשובה לא ניתן לחזור אליה. לא יינתן משוב בזמן אמת לגבי נכונות התשובה.
 </div>
+<div class="welcome-text">
+ניתן לחקור את הנתונים באמצעות סמל הזכוכית המגדלת (🔍), המאפשר לבצע Drill Down (ירידה לפרטים עמוקים יותר) או להציג תצוגות מפורטות יותר של הנתונים.
+</div>
 
 <div class="welcome-section-title">משך הניסוי</div>
 <div class="welcome-text">
@@ -1373,7 +1376,7 @@ elif st.session_state.screen == "welcome":
 # SCREEN: EXPERIMENT
 # ==============================
 elif st.session_state.screen == "experiment":
-    st.markdown('<div class="big-title" style="direction:ltr; text-align:left;">Business Analytics Dashboard</div>', unsafe_allow_html=True)
+    st.markdown('<div class="big-title" style="direction:ltr; text-align:left;">Fashion Store Analytics Dashboard</div>', unsafe_allow_html=True)
     st.markdown('<div class="sub-title" style="direction:ltr; text-align:left;">Decision support & Performance analysis</div>', unsafe_allow_html=True)
 
     # metric bar - visible only for participant 999
