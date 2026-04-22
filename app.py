@@ -929,7 +929,6 @@ def show_chart1():
         fig.update_layout(
             plot_bgcolor="#f7f7f7",
             paper_bgcolor="#f7f7f7"
-            margin=dict(l=20, r=20, t=40, b=20)
         )
 
         st.plotly_chart(fig, use_container_width=True)
@@ -1209,7 +1208,7 @@ def show_chart4():
             plot_bgcolor="#f7f7f7",
             paper_bgcolor="#f7f7f7"
         )
-
+        
         st.plotly_chart(fig, use_container_width=True)
 
         if st.button("⬅️ חזרה", key="chart4_back_btn", use_container_width=True):
