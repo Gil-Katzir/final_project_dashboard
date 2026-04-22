@@ -870,6 +870,8 @@ def apply_common_layout(fig, title_text):
         ticks=""
     )
 
+    fig.update_yaxes(tickprefix="$")
+
     return fig
 
 def panel_header(title: str, narrative: str):
@@ -1082,7 +1084,7 @@ def show_chart4():
             secondary_y=True
         )
 
-        fig.update_yaxes(title_text="Profit", secondary_y=False)
+        fig.update_yaxes(title_text="Profit", secondary_y=False, tickprefix="$")
         fig.update_yaxes(title_text="Discount (%)", secondary_y=True)
         fig = apply_common_layout(fig, "Dress: Discount vs Profit")
         st.plotly_chart(fig, use_container_width=True)
@@ -1128,7 +1130,7 @@ def show_chart4():
             secondary_y=True
         )
 
-        fig.update_yaxes(title_text="Profit", secondary_y=False)
+        fig.update_yaxes(title_text="Profit", secondary_y=False, tickprefix="$")
         fig.update_yaxes(title_text="Discount (%)", secondary_y=True)
         fig = apply_common_layout(fig, f"Dress: Daily Stats ({st.session_state.chart4_month})")
         st.plotly_chart(fig, use_container_width=True)
