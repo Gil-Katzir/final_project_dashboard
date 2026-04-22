@@ -953,6 +953,12 @@ def show_chart1():
         fig = px.line(drill_df, x="Day", y="Revenue", color_discrete_sequence=['#60a5fa'])
         fig = apply_common_layout(fig, f"Daily Revenue — {st.session_state.chart1_month}")
         fig.update_yaxes(tickprefix="$")
+
+        fig.update_layout(
+            plot_bgcolor="#f7f7f7",
+            paper_bgcolor="#f7f7f7"
+        )
+
         st.plotly_chart(fig, use_container_width=True)
         if st.button("⬅️ חזרה", key="chart1_back_btn", use_container_width=True):
             st.session_state.chart1_drilled = False
@@ -979,6 +985,12 @@ def show_chart2():
 
         fig = apply_common_layout(fig, "Profit Total by Month")
         fig.update_yaxes(tickprefix="$")
+
+        fig.update_layout(
+            plot_bgcolor="#f7f7f7",
+            paper_bgcolor="#f7f7f7"
+        )
+
         st.plotly_chart(fig, use_container_width=True)
 
         c1, c2 = st.columns([2.2, 1])
@@ -1001,6 +1013,12 @@ def show_chart2():
         fig = px.line(drill_df, x="Day", y="Profit", color_discrete_sequence=['#34d399'])
         fig = apply_common_layout(fig, f"Daily Profit — {st.session_state.chart2_month}")
         fig.update_yaxes(tickprefix="$")
+
+        fig.update_layout(
+            plot_bgcolor="#f7f7f7",
+            paper_bgcolor="#f7f7f7"
+        )
+
         st.plotly_chart(fig, use_container_width=True)
         if st.button("⬅️ חזרה", key="chart2_back_btn", use_container_width=True):
             st.session_state.chart2_drilled = False
@@ -1027,6 +1045,12 @@ def show_chart3():
 
         fig = apply_common_layout(fig, "Revenue by Category and Month")
         fig.update_yaxes(tickprefix="$")
+
+        fig.update_layout(
+            plot_bgcolor="#f7f7f7",
+            paper_bgcolor="#f7f7f7"
+        )
+
         st.plotly_chart(fig, use_container_width=True)
 
         c1, c2 = st.columns([2.2, 1])
@@ -1078,6 +1102,11 @@ def show_chart3():
 
         fig.update_yaxes(tickprefix="$")
 
+        fig.update_layout(
+            plot_bgcolor="#f7f7f7",
+            paper_bgcolor="#f7f7f7"
+        )
+
         st.plotly_chart(fig, use_container_width=True)
 
         if st.button("⬅️ חזרה", key="chart3_back_btn", use_container_width=True):
@@ -1122,6 +1151,12 @@ def show_chart4():
         fig.update_yaxes(title_text="Profit", secondary_y=False, tickprefix="$")
         fig.update_yaxes(title_text="Discount (%)", secondary_y=True)
         fig = apply_common_layout(fig, "Dress: Discount vs Profit")
+
+        fig.update_layout(
+            plot_bgcolor="#f7f7f7",
+            paper_bgcolor="#f7f7f7"
+        )
+
         st.plotly_chart(fig, use_container_width=True)
 
         c1, c2 = st.columns([2.2, 1])
@@ -1168,6 +1203,12 @@ def show_chart4():
         fig.update_yaxes(title_text="Profit", secondary_y=False, tickprefix="$")
         fig.update_yaxes(title_text="Discount (%)", secondary_y=True)
         fig = apply_common_layout(fig, f"Dress: Daily Stats ({st.session_state.chart4_month})")
+
+        fig.update_layout(
+            plot_bgcolor="#f7f7f7",
+            paper_bgcolor="#f7f7f7"
+        )
+        
         st.plotly_chart(fig, use_container_width=True)
 
         if st.button("⬅️ חזרה", key="chart4_back_btn", use_container_width=True):
