@@ -281,39 +281,54 @@ st.markdown("""
 
     /* ---- Inputs & Buttons ---- */
 
-   /* ---- מעטפת השאלה והתשובות ---- */
+   /* ---- פתרון בשימוש בשם הקלאס: question-container ---- */
     .question-container {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start; /* שומר שהכל יתחיל מצד ימין (בגלל ה-RTL הכללי) */
-        direction: rtl;
+        width: 100% !important;
+        direction: rtl !important;
+        text-align: right !important;
     }
 
-    /* מוודא שהרדיו בתוך המעטפת תופס את כל הרוחב */
-    .question-container [data-testid="stRadio"] {
+    /* הכרחת כל שכבות המבנה של Streamlit להיפתח לרוחב מלא */
+    .question-container div[data-testid="stRadio"],
+    .question-container div[data-testid="stRadio"] > div,
+    .question-container div[data-testid="stWidgetStack"] {
         width: 100% !important;
     }
 
     /* עיצוב התשובות ככרטיסים רחבים */
-    .question-container [role="radiogroup"] label {
-        display: block !important;
-        width: 100% !important; /* פריסה ל-100% רוחב */
-        background: #ffffff !important;
-        border: 1.5px solid #dbe4ee !important;
-        border-radius: 12px !important;
-        padding: 14px 20px !important;
-        margin-bottom: 8px !important;
-        text-align: right !important;
-        cursor: pointer !important;
-        transition: all 0.2s ease;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
+    .question-container div[role="radiogroup"] {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+        width: 100% !important;
+        align-items: stretch !important;
     }
 
-    /* אפקט מעבר */
-    .question-container [role="radiogroup"] label:hover {
-        border-color: #3b82f6 !important;
-        background-color: #f8fbff !important;
+    .question-container div[role="radiogroup"] label {
+        display: flex !important;
+        width: 100% !important;
+        background: #ffffff !important;
+        border: 1.5px solid #e2e8f0 !important;
+        border-radius: 14px !important;
+        padding: 16px 20px !important;
+        margin: 0 !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+        box-shadow: 0 2px 6px rgba(15,23,42,0.04) !important;
+        
+        /* יישור הטקסט לימין בתוך הכרטיס */
+        justify-content: flex-start !important;
+        text-align: right !important;
+        direction: rtl !important;
+    }
+
+    /* תיקון הטקסט בתוך התיבה */
+    .question-container div[role="radiogroup"] label p {
+        width: 100% !important;
+        text-align: right !important;
+        margin: 0 !important;
+        font-family: 'Varela Round', sans-serif !important;
+        color: #1e293b !important;
     }
 
     /* הסתרת העיגול המקורי */
@@ -321,11 +336,10 @@ st.markdown("""
         display: none !important;
     }
 
-    /* תיקון טקסט השאלה */
-    .question-container p {
-        text-align: right !important;
-        width: 100% !important;
-        font-family: 'Varela Round', sans-serif !important;
+    /* אפקט Hover */
+    .question-container div[role="radiogroup"] label:hover {
+        border-color: #3b82f6 !important;
+        background: #f8fbff !important;
     }
 
 
