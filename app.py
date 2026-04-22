@@ -883,7 +883,7 @@ def panel_header(title: str, narrative: str):
 # Chart renderers
 # -----------------------------
 def show_chart1():
-    panel_header("מגמת הכנסות", chart_narratives["chart1"])
+    panel_header("הכנסות לפי חודש", chart_narratives["chart1"])
 
     if not st.session_state.chart1_drilled:
         fig = px.line(
@@ -932,7 +932,7 @@ def show_chart1():
 
 
 def show_chart2():
-    panel_header("מגמת רווח", chart_narratives["chart2"])
+    panel_header("רווחים לפי חודש", chart_narratives["chart2"])
 
     if not st.session_state.chart2_drilled:
         fig = px.line(
