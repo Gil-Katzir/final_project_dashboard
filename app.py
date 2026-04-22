@@ -287,6 +287,10 @@ st.markdown("""
         width: 100% !important;
     }
 
+    div[data-testid="stRadio"] > div {
+        width: 100% !important;
+    }
+
     /* מסתיר את הלייבל הריק של הקומפוננטה */
     div[data-testid="stRadio"] > label {
         display: none !important;
@@ -320,6 +324,7 @@ st.markdown("""
         direction: rtl !important;
 
         box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
+
     }
 
     /* hover */
