@@ -1367,7 +1367,6 @@ elif st.session_state.screen == "welcome":
 <div class="welcome-text">
 ניתן לחקור את הנתונים באמצעות סמל הזכוכית המגדלת (🔍), המאפשר לבצע Drill Down (ירידה לפרטים עמוקים יותר) או להציג תצוגות מפורטות יותר של הנתונים.
 </div>
-</div>
 <div class="welcome-text">
 💡 שימו לב - ערכי ציר ה-Y בגרפים לא תמיד יתחילו מ-0
 </div>
