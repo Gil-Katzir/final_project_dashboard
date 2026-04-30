@@ -3,8 +3,6 @@ import pandas as pd
 import plotly.express as px
 import time
 import uuid
-from datetime import datetime
-from zoneinfo import ZoneInfo
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from supabase import create_client, Client
@@ -32,16 +30,13 @@ supabase: Client = create_client(
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
-    @import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
 
     html, body, [class*="css"] {
         font-family: 'Inter', "Segoe UI", sans-serif;
     }
 
     .main {
-        background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%),
-        radial-gradient(circle at top left, #eef6ff 0%, transparent 30%),
-        linear-gradient(180deg, #f8fbff 0%, #edf3f8 100%);
+        background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
     }
 
     .block-container {
@@ -90,7 +85,6 @@ st.markdown("""
         -webkit-text-fill-color: transparent;
         margin-bottom: 0.3rem;
         text-align: center;
-        font-family: 'Varela Round', sans-serif;
     }
 
     .welcome-subtitle {
@@ -98,7 +92,6 @@ st.markdown("""
         color: #94a3b8;
         text-align: center;
         margin-bottom: 2rem;
-        font-family: 'Varela Round', sans-serif;
     }
 
     .welcome-section-title {
@@ -108,14 +101,12 @@ st.markdown("""
         margin: 1.4rem 0 0.45rem 0;
         border-right: 4px solid #3b82f6;
         padding-right: 10px;
-        font-family: 'Varela Round', sans-serif;
     }
 
     .welcome-text {
         font-size: 0.95rem;
         color: #475569;
         line-height: 1.85;
-        font-family: 'Varela Round', sans-serif;
     }
 
     .welcome-highlight {
@@ -127,11 +118,6 @@ st.markdown("""
         font-size: 0.93rem;
         margin: 1.3rem 0;
         line-height: 1.75;
-        font-family: 'Varela Round', sans-serif;
-    }
-
-    .welcome-highlight strong {
-        font-family: 'Varela Round', sans-serif;
     }
 
     .welcome-divider {
@@ -160,7 +146,6 @@ st.markdown("""
         margin-bottom: 1.4rem;
         border-right: 4px solid #3b82f6;
         padding-right: 10px;
-        font-family: 'Varela Round', sans-serif;
     }
 
     /* ---- Metric cards ---- */
@@ -203,21 +188,17 @@ st.markdown("""
         border-right: 5px solid #3b82f6;
         direction: rtl;
         text-align: right;
-        font-family: 'Varela Round', sans-serif;
     }
 
     /* ---- Chart cards ---- */
     .chart-card {
-        background: rgba(255, 255, 255, 0.92);
-        border: 1px solid rgba(226, 232, 240, 0.9);
-        border-radius: 28px;
-        padding: 24px;
-        box-shadow:
-            0 10px 30px rgba(15, 23, 42, 0.06),
-            0 2px 8px rgba(15, 23, 42, 0.04);
-        backdrop-filter: blur(10px);
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 24px;
+        padding: 22px;
+        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.06);
         height: 100%;
-        animation: fadeIn 0.45s ease;
+        animation: fadeIn 0.5s cubic-bezier(0.16,1,0.3,1);
     }
 
     .chart-card-empty {
@@ -232,29 +213,25 @@ st.markdown("""
     }
 
     .chart-title {
-        font-size: 1.35rem;
-        font-weight: 800;
-        color: #0f172a;
+        font-size: 1.08rem;
+        font-weight: 700;
+        color: #1e293b;
         margin-bottom: 0.9rem;
         direction: rtl;
         text-align: right;
-        font-family: 'Varela Round', sans-serif;
-        letter-spacing: -0.02em;
     }
 
     .story-box {
-        background: linear-gradient(180deg, #f8fbff 0%, #eef6ff 100%);
-        border: 1px solid #dbeafe;
+        background: #eff6ff;
         border-right: 4px solid #3b82f6;
-        border-radius: 14px;
-        padding: 12px 15px;
+        border-radius: 10px;
+        padding: 11px 15px;
         color: #1e40af;
         font-size: 0.93rem;
-        line-height: 1.7;
+        line-height: 1.65;
         margin-bottom: 1.1rem;
         direction: rtl;
         text-align: right;
-        font-family: 'Varela Round', sans-serif;
     }
 
     /* ---- New chart badge ---- */
@@ -280,99 +257,49 @@ st.markdown("""
     }
 
     /* ---- Inputs & Buttons ---- */
-
-    /* ---- Modern radio answers - Fixed Width & Alignment ---- */
-    
-    /* מוודא שהקומפוננטה עצמה תופסת 100% */
     div[data-testid="stRadio"] {
-        width: 100% !important;
-        direction: rtl !important;
+        direction: rtl;
+        text-align: right;
     }
 
-    /* מוודא שהמיכל הפנימי (הקבוצה) תופס 100% */
-    div[data-testid="stRadio"] > div[role="radiogroup"] {
-        width: 100% !important;
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 12px !important;
+    div[data-testid="stRadio"] > div {
+        direction: rtl;
+        align-items: flex-end;
+        gap: 8px;
     }
 
-    /* הכפתור עצמו - הופך אותו לבלוק מלא שמתנהג כמו כפתור */
-    div[data-testid="stRadio"] [role="radiogroup"] label {
-        display: flex !important; /* שינוי מ-block ל-flex */
-        width: 100% !important;
-        min-width: 100% !important;
-        max-width: 100% !important;
-        box-sizing: border-box !important;
-
-        background: #ffffff !important;
-        border: 1.5px solid #dbe4ee !important;
-        border-radius: 16px !important;
-        padding: 16px 20px !important;
-        margin: 0 !important;
-
-        cursor: pointer !important;
-        transition: all 0.2s ease !important;
-        
-        /* יישור לימין */
-        justify-content: flex-start !important;
-        text-align: right !important;
-        direction: rtl !important;
-        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
-    }
-
-    /* שינוי צבע ב-Hover */
-    div[data-testid="stRadio"] [role="radiogroup"] label:hover {
-        border-color: #3b82f6 !important;
-        background: #f8fbff !important;
-        box-shadow: 0 6px 18px rgba(59, 130, 246, 0.10) !important;
-    }
-
-    /* הסתרת עיגול הבחירה המקורי */
-    div[data-testid="stRadio"] input[type="radio"] {
-        display: none !important;
-    }
-
-    /* עיצוב הטקסט בתוך הכפתור */
-    div[data-testid="stRadio"] [role="radiogroup"] label p,
-    div[data-testid="stRadio"] [role="radiogroup"] label span {
-        width: 100% !important;
-        text-align: right !important;
-        direction: rtl !important;
-        font-family: 'Varela Round', sans-serif !important;
-        font-size: 0.98rem !important;
-        color: #1e293b !important;
-        margin: 0 !important;
-        display: block !important;
-    }
-
-    
-
-
-    /* כל סוגי הכפתורים ב-Streamlit */
-    div.stButton > button,
-    div[data-testid="stButton"] button,
-    button[kind="primary"],
-    button[kind="secondary"],
-    button {
-        font-family: 'Varela Round', sans-serif !important;
-        font-weight: 600 !important;
-        font-size: 1rem !important;
+    div[data-testid="stRadio"] label {
+        background: #f8fafc;
+        border: 1.5px solid #e2e8f0;
         border-radius: 12px;
+        padding: 11px 18px !important;
+        transition: all 0.18s ease;
+        cursor: pointer;
+        direction: rtl;
+        text-align: right;
+        justify-content: flex-end;
+        flex-direction: row-reverse;
+    }
+
+    div[data-testid="stRadio"] label:hover {
+        border-color: #3b82f6;
+        background: #eff6ff;
+    }
+
+    div[data-testid="stRadio"] label span,
+    div[data-testid="stRadio"] p {
+        direction: rtl;
+        text-align: right;
+    }
+
+    div.stButton > button {
+        border-radius: 12px;
+        font-weight: 600;
         padding: 0.6rem 2rem;
         background-color: #ffffff;
         color: #1e293b;
         border: 1.5px solid #e2e8f0;
         transition: all 0.18s ease;
-    }
-
-    /* הטקסט שבתוך הכפתור */
-    div.stButton > button *,
-    div[data-testid="stButton"] button *,
-    button[kind="primary"] *,
-    button[kind="secondary"] *,
-    button * {
-        font-family: 'Varela Round', sans-serif !important;
     }
 
     div.stButton > button:hover {
@@ -414,7 +341,6 @@ st.markdown("""
         margin: 4rem auto;
         animation: fadeIn 0.6s ease;
         direction: rtl;
-        font-family: 'Varela Round', sans-serif;
     }
 
     .thankyou-emoji { font-size: 4rem; margin-bottom: 1rem; }
@@ -424,69 +350,13 @@ st.markdown("""
         font-weight: 800;
         color: #1e293b;
         margin-bottom: 0.8rem;
-        font-family: 'Varela Round', sans-serif;
     }
 
     .thankyou-sub {
         font-size: 1rem;
         color: #64748b;
         line-height: 1.8;
-        font-family: 'Varela Round', sans-serif;
     }
-
-        /* selectbox טקסט כללי */
-    div[data-testid="stSelectbox"] {
-        direction: rtl;
-        text-align: right;
-        font-family: 'Varela Round', sans-serif;
-    }
-
-    /* הטקסט שנבחר */
-    div[data-testid="stSelectbox"] div {
-        text-align: right !important;
-        direction: rtl;
-        font-family: 'Varela Round', sans-serif !important;
-    }
-
-    /* dropdown options */
-    ul[role="listbox"] li {
-        text-align: right !important;
-        direction: rtl;
-        font-family: 'Varela Round', sans-serif !important;
-    }
-
-        /* תיבת הבחירה עצמה */
-    div[data-testid="stSelectbox"] > div {
-        border-radius: 12px;
-    }
-
-    /* כל ה-text input */
-    div[data-testid="stTextInput"] {
-        direction: rtl;
-        text-align: right;
-        font-family: 'Varela Round', sans-serif;
-    }
-
-    /* ה-input עצמו (מה שכותבים בו) */
-    div[data-testid="stTextInput"] input {
-        text-align: right !important;
-        direction: rtl;
-        font-family: 'Varela Round', sans-serif !important;
-    }
-
-    /* ה-placeholder */
-    div[data-testid="stTextInput"] input::placeholder {
-        text-align: right;
-        direction: rtl;
-        font-family: 'Varela Round', sans-serif;
-    }
-
-    div[data-testid="stTextInput"] label {
-        direction: rtl;
-        text-align: right;
-        font-family: 'Varela Round', sans-serif;
-    }
-
 </style>
 """, unsafe_allow_html=True)
 
@@ -525,6 +395,15 @@ monthly_dress = (
 monthly_dress["Month"] = pd.Categorical(monthly_dress["Month"], categories=months_order, ordered=True)
 monthly_dress = monthly_dress.sort_values("Month")
 
+monthly_discount_total = (
+    df.groupby("Month", as_index=False)
+    .agg(**{
+        "Discount Total": ("Discount", "mean")
+    })
+)
+monthly_discount_total["Month"] = pd.Categorical(monthly_discount_total["Month"], categories=months_order, ordered=True)
+monthly_discount_total = monthly_discount_total.sort_values("Month")
+
 # -----------------------------
 # Questions and narratives
 # -----------------------------
@@ -561,8 +440,8 @@ questions = [
     },
     {
         "id": 6,
-        "text": "האם גרף בו מוצגות כל הקטגוריות יחד יכול לסייע להסביר את הפער בין הכנסות לרווח?",
-        "options": ["כן", "ניתן לדעת רק כאשר בוחנים את ההתנהגות פר חודש", "רק באופן חלקי", "לא ניתן לדעת"],
+        "text": "האם גרף הקטגוריות יכול לסייע להסביר את הפער בין הכנסות לרווח?",
+        "options": ["כן", "לא", "רק באופן חלקי", "לא ניתן לדעת"],
         "correct_answer": "רק באופן חלקי"
     },
     {
@@ -581,8 +460,8 @@ questions = [
         "id": 9,
         "text": "מהו ההסבר הסביר ביותר לירידה ברווח הכולל?",
         "options": [
-            "ירידה בהכנסות הכוללות של החנות מכלל הקטגוריות",
-            "ירידה במכירות ביחס לשנה הקודמת",
+            "ירידה בהכנסות הכוללות",
+            "ירידה במכירות של כל הקטגוריות",
             "גידול במכירות ב-Dress לצד הנחות גבוהות שפוגעות ברווחיות",
             "עלייה ברווח של Dress"
         ],
@@ -602,10 +481,10 @@ questions = [
 ]
 
 chart_narratives = {
-    "chart1": "📈 מבט על הכנסות: הגרף מציג את סך ההכנסות החודשיות של החברה.",
-    "chart2": "💰 על מנת להשלים את התמונה, כעת מוצגים בגרף זה גם הרווח הנקי של החברה לאורך זמן",
-    "chart3": "🏷️ לשם העמקת הבחינה, מוצגות ההכנסות בחלוקה לפי קטגוריות הלבוש השונות בחנות",
-    "chart4": "📉 גרף זה בוחן את הקשר בין מדיניות ההנחות לרווחיות קטגוריית השמלות בחנות."
+    "chart1": "📈 **מבט על הכנסות:** הגרף מציג את סך ההכנסות החודשיות של החברה.",
+    "chart2": "💰 **מבט על רווחים:** הגרף מציג את השורה התחתונה — הרווח הנקי לאורך זמן.",
+    "chart3": "🏷️ **פילוח קטגוריות:** השוואה בין ביצועי קטגוריות הלבוש השונות.",
+    "chart4": "📉 **רווחים והנחות:** מוצגת בחינה של הרווחים בקטגוריית השמלות, לצד שיעור ההנחה הכולל לאורך זמן."
 }
 
 # שאלות שבהן נוסף גרף (storytelling) — מפתח = index שאלה (0-based)
@@ -615,30 +494,19 @@ NEW_CHART_AT = {2: "גרף 2 נוסף", 4: "גרף 3 נוסף", 7: "גרף 4 נ�
 # Session state
 # -----------------------------
 defaults = {
-    "screen": "register",   # welcome | demographics | register | experiment | summary | thankyou
+    "screen": "welcome",   # welcome | register | experiment | summary | thankyou
     "experiment_started": False,
     "participant_id": "",
     "experiment_group": "",
-
-    "demographic_age": "",
-    "demographic_gender": "",
-    "demographic_experience": "",
-    "demographic_education": "",
-
     "session_id": str(uuid.uuid4()),
     "session_start_time": None,
-    "started_at": None,
-    "ended_at": None,
     "question_start_time": None,
     "current_question": 0,
     "answers": [],
     "correct_count": 0,
     "dashboard_interaction_clicks": 0,
     "interaction_log": [],
-
-    
     "db_saved": False,
-    
 
     "chart1_drilled": False,
     "chart1_month": months_order[0],
@@ -650,7 +518,7 @@ defaults = {
     "chart3_category": "Dress",
 
     "chart4_drilled": False,
-    "chart4_month": months_order[0],
+    "chart4_category": "Dress",
 }
 
 for key, value in defaults.items():
@@ -661,7 +529,7 @@ widget_defaults = {
     "chart1_month_select": months_order[0],
     "chart2_month_select": months_order[0],
     "chart3_category_select": "Dress",
-    "chart4_month_select": months_order[0],
+    "chart4_category_select": "Dress",
 }
 for key, value in widget_defaults.items():
     if key not in st.session_state:
@@ -671,7 +539,7 @@ prev_defaults = {
     "__prev_chart1_month_select": months_order[0],
     "__prev_chart2_month_select": months_order[0],
     "__prev_chart3_category_select": "Dress",
-    "__prev_chart4_month_select": months_order[0],
+    "__prev_chart4_category_select": "Dress",
 }
 for key, value in prev_defaults.items():
     if key not in st.session_state:
@@ -680,10 +548,6 @@ for key, value in prev_defaults.items():
 # -----------------------------
 # Helper functions
 # -----------------------------
-def is_admin_participant() -> bool:
-    return str(st.session_state.participant_id).strip() == "999"
-
-
 def track_dashboard_click(action_type: str, action_value: str = ""):
     if not st.session_state.experiment_started:
         return
@@ -719,10 +583,6 @@ def build_export_df(total_duration: float) -> pd.DataFrame:
         "dashboard_interaction_clicks": st.session_state.dashboard_interaction_clicks,
         "correct_answers_count": st.session_state.correct_count,
         "total_questions": len(questions),
-        "demographic_age": st.session_state.demographic_age,
-        "demographic_gender": st.session_state.demographic_gender,
-        "demographic_experience": st.session_state.demographic_experience,
-        "demographic_education": st.session_state.demographic_education,
     }
     rows = []
     for answer in st.session_state.answers:
@@ -747,16 +607,10 @@ def save_session_to_db(total_duration):
         "session_id": str(st.session_state.session_id),
         "participant_id": str(st.session_state.participant_id),
         "experiment_group": str(st.session_state.experiment_group),
-        "started_at": st.session_state.started_at,
-        "ended_at": st.session_state.ended_at,
         "total_duration_seconds": float(round(total_duration, 2)),
         "dashboard_interaction_clicks": int(st.session_state.dashboard_interaction_clicks),
         "correct_answers_count": int(st.session_state.correct_count),
         "total_questions": int(len(questions)),
-        "demographic_age": str(st.session_state.demographic_age),
-        "demographic_gender": str(st.session_state.demographic_gender),
-        "demographic_experience": str(st.session_state.demographic_experience),
-        "demographic_education": str(st.session_state.demographic_education),
     }
 
     try:
@@ -815,6 +669,19 @@ def dress_month_daily(month_name: str):
     return d[["Day", "Profit", "Discount"]].copy()
 
 
+def category_monthly_profit_discount(category_name: str):
+    d = (
+        df[df["Category"] == category_name]
+        .groupby("Month", as_index=False)
+        .agg(**{
+            "Profit": ("Profit", "sum"),
+            "Discount": ("Discount", "mean")
+        })
+    )
+    d["Month"] = pd.Categorical(d["Month"], categories=months_order, ordered=True)
+    return d.sort_values("Month")
+
+
 def category_monthly_totals(category_name):
     d = (
         df[df["Category"] == category_name]
@@ -827,68 +694,19 @@ def category_monthly_totals(category_name):
 
 def apply_common_layout(fig, title_text):
     fig.update_layout(
-        title=dict(
-            text=title_text,
-            x=0.02,
-            xanchor="left",
-            font=dict(
-                size=15,
-                color="#1e293b",
-                family="Inter, sans-serif"
-            )
-        ),
+        title=dict(text=title_text, font=dict(size=13, color="#475569")),
         template="plotly_white",
         hovermode="x unified",
-        margin=dict(l=8, r=8, t=52, b=8),
-        font=dict(
-            family="Inter, sans-serif",
-            color="#334155",
-            size=12
-        ),
-        legend=dict(
-            orientation="h",
-            yanchor="bottom",
-            y=1.02,
-            xanchor="right",
-            x=1,
-            bgcolor="rgba(255,255,255,0.72)",
-            bordercolor="rgba(226,232,240,0.8)",
-            borderwidth=1,
-            font=dict(size=11, color="#475569")
-        ),
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="#fbfdff",
-        hoverlabel=dict(
-            bgcolor="white",
-            bordercolor="#dbe4ee",
-            font=dict(
-                family="Inter, sans-serif",
-                size=11,
-                color="#334155"
-            )
-        )
+        margin=dict(l=10, r=10, t=50, b=10),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        font=dict(family="Inter, sans-serif"),
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
     )
-
-    fig.update_xaxes(
-        showgrid=False,
-        showline=False,
-        tickfont=dict(size=11, color="#64748b"),
-        zeroline=False,
-        ticks=""
-    )
-
-    fig.update_yaxes(
-        showgrid=True,
-        gridcolor="#edf2f7",
-        gridwidth=1,
-        showline=False,
-        tickfont=dict(size=11, color="#64748b"),
-        zeroline=False,
-        ticks=""
-    )
-
-
+    fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(showgrid=True, gridcolor='#f1f5f9')
     return fig
+
 
 def panel_header(title: str, narrative: str):
     st.markdown(f'<div class="chart-title">{title}</div>', unsafe_allow_html=True)
@@ -900,31 +718,14 @@ def panel_header(title: str, narrative: str):
 # Chart renderers
 # -----------------------------
 def show_chart1():
-    panel_header("הכנסות לפי חודש", chart_narratives["chart1"])
+    panel_header("גרף 1: מגמת הכנסות", chart_narratives["chart1"])
 
     if not st.session_state.chart1_drilled:
         fig = px.line(
-            monthly_total,
-            x="Month",
-            y="Revenue Total",
-            markers=True,
-            color_discrete_sequence=["#3b82f6"],
-            line_shape="spline"
+            monthly_total, x="Month", y="Revenue Total",
+            markers=True, color_discrete_sequence=['#3b82f6']
         )
-        fig.update_traces(
-            line=dict(width=3),
-            marker=dict(size=7, line=dict(width=2, color="white"))
-        )
-
-        
         fig = apply_common_layout(fig, "Revenue Total by Month")
-        fig.update_yaxes(tickprefix="$")
-
-        fig.update_layout(
-            plot_bgcolor="#f7f7f7",
-            paper_bgcolor="#f7f7f7"
-        )
-
         st.plotly_chart(fig, use_container_width=True)
 
         c1, c2 = st.columns([2.2, 1])
@@ -946,13 +747,6 @@ def show_chart1():
         drill_df = month_daily_totals(st.session_state.chart1_month)
         fig = px.line(drill_df, x="Day", y="Revenue", color_discrete_sequence=['#60a5fa'])
         fig = apply_common_layout(fig, f"Daily Revenue — {st.session_state.chart1_month}")
-        fig.update_yaxes(tickprefix="$")
-
-        fig.update_layout(
-            plot_bgcolor="#f7f7f7",
-            paper_bgcolor="#f7f7f7"
-        )
-
         st.plotly_chart(fig, use_container_width=True)
         if st.button("⬅️ חזרה", key="chart1_back_btn", use_container_width=True):
             st.session_state.chart1_drilled = False
@@ -961,30 +755,14 @@ def show_chart1():
 
 
 def show_chart2():
-    panel_header("רווחים לפי חודש", chart_narratives["chart2"])
+    panel_header("גרף 2: מגמת רווח", chart_narratives["chart2"])
 
     if not st.session_state.chart2_drilled:
         fig = px.line(
-            monthly_total,
-            x="Month",
-            y="Profit Total",
-            markers=True,
-            color_discrete_sequence=["#10b981"],
-            line_shape="spline"
+            monthly_total, x="Month", y="Profit Total",
+            markers=True, color_discrete_sequence=['#10b981']
         )
-        fig.update_traces(
-            line=dict(width=3),
-            marker=dict(size=7, line=dict(width=2, color="white"))
-        )
-
         fig = apply_common_layout(fig, "Profit Total by Month")
-        fig.update_yaxes(tickprefix="$")
-
-        fig.update_layout(
-            plot_bgcolor="#f7f7f7",
-            paper_bgcolor="#f7f7f7"
-        )
-
         st.plotly_chart(fig, use_container_width=True)
 
         c1, c2 = st.columns([2.2, 1])
@@ -1006,13 +784,6 @@ def show_chart2():
         drill_df = month_daily_totals(st.session_state.chart2_month)
         fig = px.line(drill_df, x="Day", y="Profit", color_discrete_sequence=['#34d399'])
         fig = apply_common_layout(fig, f"Daily Profit — {st.session_state.chart2_month}")
-        fig.update_yaxes(tickprefix="$")
-
-        fig.update_layout(
-            plot_bgcolor="#f7f7f7",
-            paper_bgcolor="#f7f7f7"
-        )
-
         st.plotly_chart(fig, use_container_width=True)
         if st.button("⬅️ חזרה", key="chart2_back_btn", use_container_width=True):
             st.session_state.chart2_drilled = False
@@ -1021,7 +792,7 @@ def show_chart2():
 
 
 def show_chart3():
-    panel_header("הכנסות לפי קטגוריה", chart_narratives["chart3"])
+    panel_header("גרף 3: הכנסות לפי קטגוריה", chart_narratives["chart3"])
 
     if not st.session_state.chart3_drilled:
         fig = px.line(
@@ -1029,22 +800,7 @@ def show_chart3():
             markers=True,
             color_discrete_map={"T-shirt": "#3b82f6", "Dress": "#f43f5e", "Jeans": "#8b5cf6"}
         )
-
-        fig.update_traces(
-            line=dict(width=3),
-            marker=dict(size=7, line=dict(width=2, color="white"))
-        )
-
-        fig.update_layout(legend_title_text="")
-
         fig = apply_common_layout(fig, "Revenue by Category and Month")
-        fig.update_yaxes(tickprefix="$")
-
-        fig.update_layout(
-            plot_bgcolor="#f7f7f7",
-            paper_bgcolor="#f7f7f7"
-        )
-
         st.plotly_chart(fig, use_container_width=True)
 
         c1, c2 = st.columns([2.2, 1])
@@ -1057,7 +813,7 @@ def show_chart3():
             )
         with c2:
             st.write("")
-            if st.button("הכנסות vs. רווח 🔍", key="chart3_drill_btn", use_container_width=True):
+            if st.button("הכנסות מול רווח 🔍", key="chart3_drill_btn", use_container_width=True):
                 st.session_state.chart3_category = st.session_state.chart3_category_select
                 st.session_state.chart3_drilled = True
                 track_dashboard_click("chart3_drill_down", st.session_state.chart3_category)
@@ -1072,33 +828,22 @@ def show_chart3():
             go.Bar(
                 x=months_list,
                 y=drill_df["Revenue"],
-                name="Revenue",
-                opacity=0.9
-            ),
-
+                name="Revenue"
+            )
         )
 
         fig.add_trace(
             go.Bar(
                 x=months_list,
                 y=drill_df["Profit"],
-                name="Profit",
-                opacity=0.9
-            ),
-
+                name="Profit"
+            )
         )
 
         fig.update_layout(barmode="group")
         fig = apply_common_layout(
             fig,
             f"{st.session_state.chart3_category} — Monthly Revenue vs Profit"
-        )
-
-        fig.update_yaxes(tickprefix="$")
-
-        fig.update_layout(
-            plot_bgcolor="#f7f7f7",
-            paper_bgcolor="#f7f7f7"
         )
 
         st.plotly_chart(fig, use_container_width=True)
@@ -1110,215 +855,108 @@ def show_chart3():
 
 
 def show_chart4():
-    panel_header("גרף המציג רווחים ואחוזי הנחה בקטגוריית שמלות", chart_narratives["chart4"])
+    panel_header("גרף 4: רווחים והנחות", chart_narratives["chart4"])
 
     if not st.session_state.chart4_drilled:
         fig = make_subplots(specs=[[{"secondary_y": True}]])
-        
+
         fig.add_trace(
             go.Bar(
                 x=monthly_dress["Month"],
                 y=monthly_dress["Profit Dress"],
-                name="Profit",
-                marker=dict(
-                    color="#8b5cf6",
-                    line=dict(width=0)
-                ),
-                width=0.45,
-                opacity=0.9
+                name="Dress Profit",
+                marker=dict(color="#75187A"),
+                width=0.4
             ),
             secondary_y=False
         )
 
         fig.add_trace(
             go.Scatter(
-                x=monthly_dress["Month"],
-                y=monthly_dress["Discount Dress"],
+                x=monthly_discount_total["Month"],
+                y=monthly_discount_total["Discount Total"],
                 mode="lines+markers",
-                name="Discount %",
-                line=dict(color="#f59e0b", width=3, dash="dot"),
-                marker=dict(size=7, line=dict(width=2, color="white"))
+                name="Overall Discount %",
+                line=dict(color="#fbbf24", width=3, dash="dot")
             ),
             secondary_y=True
         )
 
-        fig.update_yaxes(title_text="Profit", secondary_y=False, tickprefix="$")
+        fig.update_yaxes(title_text="Profit", secondary_y=False)
         fig.update_yaxes(title_text="Discount (%)", secondary_y=True)
-        fig = apply_common_layout(fig, "Dress: Discount vs Profit")
-
-        fig.update_layout(
-            plot_bgcolor="#f7f7f7",
-            paper_bgcolor="#f7f7f7"
-        )
-
+        fig = apply_common_layout(fig, "Dress Profit and Overall Discount by Month")
         st.plotly_chart(fig, use_container_width=True)
 
         c1, c2 = st.columns([2.2, 1])
         with c1:
             st.selectbox(
-                "בחר/י חודש לפירוט:", months_order,
-                key="chart4_month_select",
+                "בחר/י קטגוריה לפירוט:", ["T-shirt", "Dress", "Jeans"],
+                key="chart4_category_select",
                 on_change=track_filter_change,
-                args=("chart4_month_select", "chart4_filter_month_change")
+                args=("chart4_category_select", "chart4_filter_category_change")
             )
         with c2:
             st.write("")
             if st.button("Drill Down 🔍", key="chart4_drill_btn", use_container_width=True):
-                st.session_state.chart4_month = st.session_state.chart4_month_select
+                st.session_state.chart4_category = st.session_state.chart4_category_select
                 st.session_state.chart4_drilled = True
-                track_dashboard_click("chart4_drill_down", st.session_state.chart4_month)
+                track_dashboard_click("chart4_drill_down", st.session_state.chart4_category)
                 st.rerun()
     else:
-        drill_df = dress_month_daily(st.session_state.chart4_month)
+        drill_df = category_monthly_profit_discount(st.session_state.chart4_category)
         fig = make_subplots(specs=[[{"secondary_y": True}]])
-        
+
         fig.add_trace(
-            go.Scatter(
-                x=drill_df["Day"],
+            go.Bar(
+                x=drill_df["Month"],
                 y=drill_df["Profit"],
-                mode="lines+markers",
                 name="Profit",
-                line=dict(color="#f43f5e", width=2)
+                marker=dict(color="#75187A"),
+                width=0.4
             ),
             secondary_y=False
         )
-        
+
         fig.add_trace(
             go.Scatter(
-                x=drill_df["Day"],
+                x=drill_df["Month"],
                 y=drill_df["Discount"],
                 mode="lines+markers",
                 name="Discount %",
-                line=dict(color="#fbbf24", width=2)
+                line=dict(color="#fbbf24", width=3, dash="dot")
             ),
             secondary_y=True
         )
 
-        fig.update_yaxes(title_text="Profit", secondary_y=False, tickprefix="$")
+        fig.update_yaxes(title_text="Profit", secondary_y=False)
         fig.update_yaxes(title_text="Discount (%)", secondary_y=True)
-        fig = apply_common_layout(fig, f"Dress: Daily Stats ({st.session_state.chart4_month})")
-
-        fig.update_layout(
-            plot_bgcolor="#f7f7f7",
-            paper_bgcolor="#f7f7f7"
-        )
-        
+        fig = apply_common_layout(fig, f"{st.session_state.chart4_category}: Profit and Discount by Month")
         st.plotly_chart(fig, use_container_width=True)
 
         if st.button("⬅️ חזרה", key="chart4_back_btn", use_container_width=True):
             st.session_state.chart4_drilled = False
-            track_dashboard_click("chart4_back", st.session_state.chart4_month)
+            track_dashboard_click("chart4_back", st.session_state.chart4_category)
             st.rerun()
 
 
 def show_or_empty(show_flag, func, is_storytelling=False):
     if show_flag:
+        st.markdown('<div class="chart-card">', unsafe_allow_html=True)
         func()
+        st.markdown('</div>', unsafe_allow_html=True)
     else:
-        pass
-
-
-# ==============================
-# SCREEN: REGISTER
-# ==============================
-if st.session_state.screen == "register":
-    st.markdown("""
-        <div style="max-width:520px;margin:3rem auto 1rem auto;">
-            <div class="reg-card">
-                <div class="reg-title">פרטי משתתף</div>
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
-
-    col_l, col_form, col_r = st.columns([1, 2, 1])
-    with col_form:
-        participant_id_input = st.text_input("מספר משתתף", placeholder="הזינו את מספר המשתתף המוקצה ברשימה")
-        experiment_group_input = st.selectbox("קבוצת ניסוי", ["control", "storytelling"])
-        st.write("")
-        if st.button("התחל ניסוי 🚀", use_container_width=True):
-            if participant_id_input.strip() == "":
-                st.warning("יש להזין מספר משתתף")
-            else:
-                st.session_state.participant_id = participant_id_input.strip()
-                st.session_state.experiment_group = experiment_group_input
-                st.session_state.experiment_started = True
-                st.session_state.session_start_time = time.time()
-                st.session_state.started_at = datetime.now(ZoneInfo("Asia/Jerusalem")).isoformat()
-                st.session_state.question_start_time = time.time()
-                st.session_state.db_saved = False
-                st.session_state.screen = "demographics"
-                st.rerun()
-
-
-# ==============================
-# SCREEN: DEMOGRAPHICS
-# ==============================
-elif st.session_state.screen == "demographics":
-    st.markdown(
-"""
-<div style="max-width:820px;margin:2rem auto;">
-<div class="welcome-card">
-<div class="welcome-title">שאלון קצר לפני שמתחילים... </div>
-<div class="welcome-subtitle">השאלון מיועד לצורכי מחקר בלבד ונשמר באופן אנונימי</div>
-<hr class="welcome-divider">
-
-<div class="welcome-text">
-לפני תחילת הניסוי, נבקש למלא מספר פרטים כלליים.  
-המידע ישמש לצורכי מחקר בלבד.
-</div>
-</div>
-</div>
-""",
-        unsafe_allow_html=True
-    )
-
-    col_l, col_form, col_r = st.columns([1, 2, 1])
-
-    with col_form:
-        age = st.selectbox(
-            "טווח גילאים",
-            ["", "18–24", "25–34", "35–44", "45 ומעלה"]
-        )
-
-        gender = st.selectbox(
-            "מגדר",
-            ["", "אישה", "גבר", "אחר", "מעדיפ/ה לא לציין"]
-        )
-
-        experience = st.selectbox(
-            "מהי רמת ההיכרות שלך עם דשבורדים או גרפים עסקיים?",
-            ["", "ללא ניסיון", "ניסיון מועט", "ניסיון בינוני", "ניסיון רב"]
-        )
-
-        education = st.selectbox(
-            "מהו הרקע העיקרי שלך?",
-            ["", "סטודנט/ית", "עובד/ת בתחום עסקי", "עובד/ת בתחום טכנולוגי", "אחר"]
-        )
-
-        st.write("")
-
-        if st.button("שלח/י והמשך ▶", use_container_width=True):
-            if age == "" or gender == "" or experience == "" or education == "":
-                st.warning("יש למלא את כל השאלות לפני ההמשך")
-            else:
-                st.session_state.demographic_age = age
-                st.session_state.demographic_gender = gender
-                st.session_state.demographic_experience = experience
-                st.session_state.demographic_education = education
-
-                st.session_state.screen = "welcome"
-                st.rerun()
-
+        # storytelling: completely blank; control: should not reach here (all shown)
+        st.markdown('<div class="chart-card-empty"></div>', unsafe_allow_html=True)
 
 
 # ==============================
 # SCREEN: WELCOME
 # ==============================
-elif st.session_state.screen == "welcome":
+if st.session_state.screen == "welcome":
     st.markdown(
 """<div style="max-width:820px;margin:2rem auto;">
 <div class="welcome-card">
-<div class="welcome-title">ברוכים הבאים</div>
+<div class="welcome-title">ברוך הבא</div>
 <div class="welcome-subtitle">פרויקט גמר — המחלקה להנדסת תעשייה וניהול, אוניברסיטת בן-גוריון תשפ"ו</div>
 <hr class="welcome-divider">
 
@@ -1334,13 +972,10 @@ elif st.session_state.screen == "welcome":
 יש לעיין בדשבורד האינטראקטיבי ולענות על <strong>10 שאלות</strong> המבוססות על הנתונים המוצגים.
 לאחר שליחת תשובה לא ניתן לחזור אליה. לא יינתן משוב בזמן אמת לגבי נכונות התשובה.
 </div>
-<div class="welcome-text">
-ניתן לחקור את הנתונים באמצעות סמל הזכוכית המגדלת (🔍), המאפשר לבצע Drill Down (ירידה לפרטים עמוקים יותר) או להציג תצוגות מפורטות יותר של הנתונים.
-</div>
 
 <div class="welcome-section-title">משך הניסוי</div>
 <div class="welcome-text">
-הניסוי צפוי להימשך כ-<strong>10 דקות</strong>. אין הגבלת זמן לכל שאלה בנפרד.
+הניסוי צפוי להימשך כ-<strong>15 דקות</strong>. אין הגבלת זמן לכל שאלה בנפרד.
 </div>
 
 
@@ -1348,7 +983,8 @@ elif st.session_state.screen == "welcome":
 🔒 <strong>פרטיות וסודיות:</strong> ההשתתפות אנונימית לחלוטין. לא נאסף מידע מזהה אישי.
 הנתונים ישמשו למחקר אקדמי בלבד ויפורסמו בצורה מצטברת בלבד.<br><br>
 ✋ <strong>הסכמה:</strong> לחיצה על "המשך" מהווה אישור לקריאת תנאים אלה
-והסכמה מרצון להשתתפות בניסוי. ניתן לעצור בכל עת.
+והסכמה מרצון להשתתפות בניסוי. ניתן לעצור בכל עת — אולם עצירה לפני השלמת
+המשימה לא תזכה בנקודת הבונוס.
 </div>
 
 <hr class="welcome-divider">
@@ -1360,47 +996,74 @@ elif st.session_state.screen == "welcome":
     col_l, col_btn, col_r = st.columns([2, 2, 2])
     with col_btn:
         if st.button("אני מסכים/ה — המשך ▶", use_container_width=True):
-            st.session_state.screen = "experiment"
+            st.session_state.screen = "register"
             st.rerun()
 
+# ==============================
+# SCREEN: REGISTER
+# ==============================
+elif st.session_state.screen == "register":
+    st.markdown("""
+        <div style="max-width:520px;margin:3rem auto 1rem auto;">
+            <div class="reg-card">
+                <div class="reg-title">פרטי משתתף</div>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
 
+    col_l, col_form, col_r = st.columns([1, 2, 1])
+    with col_form:
+        participant_id_input = st.text_input("מספר משתתף", placeholder="הזינו את מספר המשתתף שלכם")
+        experiment_group_input = st.selectbox("קבוצת ניסוי", ["control", "storytelling"])
+        st.write("")
+        if st.button("התחל ניסוי 🚀", use_container_width=True):
+            if participant_id_input.strip() == "":
+                st.warning("יש להזין מספר משתתף")
+            else:
+                st.session_state.participant_id = participant_id_input.strip()
+                st.session_state.experiment_group = experiment_group_input
+                st.session_state.experiment_started = True
+                st.session_state.session_start_time = time.time()
+                st.session_state.question_start_time = time.time()
+                st.session_state.db_saved = False
+                st.session_state.screen = "experiment"
+                st.rerun()
 
 
 # ==============================
 # SCREEN: EXPERIMENT
 # ==============================
 elif st.session_state.screen == "experiment":
-    st.markdown('<div class="big-title" style="direction:ltr; text-align:left;">Fashion Store Analytics Dashboard</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-title" style="direction:ltr; text-align:left;">Decision support & Performance analysis</div>', unsafe_allow_html=True)
+    st.markdown('<div class="big-title">Business Analytics Dashboard</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-title">Decision support & performance analysis</div>', unsafe_allow_html=True)
 
-    # metric bar - visible only for participant 999
-    if is_admin_participant():
-        a, b, c, d = st.columns(4)
-        with a:
-            st.markdown(
-                f'<div class="metric-card"><div class="metric-label">Participant ID</div>'
-                f'<div class="metric-value">{st.session_state.participant_id}</div></div>',
-                unsafe_allow_html=True
-            )
-        with b:
-            st.markdown(
-                f'<div class="metric-card"><div class="metric-label">Group</div>'
-                f'<div class="metric-value">{st.session_state.experiment_group.capitalize()}</div></div>',
-                unsafe_allow_html=True
-            )
-        with c:
-            st.markdown(
-                f'<div class="metric-card"><div class="metric-label">Progress</div>'
-                f'<div class="metric-value">{min(st.session_state.current_question + 1, len(questions))} '
-                f'<span style="font-size:1rem;color:#94a3b8">/ {len(questions)}</span></div></div>',
-                unsafe_allow_html=True
-            )
-        with d:
-            st.markdown(
-                f'<div class="metric-card"><div class="metric-label">Interactions</div>'
-                f'<div class="metric-value">{st.session_state.dashboard_interaction_clicks}</div></div>',
-                unsafe_allow_html=True
-            )
+    # metric bar
+    a, b, c, d = st.columns(4)
+    with a:
+        st.markdown(
+            f'<div class="metric-card"><div class="metric-label">Participant ID</div>'
+            f'<div class="metric-value">{st.session_state.participant_id}</div></div>',
+            unsafe_allow_html=True
+        )
+    with b:
+        st.markdown(
+            f'<div class="metric-card"><div class="metric-label">Group</div>'
+            f'<div class="metric-value">{st.session_state.experiment_group.capitalize()}</div></div>',
+            unsafe_allow_html=True
+        )
+    with c:
+        st.markdown(
+            f'<div class="metric-card"><div class="metric-label">Progress</div>'
+            f'<div class="metric-value">{min(st.session_state.current_question + 1, len(questions))} '
+            f'<span style="font-size:1rem;color:#94a3b8">/ {len(questions)}</span></div></div>',
+            unsafe_allow_html=True
+        )
+    with d:
+        st.markdown(
+            f'<div class="metric-card"><div class="metric-label">Interactions</div>'
+            f'<div class="metric-value">{st.session_state.dashboard_interaction_clicks}</div></div>',
+            unsafe_allow_html=True
+        )
 
     # reveal logic
     is_storytelling = (st.session_state.experiment_group == "storytelling")
@@ -1414,7 +1077,7 @@ elif st.session_state.screen == "experiment":
         show_fig4 = cq >= 7
 
     # dashboard grid
-    st.markdown('<div class="section-title">  המידע המוצג מתאר את התנהגות המכירות בחנות בגדים 🛍️---> </div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title">דשבורד אינטראקטיבי</div>', unsafe_allow_html=True)
 
     top_left, top_right = st.columns(2)
     bottom_left, bottom_right = st.columns(2)
@@ -1447,19 +1110,17 @@ elif st.session_state.screen == "experiment":
             )
 
         st.markdown(
-            f'<div class="rtl-title" style="font-size:1.35rem;font-weight:700;margin-bottom:0.4rem;font-family:Varela Round, sans-serif;">'
+            f'<div class="rtl-title" style="font-size:1.35rem;font-weight:700;margin-bottom:0.4rem;">'
             f'שאלה {q["id"]}</div>',
             unsafe_allow_html=True
         )
-
         st.markdown(
-            f'<div class="rtl-question" style="font-size:1.1rem;font-weight:600;margin-bottom:1rem;font-family:Varela Round, sans-serif;">'
+            f'<div class="rtl-question" style="font-size:1.1rem;font-weight:600;margin-bottom:1rem;">'
             f'{q["text"]}</div>',
             unsafe_allow_html=True
         )
-
         st.markdown(
-            '<div class="rtl-label" style="font-weight:600;margin-bottom:0.4rem;font-family:Varela Round, sans-serif;">'
+            '<div class="rtl-label" style="font-weight:600;margin-bottom:0.4rem;">'
             'בחר/י את התשובה הנכונה ביותר:</div>',
             unsafe_allow_html=True
         )
@@ -1492,19 +1153,7 @@ elif st.session_state.screen == "experiment":
             st.rerun()
 
     else:
-        total_duration = time.time() - st.session_state.session_start_time
-        st.session_state.ended_at = datetime.now(ZoneInfo("Asia/Jerusalem")).isoformat()
-
-        if not st.session_state.db_saved:
-            session_ok, _ = save_session_to_db(total_duration)
-            responses_ok, _ = save_responses_to_db()
-
-            if session_ok and responses_ok:
-                st.session_state.db_saved = True
-            else:
-                st.warning("השמירה למסד לא הושלמה, אבל הניסוי הסתיים.")
-
-        st.session_state.screen = "summary" if is_admin_participant() else "thankyou"
+        st.session_state.screen = "summary"
         st.rerun()
 
 
@@ -1512,13 +1161,7 @@ elif st.session_state.screen == "experiment":
 # SCREEN: SUMMARY
 # ==============================
 elif st.session_state.screen == "summary":
-    if not is_admin_participant():
-        st.session_state.screen = "thankyou"
-        st.rerun()
-
     total_duration = time.time() - st.session_state.session_start_time
-    st.session_state.ended_at = datetime.now(ZoneInfo("Asia/Jerusalem")).isoformat()
-
     export_df = build_export_df(total_duration)
     interactions_df = build_interactions_df()
 
