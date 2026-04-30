@@ -612,9 +612,9 @@ questions = [
 
 chart_narratives = {
     "chart1": "📈 מבט על הכנסות: הגרף מציג את סך ההכנסות החודשיות של החברה.",
-    "chart2": "💰 על מנת להשלים את התמונה, כעת מוצגים בגרף זה גם הרווח הנקי של החברה לאורך זמן",
+    "chart2": "💰 על מנת להמשיך השלים את התמונה, כעת מוצגים בגרף זה גם הרווח הנקי של החברה לאורך זמן",
     "chart3": "🏷️ לשם העמקת הבחינה, מוצגות ההכנסות בחלוקה לפי קטגוריות הלבוש השונות בחנות",
-    "chart4": "📉 מוצגת בחינה של הרווחים בקטגוריית השמלות, לצד שיעור ההנחה הכולל לאורך זמן."
+    "chart4": "📉 בגרף מוצג הרווח הכולל של החנות, לצד שיעור ההנחה הכולל לאורך זמן. ניתן לבחון להתמקד בקטגוריה לבחירתך."
 }
 
 # שאלות שבהן נוסף גרף (storytelling) — מפתח = index שאלה (0-based)
@@ -1132,7 +1132,7 @@ def show_chart3():
 
 
 def show_chart4():
-    panel_header("רווחים והנחה ממוצעת", chart_narratives["chart4"])
+    panel_header("רווחים והנחות", chart_narratives["chart4"])
 
     if not st.session_state.chart4_drilled:
         fig = make_subplots(specs=[[{"secondary_y": True}]])
@@ -1164,7 +1164,7 @@ def show_chart4():
             secondary_y=True
         )
 
-        fig = apply_common_layout(fig, "Total Store Profit and Average Discount by Month")
+        fig = apply_common_layout(fig, "Total Profit & Average Discount by Month")
         fig.update_yaxes(title_text="Profit", secondary_y=False, tickprefix="$")
         fig.update_yaxes(title_text="Discount (%)", secondary_y=True)
 
@@ -1367,7 +1367,10 @@ elif st.session_state.screen == "welcome":
 <div class="welcome-text">
 ניתן לחקור את הנתונים באמצעות סמל הזכוכית המגדלת (🔍), המאפשר לבצע Drill Down (ירידה לפרטים עמוקים יותר) או להציג תצוגות מפורטות יותר של הנתונים.
 </div>
-
+</div>
+<div class="welcome-text">
+💡 שימו לב - ערכי ציר ה-Y בגרפים לא תמיד יתחילו מ-0
+</div>
 <div class="welcome-section-title">משך הניסוי</div>
 <div class="welcome-text">
 הניסוי צפוי להימשך כ-<strong>10 דקות</strong>. אין הגבלת זמן לכל שאלה בנפרד.
