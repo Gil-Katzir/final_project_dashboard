@@ -1471,6 +1471,9 @@ elif st.session_state.screen == "experiment":
     if cq < len(questions):
         q = questions[cq]
 
+        progress = (st.session_state.current_question + 1) / len(questions)
+        st.progress(progress)
+
         # new chart badge (storytelling only, at trigger questions)
         if is_storytelling and cq in NEW_CHART_AT:
             st.markdown(
