@@ -195,7 +195,7 @@ st.markdown("""
     }
 
     .section-title {
-        font-size: 1.35rem;
+        font-size: 2rem;
         font-weight: 800;
         color: #1e293b;
         margin: 1.8rem 0 1.1rem 0;
