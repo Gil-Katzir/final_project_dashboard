@@ -525,6 +525,15 @@ monthly_dress = (
 monthly_dress["Month"] = pd.Categorical(monthly_dress["Month"], categories=months_order, ordered=True)
 monthly_dress = monthly_dress.sort_values("Month")
 
+monthly_discount_total = (
+    df.groupby("Month", as_index=False)
+    .agg(**{
+        "Discount Total": ("Discount", "mean")
+    })
+)
+monthly_discount_total["Month"] = pd.Categorical(monthly_discount_total["Month"], categories=months_order, ordered=True)
+monthly_discount_total = monthly_discount_total.sort_values("Month")
+
 # -----------------------------
 # Questions and narratives
 # -----------------------------
@@ -605,7 +614,7 @@ chart_narratives = {
     "chart1": "📈 מבט על הכנסות: הגרף מציג את סך ההכנסות החודשיות של החברה.",
     "chart2": "💰 על מנת להשלים את התמונה, כעת מוצגים בגרף זה גם הרווח הנקי של החברה לאורך זמן",
     "chart3": "🏷️ לשם העמקת הבחינה, מוצגות ההכנסות בחלוקה לפי קטגוריות הלבוש השונות בחנות",
-    "chart4": "📉 גרף זה בוחן את הקשר בין מדיניות ההנחות לרווחיות קטגוריית השמלות בחנות."
+    "chart4": "📉 מוצגת בחינה של הרווחים בקטגוריית השמלות, לצד שיעור ההנחה הכולל לאורך זמן."
 }
 
 # שאלות שבהן נוסף גרף (storytelling) — מפתח = index שאלה (0-based)
@@ -650,7 +659,7 @@ defaults = {
     "chart3_category": "Dress",
 
     "chart4_drilled": False,
-    "chart4_month": months_order[0],
+    "chart4_category": "Dress",
 }
 
 for key, value in defaults.items():
@@ -661,7 +670,7 @@ widget_defaults = {
     "chart1_month_select": months_order[0],
     "chart2_month_select": months_order[0],
     "chart3_category_select": "Dress",
-    "chart4_month_select": months_order[0],
+    "chart4_category_select": "Dress",
 }
 for key, value in widget_defaults.items():
     if key not in st.session_state:
@@ -671,7 +680,7 @@ prev_defaults = {
     "__prev_chart1_month_select": months_order[0],
     "__prev_chart2_month_select": months_order[0],
     "__prev_chart3_category_select": "Dress",
-    "__prev_chart4_month_select": months_order[0],
+    "__prev_chart4_category_select": "Dress",
 }
 for key, value in prev_defaults.items():
     if key not in st.session_state:
@@ -813,6 +822,19 @@ def dress_month_daily(month_name: str):
         (df["Month"] == month_name) & (df["Category"] == "Dress")
     ].sort_values("Day")
     return d[["Day", "Profit", "Discount"]].copy()
+
+
+def category_monthly_profit_discount(category_name: str):
+    d = (
+        df[df["Category"] == category_name]
+        .groupby("Month", as_index=False)
+        .agg(**{
+            "Profit": ("Profit", "sum"),
+            "Discount": ("Discount", "mean")
+        })
+    )
+    d["Month"] = pd.Categorical(d["Month"], categories=months_order, ordered=True)
+    return d.sort_values("Month")
 
 
 def category_monthly_totals(category_name):
@@ -1110,7 +1132,7 @@ def show_chart3():
 
 
 def show_chart4():
-    panel_header("גרף המציג רווחים ואחוזי הנחה בקטגוריית שמלות", chart_narratives["chart4"])
+    panel_header("רווחים והנחות", chart_narratives["chart4"])
 
     if not st.session_state.chart4_drilled:
         fig = make_subplots(specs=[[{"secondary_y": True}]])
@@ -1119,7 +1141,7 @@ def show_chart4():
             go.Bar(
                 x=monthly_dress["Month"],
                 y=monthly_dress["Profit Dress"],
-                name="Profit",
+                name="Dress Profit",
                 marker=dict(
                     color="#8b5cf6",
                     line=dict(width=0)
@@ -1132,19 +1154,19 @@ def show_chart4():
 
         fig.add_trace(
             go.Scatter(
-                x=monthly_dress["Month"],
-                y=monthly_dress["Discount Dress"],
+                x=monthly_discount_total["Month"],
+                y=monthly_discount_total["Discount Total"],
                 mode="lines+markers",
-                name="Discount %",
+                name="Overall Discount %",
                 line=dict(color="#f59e0b", width=3, dash="dot"),
                 marker=dict(size=7, line=dict(width=2, color="white"))
             ),
             secondary_y=True
         )
 
+        fig = apply_common_layout(fig, "Dress Profit and Overall Discount by Month")
         fig.update_yaxes(title_text="Profit", secondary_y=False, tickprefix="$")
         fig.update_yaxes(title_text="Discount (%)", secondary_y=True)
-        fig = apply_common_layout(fig, "Dress: Discount vs Profit")
 
         fig.update_layout(
             plot_bgcolor="#f7f7f7",
@@ -1156,47 +1178,56 @@ def show_chart4():
         c1, c2 = st.columns([2.2, 1])
         with c1:
             st.selectbox(
-                "בחר/י חודש לפירוט:", months_order,
-                key="chart4_month_select",
+                "בחר/י קטגוריה לפירוט:",
+                ["T-shirt", "Dress", "Jeans"],
+                key="chart4_category_select",
                 on_change=track_filter_change,
-                args=("chart4_month_select", "chart4_filter_month_change")
+                args=("chart4_category_select", "chart4_filter_category_change")
             )
         with c2:
             st.write("")
             if st.button("Drill Down 🔍", key="chart4_drill_btn", use_container_width=True):
-                st.session_state.chart4_month = st.session_state.chart4_month_select
+                st.session_state.chart4_category = st.session_state.chart4_category_select
                 st.session_state.chart4_drilled = True
-                track_dashboard_click("chart4_drill_down", st.session_state.chart4_month)
+                track_dashboard_click("chart4_drill_down", st.session_state.chart4_category)
                 st.rerun()
     else:
-        drill_df = dress_month_daily(st.session_state.chart4_month)
+        drill_df = category_monthly_profit_discount(st.session_state.chart4_category)
         fig = make_subplots(specs=[[{"secondary_y": True}]])
         
         fig.add_trace(
-            go.Scatter(
-                x=drill_df["Day"],
+            go.Bar(
+                x=drill_df["Month"],
                 y=drill_df["Profit"],
-                mode="lines+markers",
                 name="Profit",
-                line=dict(color="#f43f5e", width=2)
+                marker=dict(
+                    color="#8b5cf6",
+                    line=dict(width=0)
+                ),
+                width=0.45,
+                opacity=0.9
             ),
             secondary_y=False
         )
         
         fig.add_trace(
             go.Scatter(
-                x=drill_df["Day"],
+                x=drill_df["Month"],
                 y=drill_df["Discount"],
                 mode="lines+markers",
                 name="Discount %",
-                line=dict(color="#fbbf24", width=2)
+                line=dict(color="#f59e0b", width=3, dash="dot"),
+                marker=dict(size=7, line=dict(width=2, color="white"))
             ),
             secondary_y=True
         )
 
+        fig = apply_common_layout(
+            fig,
+            f"{st.session_state.chart4_category}: Profit and Discount by Month"
+        )
         fig.update_yaxes(title_text="Profit", secondary_y=False, tickprefix="$")
         fig.update_yaxes(title_text="Discount (%)", secondary_y=True)
-        fig = apply_common_layout(fig, f"Dress: Daily Stats ({st.session_state.chart4_month})")
 
         fig.update_layout(
             plot_bgcolor="#f7f7f7",
@@ -1207,9 +1238,8 @@ def show_chart4():
 
         if st.button("⬅️ חזרה", key="chart4_back_btn", use_container_width=True):
             st.session_state.chart4_drilled = False
-            track_dashboard_click("chart4_back", st.session_state.chart4_month)
+            track_dashboard_click("chart4_back", st.session_state.chart4_category)
             st.rerun()
-
 
 def show_or_empty(show_flag, func, is_storytelling=False):
     if show_flag:
