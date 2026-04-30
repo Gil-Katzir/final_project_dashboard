@@ -113,6 +113,7 @@ st.markdown("""
 
     .welcome-text {
         font-size: 0.95rem;
+        margin-bottom: 12px;
         color: #475569;
         line-height: 1.85;
         font-family: 'Varela Round', sans-serif;
