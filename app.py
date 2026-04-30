@@ -1132,16 +1132,16 @@ def show_chart3():
 
 
 def show_chart4():
-    panel_header("רווחים והנחות", chart_narratives["chart4"])
+    panel_header("רווחים והנחה ממוצעת", chart_narratives["chart4"])
 
     if not st.session_state.chart4_drilled:
         fig = make_subplots(specs=[[{"secondary_y": True}]])
         
         fig.add_trace(
             go.Bar(
-                x=monthly_dress["Month"],
-                y=monthly_dress["Profit Dress"],
-                name="Dress Profit",
+                x=monthly_total["Month"],
+                y=monthly_total["Profit Total"],
+                name="Total Store Profit",
                 marker=dict(
                     color="#8b5cf6",
                     line=dict(width=0)
@@ -1164,7 +1164,7 @@ def show_chart4():
             secondary_y=True
         )
 
-        fig = apply_common_layout(fig, "Dress Profit and Overall Discount by Month")
+        fig = apply_common_layout(fig, "Total Store Profit and Average Discount by Month")
         fig.update_yaxes(title_text="Profit", secondary_y=False, tickprefix="$")
         fig.update_yaxes(title_text="Discount (%)", secondary_y=True)
 
