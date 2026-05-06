@@ -584,7 +584,7 @@ questions = [
     {
         "id": 8,
         "text": "בקטגוריה שבה ישנה מגמה הפוכה בין הרווחים להכנסות, בחודש בו הרווחים מהקטגוריה היו 4,619.85$ מה היה הרווח הכולל של החנות?",
-        "options": ["56.1k $", "12,85575 $", "55k $", "לא ניתן לדעת"],
+        "options": ["56.1k $", "12,85575$", "55k $", "לא ניתן לדעת"],
         "correct_answer": "12,85575$"
     },
     {
@@ -621,11 +621,31 @@ chart_narratives = {
 # שאלות שבהן נוסף גרף (storytelling) — מפתח = index שאלה (0-based)
 NEW_CHART_AT = {2: "גרף 2 נוסף", 4: "גרף 3 נוסף", 8: "גרף 4 נוסף"}
 
+comprehension_questions = [
+    {
+        "id": 1,
+        "text": "לאחר שליחת תשובה במהלך הניסוי, האם ניתן לחזור לשאלה קודמת?",
+        "options": ["כן", "לא"],
+        "correct_answer": "לא"
+    },
+    {
+        "id": 2,
+        "text": "מה מאפשר סמל הזכוכית המגדלת (🔍) בדשבורד?",
+        "options": [
+            "לבצע Drill Down ולצפות בפירוט נוסף של הנתונים",
+            "לדלג על שאלה",
+            "להציג את התשובה הנכונה",
+            "לסיים את הניסוי"
+        ],
+        "correct_answer": "לבצע Drill Down ולצפות בפירוט נוסף של הנתונים"
+    },
+]
+
 # -----------------------------
 # Session state
 # -----------------------------
 defaults = {
-    "screen": "register",   # welcome | demographics | register | experiment | summary | thankyou
+    "screen": "consent",   # consent | demographics | instructions | comprehension | experiment | summary | thankyou
     "experiment_started": False,
     "participant_id": "",
     "experiment_group": "",
@@ -634,6 +654,13 @@ defaults = {
     "demographic_gender": "",
     "demographic_experience": "",
     "demographic_education": "",
+    "demographic_country": "",
+    "demographic_occupation": "",
+    "demographic_ai_experience": "",
+    "demographic_bi_experience": "",
+    "consent_given": False,
+    "comprehension_current": 0,
+    "comprehension_answers": [],
 
     "session_id": str(uuid.uuid4()),
     "session_start_time": None,
@@ -733,6 +760,11 @@ def build_export_df(total_duration: float) -> pd.DataFrame:
         "demographic_gender": st.session_state.demographic_gender,
         "demographic_experience": st.session_state.demographic_experience,
         "demographic_education": st.session_state.demographic_education,
+        "demographic_country": st.session_state.demographic_country,
+        "demographic_occupation": st.session_state.demographic_occupation,
+        "demographic_ai_experience": st.session_state.demographic_ai_experience,
+        "demographic_bi_experience": st.session_state.demographic_bi_experience,
+        "comprehension_answers": str(st.session_state.comprehension_answers),
     }
     rows = []
     for answer in st.session_state.answers:
@@ -1250,33 +1282,46 @@ def show_or_empty(show_flag, func, is_storytelling=False):
 
 
 # ==============================
-# SCREEN: REGISTER
+# SCREEN: CONSENT
 # ==============================
-if st.session_state.screen == "register":
-    st.markdown("""
-        <div style="max-width:520px;margin:3rem auto 1rem auto;">
-            <div class="reg-card">
-                <div class="reg-title">פרטי משתתף</div>
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
+if st.session_state.screen == "consent":
+    st.markdown(
+"""
+<div style="max-width:900px;margin:2rem auto;">
+<div class="welcome-card">
+<div class="welcome-title">טופס הסכמה להשתתפות במחקר</div>
+<div class="welcome-subtitle">Informed consent to participate in a study</div>
+<hr class="welcome-divider">
+
+<div class="welcome-text">
+<ol style="line-height:1.9; padding-right:22px;">
+<li>הינך עומד/ת להשתתף במחקר העוסק בקבלת החלטות.</li>
+<li>במהלך המחקר יוצג בפניך דשבורד Business Intelligence (BI), ותתבקש/י לענות על מספר שאלות בתחום ניתוח נתונים עסקיים.</li>
+<li>ניתן להפסיק את ההשתתפות בכל שלב או לסרב לענות על כל שאלה. עם זאת, משתתפים שיפסיקו לפני השלמת המשימה לא יקבלו קרדיט/אישור על השלמת ההשתתפות.</li>
+<li>בסיום המחקר תוצג עמודת סיום המאשרת את השלמת ההשתתפות.</li>
+<li>סודיות זהות המשתתפים מובטחת. הנתונים יפורסמו בצורה מצטברת בלבד, ולא ניתן יהיה לקשר בין פרטים אישיים לבין התשובות והנתונים שנמסרו במהלך המחקר.</li>
+<li>אין מגבלת זמן להשלמת המחקר. משך ההשתתפות הצפוי הוא כ-10 דקות.</li>
+<li>המחקר נערך במסגרת פרויקט גמר במחלקה להנדסת תעשייה וניהול, אוניברסיטת בן-גוריון.</li>
+<li>בכל שאלה בנוגע למחקר ניתן לפנות לצוות המחקר.</li>
+</ol>
+</div>
+
+<hr class="welcome-divider">
+</div>
+</div>
+""",
+        unsafe_allow_html=True
+    )
 
     col_l, col_form, col_r = st.columns([1, 2, 1])
     with col_form:
-        participant_id_input = st.text_input("מספר משתתף", placeholder="הזינו את מספר המשתתף המוקצה ברשימה")
-        experiment_group_input = st.selectbox("קבוצת ניסוי", ["control", "storytelling"])
+        consent = st.checkbox("אני מאשר/ת שקראתי והבנתי את האמור לעיל, ואני מסכים/ה מרצוני להשתתף במחקר.")
         st.write("")
-        if st.button("התחל ניסוי 🚀", use_container_width=True):
-            if participant_id_input.strip() == "":
-                st.warning("יש להזין מספר משתתף")
+        if st.button("המשך ▶", use_container_width=True):
+            if not consent:
+                st.warning("יש לסמן את תיבת ההסכמה כדי להמשיך")
             else:
-                st.session_state.participant_id = participant_id_input.strip()
-                st.session_state.experiment_group = experiment_group_input
-                st.session_state.experiment_started = True
-                st.session_state.session_start_time = time.time()
-                st.session_state.started_at = datetime.now(ZoneInfo("Asia/Jerusalem")).isoformat()
-                st.session_state.question_start_time = time.time()
-                st.session_state.db_saved = False
+                st.session_state.consent_given = True
                 st.session_state.screen = "demographics"
                 st.rerun()
 
@@ -1289,13 +1334,12 @@ elif st.session_state.screen == "demographics":
 """
 <div style="max-width:820px;margin:2rem auto;">
 <div class="welcome-card">
-<div class="welcome-title">שאלון קצר לפני שמתחילים... </div>
+<div class="welcome-title">שאלון דמוגרפי</div>
 <div class="welcome-subtitle">השאלון מיועד לצורכי מחקר בלבד ונשמר באופן אנונימי</div>
 <hr class="welcome-divider">
 
 <div class="welcome-text">
-לפני תחילת הניסוי, נבקש למלא מספר פרטים כלליים.  
-המידע ישמש לצורכי מחקר בלבד.
+לפני תחילת הניסוי, נבקש למלא מספר פרטים כלליים. המידע ישמש לצורכי מחקר בלבד.
 </div>
 </div>
 </div>
@@ -1306,50 +1350,71 @@ elif st.session_state.screen == "demographics":
     col_l, col_form, col_r = st.columns([1, 2, 1])
 
     with col_form:
+        participant_id_input = st.text_input("מספר משתתף", placeholder="הזינו את מספר המשתתף המוקצה ברשימה")
+        experiment_group_input = st.selectbox("קבוצת ניסוי", ["control", "storytelling"])
+
         age = st.selectbox(
-            "טווח גילאים",
+            "Age / גיל",
             ["", "18–24", "25–34", "35–44", "45 ומעלה"]
         )
 
         gender = st.selectbox(
-            "מגדר",
+            "Gender / מגדר",
             ["", "אישה", "גבר", "אחר", "מעדיפ/ה לא לציין"]
         )
 
-        experience = st.selectbox(
-            "מהי רמת ההיכרות שלך עם דשבורדים או גרפים עסקיים?",
-            ["", "ללא ניסיון", "ניסיון מועט", "ניסיון בינוני", "ניסיון רב"]
-        )
+        country = st.text_input("Country / מדינה", placeholder="לדוגמה: Israel")
+
+        occupation = st.text_input("Occupation / עיסוק", placeholder="לדוגמה: סטודנט/ית")
 
         education = st.selectbox(
-            "מהו הרקע העיקרי שלך?",
-            ["", "סטודנט/ית", "עובד/ת בתחום עסקי", "עובד/ת בתחום טכנולוגי", "אחר"]
+            "Education Level / רמת השכלה",
+            ["", "תיכון", "סטודנט/ית לתואר ראשון", "תואר ראשון", "תואר שני ומעלה", "אחר"]
+        )
+
+        ai_experience = st.selectbox(
+            "האם השתמשת בעבר בכלי חיזוי, אלגוריתמים או מערכות בינה מלאכותית?",
+            ["", "לא", "כן, מעט", "כן, במידה בינונית", "כן, במידה רבה"]
+        )
+
+        bi_experience = st.selectbox(
+            "האם השתמשת בעבר במערכות Business Intelligence (BI)?",
+            ["", "לא", "כן, מעט", "כן, במידה בינונית", "כן, במידה רבה"]
         )
 
         st.write("")
 
         if st.button("שלח/י והמשך ▶", use_container_width=True):
-            if age == "" or gender == "" or experience == "" or education == "":
-                st.warning("יש למלא את כל השאלות לפני ההמשך")
+            if (
+                participant_id_input.strip() == "" or
+                age == "" or gender == "" or country.strip() == "" or
+                occupation.strip() == "" or education == "" or
+                ai_experience == "" or bi_experience == ""
+            ):
+                st.warning("יש למלא את כל השדות לפני ההמשך")
             else:
+                st.session_state.participant_id = participant_id_input.strip()
+                st.session_state.experiment_group = experiment_group_input
                 st.session_state.demographic_age = age
                 st.session_state.demographic_gender = gender
-                st.session_state.demographic_experience = experience
+                st.session_state.demographic_country = country.strip()
+                st.session_state.demographic_occupation = occupation.strip()
                 st.session_state.demographic_education = education
+                st.session_state.demographic_ai_experience = ai_experience
+                st.session_state.demographic_bi_experience = bi_experience
 
-                st.session_state.screen = "welcome"
+                st.session_state.screen = "instructions"
                 st.rerun()
 
 
-
 # ==============================
-# SCREEN: WELCOME
+# SCREEN: INSTRUCTIONS
 # ==============================
-elif st.session_state.screen == "welcome":
+elif st.session_state.screen == "instructions":
     st.markdown(
 """<div style="max-width:820px;margin:2rem auto;">
 <div class="welcome-card">
-<div class="welcome-title">ברוכים הבאים</div>
+<div class="welcome-title">הוראות הניסוי</div>
 <div class="welcome-subtitle">פרויקט גמר — המחלקה להנדסת תעשייה וניהול, אוניברסיטת בן-גוריון תשפ"ו</div>
 <hr class="welcome-divider">
 
@@ -1377,13 +1442,6 @@ elif st.session_state.screen == "welcome":
 </div>
 
 
-<div class="welcome-highlight">
-🔒 <strong>פרטיות וסודיות:</strong> ההשתתפות אנונימית לחלוטין. לא נאסף מידע מזהה אישי.
-הנתונים ישמשו למחקר אקדמי בלבד ויפורסמו בצורה מצטברת בלבד.<br><br>
-✋ <strong>הסכמה:</strong> לחיצה על "המשך" מהווה אישור לקריאת תנאים אלה
-והסכמה מרצון להשתתפות בניסוי. ניתן לעצור בכל עת.
-</div>
-
 <hr class="welcome-divider">
 </div>
 </div>""",
@@ -1392,11 +1450,81 @@ elif st.session_state.screen == "welcome":
 
     col_l, col_btn, col_r = st.columns([2, 2, 2])
     with col_btn:
-        if st.button("אני מסכים/ה — המשך ▶", use_container_width=True):
-            st.session_state.screen = "experiment"
+        if st.button("המשך לבדיקת הבנה ▶", use_container_width=True):
+            st.session_state.screen = "comprehension"
             st.rerun()
 
 
+
+
+# ==============================
+# SCREEN: COMPREHENSION
+# ==============================
+elif st.session_state.screen == "comprehension":
+    st.markdown(
+"""
+<div style="max-width:820px;margin:2rem auto;">
+<div class="welcome-card">
+<div class="welcome-title">בדיקת הבנת ההוראות</div>
+<div class="welcome-subtitle">לפני תחילת הניסוי נציג שתי שאלות קצרות לווידוא קליטת ההנחיות</div>
+<hr class="welcome-divider">
+<div class="welcome-text">
+יש לענות נכון על כל שאלה כדי להמשיך לניסוי עצמו.
+</div>
+</div>
+</div>
+""",
+        unsafe_allow_html=True
+    )
+
+    cq_check = st.session_state.comprehension_current
+
+    if cq_check < len(comprehension_questions):
+        check_q = comprehension_questions[cq_check]
+        st.markdown(
+            f'<div class="rtl-title" style="font-size:1.35rem;font-weight:700;margin-bottom:0.4rem;font-family:Varela Round, sans-serif;">'
+            f'שאלת הבנה {check_q["id"]} מתוך {len(comprehension_questions)}</div>',
+            unsafe_allow_html=True
+        )
+        st.markdown(
+            f'<div class="rtl-question" style="font-size:1.1rem;font-weight:600;margin-bottom:1rem;font-family:Varela Round, sans-serif;">'
+            f'{check_q["text"]}</div>',
+            unsafe_allow_html=True
+        )
+
+        selected_check = st.radio(
+            "",
+            check_q["options"],
+            key=f"comprehension_{check_q['id']}",
+            label_visibility="collapsed"
+        )
+
+        if st.button("שלח/י תשובה ▶", use_container_width=True):
+            is_check_correct = selected_check == check_q["correct_answer"]
+            st.session_state.comprehension_answers.append({
+                "question_id": check_q["id"],
+                "question_text": check_q["text"],
+                "selected_answer": selected_check,
+                "correct_answer": check_q["correct_answer"],
+                "is_correct": is_check_correct,
+            })
+
+            if is_check_correct:
+                st.session_state.comprehension_current += 1
+                st.rerun()
+            else:
+                st.warning("התשובה אינה נכונה. אנא קרא/י שוב את ההוראות ונסה/י שוב.")
+
+    else:
+        st.success("מעולה, אפשר להתחיל את הניסוי")
+        if st.button("התחלת הניסוי 🚀", use_container_width=True):
+            st.session_state.experiment_started = True
+            st.session_state.session_start_time = time.time()
+            st.session_state.started_at = datetime.now(ZoneInfo("Asia/Jerusalem")).isoformat()
+            st.session_state.question_start_time = time.time()
+            st.session_state.db_saved = False
+            st.session_state.screen = "experiment"
+            st.rerun()
 
 
 # ==============================
