@@ -634,20 +634,15 @@ NEW_CHART_AT = {2: "גרף 2 נוסף", 4: "גרף 3 נוסף", 8: "גרף 4 נ�
 comprehension_questions = [
     {
         "id": 1,
-        "text": "לאחר שליחת תשובה במהלך הניסוי, האם ניתן לחזור לשאלה קודמת?",
-        "options": ["כן", "לא"],
-        "correct_answer": "לא"
+        "text": "כמה זה 10% מ-105?",
+        "options": ["10.5", "15", "105", "1.05"],
+        "correct_answer": "10.5"
     },
     {
         "id": 2,
-        "text": "מה מאפשר סמל הזכוכית המגדלת (🔍) בדשבורד?",
-        "options": [
-            "לבצע Drill Down ולצפות בפירוט נוסף של הנתונים",
-            "לדלג על שאלה",
-            "להציג את התשובה הנכונה",
-            "לסיים את הניסוי"
-        ],
-        "correct_answer": "לבצע Drill Down ולצפות בפירוט נוסף של הנתונים"
+        "text": "לאחר שליחת תשובה במהלך הניסוי, האם ניתן לחזור לשאלה קודמת?",
+        "options": ["כן", "לא", "רק פעם אחת", "רק בסיום הניסוי"],
+        "correct_answer": "לא"
     },
 ]
 
@@ -1458,6 +1453,10 @@ elif st.session_state.screen == "instructions":
 <div class="welcome-text">
 💡 שימו לב - ערכי ציר ה-Y בגרפים לא תמיד יתחילו מ-0
 </div>
+<div class="welcome-section-title">תגמול</div>
+<div class="welcome-text">
+מבין המשתתפים המובילים בהישגים במענה על שאלות הניסוי, יוגרל פרס בסך 1000 ש״ח שיחולק בין שלושת המקומות המובילים.
+</div>
 <div class="welcome-section-title">משך הניסוי</div>
 <div class="welcome-text">
 הניסוי צפוי להימשך כ-<strong>10 דקות</strong>. אין הגבלת זמן לכל שאלה בנפרד.
@@ -1491,7 +1490,7 @@ elif st.session_state.screen == "comprehension":
 <div class="welcome-subtitle">לפני תחילת הניסוי נציג שתי שאלות קצרות לווידוא קליטת ההנחיות</div>
 <hr class="welcome-divider">
 <div class="welcome-text">
-יש לענות נכון על כל שאלה כדי להמשיך לניסוי עצמו.
+השאלות מוצגות לצורך בדיקת קליטה בלבד. לא יוצג משוב על נכונות התשובה, ולא יהיה צורך לתקן את המענה.
 </div>
 </div>
 </div>
@@ -1531,11 +1530,8 @@ elif st.session_state.screen == "comprehension":
                 "is_correct": is_check_correct,
             })
 
-            if is_check_correct:
-                st.session_state.comprehension_current += 1
-                st.rerun()
-            else:
-                st.warning("התשובה אינה נכונה. אנא קרא/י שוב את ההוראות ונסה/י שוב.")
+            st.session_state.comprehension_current += 1
+            st.rerun()
 
     else:
         st.success("מעולה, אפשר להתחיל את הניסוי")
