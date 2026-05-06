@@ -488,6 +488,16 @@ st.markdown("""
         font-family: 'Varela Round', sans-serif;
     }
 
+    /* checkbox font */
+    div[data-testid="stCheckbox"] label {
+        font-family: 'Varela Round', sans-serif !important;
+        font-size: 0.97rem !important;
+        color: #1e293b !important;
+        direction: rtl !important;
+        text-align: right !important;
+        line-height: 1.7 !important;
+    }
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -1342,7 +1352,7 @@ elif st.session_state.screen == "consent":
 
     col_l, col_form, col_r = st.columns([1, 2, 1])
     with col_form:
-        consent = st.checkbox("אני מאשר/ת שקראתי והבנתי את האמור לעיל, ואני מסכים/ה מרצוני להשתתף במחקר.")
+        consent = st.checkbox("I confirm that I have read and understood the information above and voluntarily agree to participate in this study.")
         st.write("")
         if st.button("המשך ▶", use_container_width=True):
             if not consent:
@@ -1436,13 +1446,6 @@ elif st.session_state.screen == "instructions":
 <div class="welcome-title">הוראות הניסוי</div>
 <div class="welcome-subtitle">פרויקט גמר — המחלקה להנדסת תעשייה וניהול, אוניברסיטת בן-גוריון תשפ"ו</div>
 <hr class="welcome-divider">
-
-<div class="welcome-section-title">מהו הניסוי?</div>
-<div class="welcome-text">
-ניסוי זה בוחן כיצד אופן הצגת מידע בדשבורדים עסקיים משפיע על איכות קבלת ההחלטות
-ועל רמת המעורבות של המשתמש. תוצגו בפניכם ויזואליזציות נתונים עסקיים ותתבקשו
-לנתח אותם ולענות על שאלות.
-</div>
 
 <div class="welcome-section-title">מה עלי לעשות?</div>
 <div class="welcome-text">
