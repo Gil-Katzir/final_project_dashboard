@@ -645,7 +645,7 @@ comprehension_questions = [
 # Session state
 # -----------------------------
 defaults = {
-    "screen": "consent",   # consent | demographics | instructions | comprehension | experiment | summary | thankyou
+    "screen": "register",   # register | consent | demographics | instructions | comprehension | experiment | summary | thankyou
     "experiment_started": False,
     "participant_id": "",
     "experiment_group": "",
@@ -1282,9 +1282,34 @@ def show_or_empty(show_flag, func, is_storytelling=False):
 
 
 # ==============================
+# SCREEN: REGISTER
+# ==============================
+if st.session_state.screen == "register":
+    st.markdown("""
+        <div style="max-width:520px;margin:3rem auto 1rem auto;">
+            <div class="reg-card">
+                <div class="reg-title">פרטי משתתף</div>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
+    col_l, col_form, col_r = st.columns([1, 2, 1])
+    with col_form:
+        participant_id_input = st.text_input("מספר משתתף", placeholder="הזינו את מספר המשתתף המוקצה ברשימה")
+        experiment_group_input = st.selectbox("קבוצת ניסוי", ["control", "storytelling"])
+        st.write("")
+        if st.button("המשך לטופס ההסכמה ▶", use_container_width=True):
+            if participant_id_input.strip() == "":
+                st.warning("יש להזין מספר משתתף")
+            else:
+                st.session_state.screen = "consent"
+                st.rerun()
+
+
+# ==============================
 # SCREEN: CONSENT
 # ==============================
-if st.session_state.screen == "consent":
+elif st.session_state.screen == "consent":
     st.markdown(
 """
 <div style="max-width:900px;margin:2rem auto;">
@@ -1350,9 +1375,6 @@ elif st.session_state.screen == "demographics":
     col_l, col_form, col_r = st.columns([1, 2, 1])
 
     with col_form:
-        participant_id_input = st.text_input("מספר משתתף", placeholder="הזינו את מספר המשתתף המוקצה ברשימה")
-        experiment_group_input = st.selectbox("קבוצת ניסוי", ["control", "storytelling"])
-
         age = st.selectbox(
             "Age / גיל",
             ["", "18–24", "25–34", "35–44", "45 ומעלה"]
@@ -1386,7 +1408,6 @@ elif st.session_state.screen == "demographics":
 
         if st.button("שלח/י והמשך ▶", use_container_width=True):
             if (
-                participant_id_input.strip() == "" or
                 age == "" or gender == "" or country.strip() == "" or
                 occupation.strip() == "" or education == "" or
                 ai_experience == "" or bi_experience == ""
