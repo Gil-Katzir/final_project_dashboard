@@ -1302,6 +1302,8 @@ if st.session_state.screen == "register":
             if participant_id_input.strip() == "":
                 st.warning("יש להזין מספר משתתף")
             else:
+                st.session_state.participant_id = participant_id_input.strip()
+                st.session_state.experiment_group = experiment_group_input
                 st.session_state.screen = "consent"
                 st.rerun()
 
@@ -1376,22 +1378,23 @@ elif st.session_state.screen == "demographics":
 
     with col_form:
         age = st.selectbox(
-            "Age / גיל",
+            "טווח גילאים",
             ["", "18–24", "25–34", "35–44", "45 ומעלה"]
         )
 
         gender = st.selectbox(
-            "Gender / מגדר",
+            "מגדר",
             ["", "אישה", "גבר", "אחר", "מעדיפ/ה לא לציין"]
         )
 
-        country = st.text_input("Country / מדינה", placeholder="לדוגמה: Israel")
-
-        occupation = st.text_input("Occupation / עיסוק", placeholder="לדוגמה: סטודנט/ית")
+        experience = st.selectbox(
+            "מהי רמת ההיכרות שלך עם דשבורדים או גרפים עסקיים?",
+            ["", "ללא ניסיון", "ניסיון מועט", "ניסיון בינוני", "ניסיון רב"]
+        )
 
         education = st.selectbox(
-            "Education Level / רמת השכלה",
-            ["", "תיכון", "סטודנט/ית לתואר ראשון", "תואר ראשון", "תואר שני ומעלה", "אחר"]
+            "מהו הרקע העיקרי שלך?",
+            ["", "סטודנט/ית", "עובד/ת בתחום עסקי", "עובד/ת בתחום טכנולוגי", "אחר"]
         )
 
         ai_experience = st.selectbox(
@@ -1408,25 +1411,20 @@ elif st.session_state.screen == "demographics":
 
         if st.button("שלח/י והמשך ▶", use_container_width=True):
             if (
-                age == "" or gender == "" or country.strip() == "" or
-                occupation.strip() == "" or education == "" or
+                age == "" or gender == "" or experience == "" or education == "" or
                 ai_experience == "" or bi_experience == ""
             ):
                 st.warning("יש למלא את כל השדות לפני ההמשך")
             else:
-                st.session_state.participant_id = participant_id_input.strip()
-                st.session_state.experiment_group = experiment_group_input
                 st.session_state.demographic_age = age
                 st.session_state.demographic_gender = gender
-                st.session_state.demographic_country = country.strip()
-                st.session_state.demographic_occupation = occupation.strip()
+                st.session_state.demographic_experience = experience
                 st.session_state.demographic_education = education
                 st.session_state.demographic_ai_experience = ai_experience
                 st.session_state.demographic_bi_experience = bi_experience
 
                 st.session_state.screen = "instructions"
                 st.rerun()
-
 
 # ==============================
 # SCREEN: INSTRUCTIONS
