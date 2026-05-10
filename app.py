@@ -539,7 +539,7 @@ monthly_dress = monthly_dress.sort_values("Month")
 monthly_discount_total = (
     df.groupby("Month", as_index=False)
     .agg(**{
-        "Discount Total": ("Discount", "mean")
+        "Campaign Expense Total": ("Discount", "mean")
     })
 )
 monthly_discount_total["Month"] = pd.Categorical(monthly_discount_total["Month"], categories=months_order, ordered=True)
@@ -603,21 +603,21 @@ questions = [
         "options": [
             "ירידה בהכנסות הכוללות של החנות מכלל הקטגוריות",
             "ירידה במכירות ביחס לשנה הקודמת",
-            "גידול במכירות ב-Dress לצד הנחות גבוהות שפוגעות ברווחיות",
+            "גידול במכירות ב-Dress לצד השקעה נרחבת בקמפיניים שפוגעות ברווחיות",
             "עלייה ברווח של Dress"
         ],
-        "correct_answer": "גידול במכירות ב-Dress לצד הנחות גבוהות שפוגעות ברווחיות"
+        "correct_answer": "גידול במכירות ב-Dress לצד השקעה נרחבת בקמפיניים שפוגעות ברווחיות"
     },
     {
         "id": 10,
         "text": "מהי המסקנה העסקית המרכזית מהנתונים?",
         "options": [
-            "יש להפחית במתן הנחות בכל קטגוריות החנות",
+            "יש להפחית בהשקעה בקמפיניים בכל קטגוריות החנות",
             "עלייה בהכנסות מחודש יולי צפויה לשפר את רווחי החנות",
-            "הגידול בהנחות הגבוהות לאורך זמן בקטגוריה מסויימת עשוי לגרום למגמת ירידה ברווחים",
+            "הגידול בהוצאות על הקמפיינים לאורך זמן בקטגוריה מסויימת עשוי לגרום למגמת ירידה ברווחים",
             "קטגוריית החולצות והג'ינסים אינן מניבות מספיק רווחים לחנות, יש לנקוט בפעולות לשיפור"
         ],
-        "correct_answer": "הגידול בהנחות הגבוהות לאורך זמן בקטגוריה מסויימת עשוי לגרום למגמת ירידה ברווחים"
+        "correct_answer": "הגידול בהוצאות על הקמפיינים לאורך זמן בקטגוריה מסויימת עשוי לגרום למגמת ירידה ברווחים"
     },
 ]
 
@@ -625,7 +625,7 @@ chart_narratives = {
     "chart1": "📈 בחינת מצב של הכנסות החברה: הגרף מציג את סך ההכנסות החודשיות של חנות הבגדים לאורך זמן.",
     "chart2": "💰 על מנת להמשיך השלים את התמונה, כעת מוצגים בגרף זה גם הרווח הנקי של החברה לאורך זמן",
     "chart3": "🏷️ לשם העמקת הבחינה, מוצגות ההכנסות של חנות הבגדים בחלוקה לפי קטגוריות הלבוש השונות בחנות",
-    "chart4": "📉 בגרף מוצג הרווח הכולל של החנות, לצד שיעור ההנחה הכולל לאורך זמן. ניתן לבחון להתמקד בקטגוריה לבחירתך."
+    "chart4": "📉 בגרף מוצג הרווח הכולל של החנות, לצד שיעור הוצאות על קמפיינים הכולל לאורך זמן. ניתן לבחון להתמקד בקטגוריה לבחירתך."
 }
 
 # שאלות שבהן נוסף גרף (storytelling) — מפתח = index שאלה (0-based)
@@ -982,7 +982,7 @@ def show_chart1():
         )
 
         
-        fig = apply_common_layout(fig, "Revenue Total by Month")
+        fig = apply_common_layout(fig, "Total Revenue by Month")
         fig.update_yaxes(tickprefix="$")
 
         fig.update_layout(
@@ -1026,7 +1026,7 @@ def show_chart1():
 
 
 def show_chart2():
-    panel_header("רווחים לפי חודש", chart_narratives["chart2"])
+    panel_header("רווחים נטו לפי חודש", chart_narratives["chart2"])
 
     if not st.session_state.chart2_drilled:
         fig = px.line(
@@ -1175,7 +1175,7 @@ def show_chart3():
 
 
 def show_chart4():
-    panel_header("רווחים והנחות", chart_narratives["chart4"])
+    panel_header("רווחים ואחוזי השקעה בקמפיינים", chart_narratives["chart4"])
 
     if not st.session_state.chart4_drilled:
         fig = make_subplots(specs=[[{"secondary_y": True}]])
@@ -1198,18 +1198,18 @@ def show_chart4():
         fig.add_trace(
             go.Scatter(
                 x=monthly_discount_total["Month"],
-                y=monthly_discount_total["Discount Total"],
+                y=monthly_discount_total["Campaign Expense Total"],
                 mode="lines+markers",
-                name="Overall Discount %",
+                name="Overall Campaign Expense %",
                 line=dict(color="#f59e0b", width=3, dash="dot"),
                 marker=dict(size=7, line=dict(width=2, color="white"))
             ),
             secondary_y=True
         )
 
-        fig = apply_common_layout(fig, "Total Profit & Average Discount by Month")
+        fig = apply_common_layout(fig, "Total Profit & Average Campaign Expense Percentage by Month")
         fig.update_yaxes(title_text="Profit", secondary_y=False, tickprefix="$")
-        fig.update_yaxes(title_text="Discount (%)", secondary_y=True)
+        fig.update_yaxes(title_text="Average Campaign Expense (%)", secondary_y=True)
 
         fig.update_layout(
             plot_bgcolor="#f7f7f7",
@@ -1267,10 +1267,10 @@ def show_chart4():
 
         fig = apply_common_layout(
             fig,
-            f"{st.session_state.chart4_category}: Profit and Discount by Month"
+            f"{st.session_state.chart4_category}: Profit and Campaign Expense (%) by Month"
         )
         fig.update_yaxes(title_text="Profit", secondary_y=False, tickprefix="$")
-        fig.update_yaxes(title_text="Discount (%)", secondary_y=True)
+        fig.update_yaxes(title_text="Campaign Expense (%)", secondary_y=True)
 
         fig.update_layout(
             plot_bgcolor="#f7f7f7",
@@ -1526,7 +1526,8 @@ elif st.session_state.screen == "comprehension":
             "",
             check_q["options"],
             key=f"comprehension_{check_q['id']}",
-            label_visibility="collapsed"
+            label_visibility="collapsed",
+            index=None
         )
 
         if st.button("שלח/י תשובה ▶", use_container_width=True):
@@ -1660,10 +1661,16 @@ elif st.session_state.screen == "experiment":
             "",
             q["options"],
             key=f"question_{q['id']}",
-            label_visibility="collapsed"
+            label_visibility="collapsed",
+            index=None
         )
 
         if st.button("שלח/י תשובה ✨", use_container_width=True):
+
+            if selected is None:
+                st.warning("יש לבחור תשובה לפני ההמשך")
+                st.stop()
+
             response_time = time.time() - st.session_state.question_start_time
             is_correct = selected == q["correct_answer"]
 
