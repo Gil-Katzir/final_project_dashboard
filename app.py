@@ -1200,14 +1200,14 @@ def show_chart4():
                 x=monthly_discount_total["Month"],
                 y=monthly_discount_total["Campaign Expense Total"],
                 mode="lines+markers",
-                name="Overall Campaign Expense %",
+                name="Campaign Expense %",
                 line=dict(color="#f59e0b", width=3, dash="dot"),
                 marker=dict(size=7, line=dict(width=2, color="white"))
             ),
             secondary_y=True
         )
 
-        fig = apply_common_layout(fig, "Total Profit & Average Campaign Expense Percentage by Month")
+        fig = apply_common_layout(fig, "Profit & Average Campaign Expense (%) by Month")
         fig.update_yaxes(title_text="Profit", secondary_y=False, tickprefix="$")
         fig.update_yaxes(title_text="Average Campaign Expense (%)", secondary_y=True)
 
@@ -1258,7 +1258,7 @@ def show_chart4():
                 x=drill_df["Month"],
                 y=drill_df["Discount"],
                 mode="lines+markers",
-                name="Discount %",
+                name="Campaign Expense (%)",
                 line=dict(color="#f59e0b", width=3, dash="dot"),
                 marker=dict(size=7, line=dict(width=2, color="white"))
             ),
