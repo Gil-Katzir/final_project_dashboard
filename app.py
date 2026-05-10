@@ -634,15 +634,20 @@ NEW_CHART_AT = {2: "גרף 2 נוסף", 4: "גרף 3 נוסף", 8: "גרף 4 נ�
 comprehension_questions = [
     {
         "id": 1,
-        "text": "כמה זה 10% מ-105?",
-        "options": ["10.5", "15", "105", "1.05"],
-        "correct_answer": "10.5"
+        "text": "לאחר שליחת תשובה במהלך הניסוי, האם ניתן לחזור לשאלה קודמת?",
+        "options": ["כן", "לא"],
+        "correct_answer": "לא"
     },
     {
         "id": 2,
-        "text": "לאחר שליחת תשובה במהלך הניסוי, האם ניתן לחזור לשאלה קודמת?",
-        "options": ["כן", "לא", "רק פעם אחת", "רק בסיום הניסוי"],
-        "correct_answer": "לא"
+        "text": "מה מאפשר סמל הזכוכית המגדלת (🔍) בדשבורד?",
+        "options": [
+            "לבצע Drill Down ולצפות בפירוט נוסף של הנתונים",
+            "לדלג על שאלה",
+            "להציג את התשובה הנכונה",
+            "לסיים את הניסוי"
+        ],
+        "correct_answer": "לבצע Drill Down ולצפות בפירוט נוסף של הנתונים"
     },
 ]
 
@@ -1453,10 +1458,6 @@ elif st.session_state.screen == "instructions":
 <div class="welcome-text">
 💡 שימו לב - ערכי ציר ה-Y בגרפים לא תמיד יתחילו מ-0
 </div>
-<div class="welcome-section-title">תגמול</div>
-<div class="welcome-text">
-מבין המשתתפים המובילים בהישגים במענה על שאלות הניסוי, יוגרל פרס בסך 1000 ש״ח שיחולק בין שלושת המקומות המובילים.
-</div>
 <div class="welcome-section-title">משך הניסוי</div>
 <div class="welcome-text">
 הניסוי צפוי להימשך כ-<strong>10 דקות</strong>. אין הגבלת זמן לכל שאלה בנפרד.
@@ -1486,12 +1487,8 @@ elif st.session_state.screen == "comprehension":
 """
 <div style="max-width:820px;margin:2rem auto;">
 <div class="welcome-card">
-<div class="welcome-title">בדיקת הבנת ההוראות</div>
-<div class="welcome-subtitle">לפני תחילת הניסוי נציג שתי שאלות קצרות לווידוא קליטת ההנחיות</div>
-<hr class="welcome-divider">
-<div class="welcome-text">
-השאלות מוצגות לצורך בדיקת קליטה בלבד. לא יוצג משוב על נכונות התשובה, ולא יהיה צורך לתקן את המענה.
-</div>
+<div class="welcome-title">שאלת קליטה לפני שמתחילים</div>
+
 </div>
 </div>
 """,
@@ -1508,8 +1505,20 @@ elif st.session_state.screen == "comprehension":
             unsafe_allow_html=True
         )
         st.markdown(
-            f'<div class="rtl-question" style="font-size:1.1rem;font-weight:600;margin-bottom:1rem;font-family:Varela Round, sans-serif;">'
-            f'{check_q["text"]}</div>',
+            f'''
+            <div style="
+                text-align:center;
+                font-size:2rem;
+                font-weight:800;
+                margin-top:4rem;
+                margin-bottom:2rem;
+                font-family:'Varela Round', sans-serif;
+                color:#1e293b;
+                direction:rtl;
+            ">
+                {check_q["text"]}
+            </div>
+            ''',
             unsafe_allow_html=True
         )
 
@@ -1530,19 +1539,20 @@ elif st.session_state.screen == "comprehension":
                 "is_correct": is_check_correct,
             })
 
-            st.session_state.comprehension_current += 1
-            st.rerun()
+            if is_check_correct:
+                st.session_state.comprehension_current += 1
 
-    else:
-        st.success("מעולה, אפשר להתחיל את הניסוי")
-        if st.button("התחלת הניסוי 🚀", use_container_width=True):
-            st.session_state.experiment_started = True
-            st.session_state.session_start_time = time.time()
-            st.session_state.started_at = datetime.now(ZoneInfo("Asia/Jerusalem")).isoformat()
-            st.session_state.question_start_time = time.time()
-            st.session_state.db_saved = False
-            st.session_state.screen = "experiment"
-            st.rerun()
+                if st.session_state.comprehension_current >= len(comprehension_questions):
+                    st.session_state.experiment_started = True
+                    st.session_state.session_start_time = time.time()
+                    st.session_state.started_at = datetime.now(ZoneInfo("Asia/Jerusalem")).isoformat()
+                    st.session_state.question_start_time = time.time()
+                    st.session_state.db_saved = False
+                    st.session_state.screen = "experiment"
+
+                st.rerun()
+            else:
+                st.warning("התשובה אינה נכונה. אנא קרא/י שוב את ההוראות ונסה/י שוב.")
 
 
 # ==============================
