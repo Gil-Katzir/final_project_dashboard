@@ -580,6 +580,12 @@ questions = [
         "correct_answer": "40K-42K"
     },
     {
+        "id": 55,
+        "text": "נא לבחור בתשובה 'אפשרות 3' בשאלה זו.",
+        "options": ["אפשרות 1", "אפשרות 2", "אפשרות 3", "אפשרות 4"],
+        "correct_answer": "אפשרות 3"
+    },
+    {
         "id": 6,
         "text": "בחודש שהכנסות החנות היו הגבוהות ביותר, מה היו ההכנסות מקטגוריית T-Shirt?",
         "options": ["49K", "18K", "18.5K", "15.5K"],
@@ -634,20 +640,15 @@ NEW_CHART_AT = {2: "גרף 2 נוסף", 4: "גרף 3 נוסף", 8: "גרף 4 נ�
 comprehension_questions = [
     {
         "id": 1,
-        "text": "לאחר שליחת תשובה במהלך הניסוי, האם ניתן לחזור לשאלה קודמת?",
-        "options": ["כן", "לא"],
-        "correct_answer": "לא"
+        "text": "כמה זה 10% מתוך 105?",
+        "options": ["10.5", "15", "9.5", "12"],
+        "correct_answer": "10.5"
     },
     {
         "id": 2,
-        "text": "מה מאפשר סמל הזכוכית המגדלת (🔍) בדשבורד?",
-        "options": [
-            "לבצע Drill Down ולצפות בפירוט נוסף של הנתונים",
-            "לדלג על שאלה",
-            "להציג את התשובה הנכונה",
-            "לסיים את הניסוי"
-        ],
-        "correct_answer": "לבצע Drill Down ולצפות בפירוט נוסף של הנתונים"
+        "text": "כמה זה 9 כפול 9 פחות 2?",
+        "options": ["79", "81", "77", "72"],
+        "correct_answer": "79"
     },
 ]
 
@@ -1324,26 +1325,35 @@ if st.session_state.screen == "register":
 elif st.session_state.screen == "consent":
     st.markdown(
 """
-<div style="max-width:900px;margin:2rem auto;">
-<div class="welcome-card">
-<div class="welcome-title">טופס הסכמה להשתתפות במחקר</div>
-<div class="welcome-subtitle">Informed consent to participate in a study</div>
-<hr class="welcome-divider">
+<div style="max-width:900px;margin:2rem auto; direction:ltr; text-align:left;">
+<div class="welcome-card" style="direction:ltr; text-align:left;">
 
-<div class="welcome-text">
-<ol style="line-height:1.9; padding-right:22px;">
-<li>הינך עומד/ת להשתתף במחקר העוסק בקבלת החלטות.</li>
-<li>במהלך המחקר יוצג בפניך דשבורד Business Intelligence (BI), ותתבקש/י לענות על מספר שאלות בתחום ניתוח נתונים עסקיים.</li>
-<li>ניתן להפסיק את ההשתתפות בכל שלב או לסרב לענות על כל שאלה. עם זאת, משתתפים שיפסיקו לפני השלמת המשימה לא יקבלו קרדיט/אישור על השלמת ההשתתפות.</li>
-<li>בסיום המחקר תוצג עמודת סיום המאשרת את השלמת ההשתתפות.</li>
-<li>סודיות זהות המשתתפים מובטחת. הנתונים יפורסמו בצורה מצטברת בלבד, ולא ניתן יהיה לקשר בין פרטים אישיים לבין התשובות והנתונים שנמסרו במהלך המחקר.</li>
-<li>אין מגבלת זמן להשלמת המחקר. משך ההשתתפות הצפוי הוא כ-10 דקות.</li>
-<li>המחקר נערך במסגרת פרויקט גמר במחלקה להנדסת תעשייה וניהול, אוניברסיטת בן-גוריון.</li>
-<li>בכל שאלה בנוגע למחקר ניתן לפנות לצוות המחקר.</li>
-</ol>
+<div class="welcome-title" style="direction:ltr; text-align:center;">
+Informed Consent Form
+</div>
+
+<div class="welcome-subtitle" style="direction:ltr; text-align:center;">
+Participation in a Business Intelligence Study
 </div>
 
 <hr class="welcome-divider">
+
+<div class="welcome-text" style="direction:ltr; text-align:left;">
+<ol style="line-height:1.9; padding-left:22px;">
+<li>You are about to participate in a decision-making study.</li>
+<li>During the study, you will be presented with BI dashboards and asked to answer business analytics questions.</li>
+<li>You may stop your participation at any time.</li>
+<li>Your responses will remain anonymous and will only be used for research purposes.</li>
+<li>The study is expected to take approximately 10 minutes.</li>
+</ol>
+</div>
+
+<div class="welcome-highlight" style="direction:ltr; text-align:left;">
+Among the top participants based on performance in the experiment questions, a prize of ₪1000 will be raffled and divided between the top 3 participants.
+</div>
+
+<hr class="welcome-divider">
+
 </div>
 </div>
 """,
@@ -1351,12 +1361,23 @@ elif st.session_state.screen == "consent":
     )
 
     col_l, col_form, col_r = st.columns([1, 2, 1])
+
     with col_form:
-        consent = st.checkbox("I confirm that I have read and understood the information above and voluntarily agree to participate in this study.")
+
+        consent_1 = st.checkbox(
+            "I confirm that I have read and understood the information above."
+        )
+
+        consent_2 = st.checkbox(
+            "I voluntarily agree to participate in this study."
+        )
+
         st.write("")
-        if st.button("המשך ▶", use_container_width=True):
-            if not consent:
-                st.warning("יש לסמן את תיבת ההסכמה כדי להמשיך")
+
+        if st.button("Continue ▶", use_container_width=True):
+
+            if not (consent_1 and consent_2):
+                st.warning("Please confirm both checkboxes before continuing.")
             else:
                 st.session_state.consent_given = True
                 st.session_state.screen = "demographics"
