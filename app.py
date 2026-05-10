@@ -488,13 +488,21 @@ st.markdown("""
         font-family: 'Varela Round', sans-serif;
     }
 
-    /* checkbox font */
+    /* consent checkbox - LTR */
     div[data-testid="stCheckbox"] label {
         font-family: 'Varela Round', sans-serif !important;
         font-size: 0.97rem !important;
         color: #1e293b !important;
-        direction: rtl !important;
-        text-align: right !important;
+
+        direction: ltr !important;
+        text-align: left !important;
+
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: flex-start !important;
+        align-items: flex-start !important;
+
+        gap: 10px !important;
         line-height: 1.7 !important;
     }
 
@@ -579,12 +587,7 @@ questions = [
         "options": ["35K-38K", "40K-42K", "53K-55K", "13K-15K"],
         "correct_answer": "40K-42K"
     },
-    {
-        "id": 55,
-        "text": "נא לבחור בתשובה 'אפשרות 3' בשאלה זו.",
-        "options": ["אפשרות 1", "אפשרות 2", "אפשרות 3", "אפשרות 4"],
-        "correct_answer": "אפשרות 3"
-    },
+
     {
         "id": 6,
         "text": "בחודש שהכנסות החנות היו הגבוהות ביותר, מה היו ההכנסות מקטגוריית T-Shirt?",
@@ -672,6 +675,10 @@ defaults = {
     "consent_given": False,
     "comprehension_current": 0,
     "comprehension_answers": [],
+    "attention_check_shown": False,
+    "attention_check_answer": None,
+    "attention_check_is_correct": None,
+    "attention_check_time_seconds": None,
 
     "session_id": str(uuid.uuid4()),
     "session_start_time": None,
@@ -776,6 +783,9 @@ def build_export_df(total_duration: float) -> pd.DataFrame:
         "demographic_ai_experience": st.session_state.demographic_ai_experience,
         "demographic_bi_experience": st.session_state.demographic_bi_experience,
         "comprehension_answers": str(st.session_state.comprehension_answers),
+        "attention_check_answer": st.session_state.attention_check_answer,
+        "attention_check_is_correct": st.session_state.attention_check_is_correct,
+        "attention_check_time_seconds": st.session_state.attention_check_time_seconds,
     }
     rows = []
     for answer in st.session_state.answers:
@@ -1268,7 +1278,7 @@ def show_chart4():
 
         fig = apply_common_layout(
             fig,
-            f"{st.session_state.chart4_category}: Profit & Campaign Expense (%) by Month"
+            f"{st.session_state.chart4_category}: Profit and Campaign Expense (%) by Month"
         )
         fig.update_yaxes(title_text="Profit", secondary_y=False, tickprefix="$")
         fig.update_yaxes(title_text="Campaign Expense (%)", secondary_y=True)
@@ -1480,7 +1490,7 @@ elif st.session_state.screen == "instructions":
 </div>
 <div class="welcome-section-title">משך הניסוי</div>
 <div class="welcome-text">
-הניסוי צפוי להימשך כ-<strong>20 דקות</strong>. אין הגבלת זמן לכל שאלה בנפרד.
+הניסוי צפוי להימשך כ-<strong>10 דקות</strong>. אין הגבלת זמן לכל שאלה בנפרד.
 </div>
 
 
@@ -1644,6 +1654,46 @@ elif st.session_state.screen == "experiment":
 
     # question block
     if cq < len(questions):
+
+        # attention check - shown once in the middle of the experiment, not counted as questions 1-10
+        if cq == 5 and not st.session_state.attention_check_shown:
+            st.progress((st.session_state.current_question + 1) / len(questions))
+
+            st.markdown(
+                '<div class="rtl-title" style="font-size:1.35rem;font-weight:700;margin-bottom:0.4rem;font-family:Varela Round, sans-serif;">'
+                'שאלת קשב</div>',
+                unsafe_allow_html=True
+            )
+
+            st.markdown(
+                '<div class="rtl-question" style="font-size:1.1rem;font-weight:600;margin-bottom:1rem;font-family:Varela Round, sans-serif;">'
+                'נא לבחור בתשובה "אפשרות 3" בשאלה זו.</div>',
+                unsafe_allow_html=True
+            )
+
+            attention_selected = st.radio(
+                "",
+                ["אפשרות 1", "אפשרות 2", "אפשרות 3", "אפשרות 4"],
+                key="attention_check_question",
+                label_visibility="collapsed",
+                index=None
+            )
+
+            if st.button("שלח/י תשובה ✨", use_container_width=True):
+                if attention_selected is None:
+                    st.warning("יש לבחור תשובה לפני ההמשך")
+                    st.stop()
+
+                response_time = time.time() - st.session_state.question_start_time
+                st.session_state.attention_check_answer = attention_selected
+                st.session_state.attention_check_is_correct = attention_selected == "אפשרות 3"
+                st.session_state.attention_check_time_seconds = round(response_time, 2)
+                st.session_state.attention_check_shown = True
+                st.session_state.question_start_time = time.time()
+                st.rerun()
+
+            st.stop()
+
         q = questions[cq]
 
         progress = (st.session_state.current_question + 1) / len(questions)
