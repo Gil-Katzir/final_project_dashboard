@@ -1268,7 +1268,7 @@ def show_chart4():
 
         fig = apply_common_layout(
             fig,
-            f"{st.session_state.chart4_category}: Profit and Campaign Expense (%) by Month"
+            f"{st.session_state.chart4_category}: Profit & Campaign Expense (%) by Month"
         )
         fig.update_yaxes(title_text="Profit", secondary_y=False, tickprefix="$")
         fig.update_yaxes(title_text="Campaign Expense (%)", secondary_y=True)
@@ -1329,11 +1329,7 @@ elif st.session_state.screen == "consent":
 <div class="welcome-card" style="direction:ltr; text-align:left;">
 
 <div class="welcome-title" style="direction:ltr; text-align:center;">
-Informed Consent Form
-</div>
-
-<div class="welcome-subtitle" style="direction:ltr; text-align:center;">
-Participation in a Business Intelligence Study
+Informed Consent to Participate in a Study
 </div>
 
 <hr class="welcome-divider">
@@ -1341,15 +1337,15 @@ Participation in a Business Intelligence Study
 <div class="welcome-text" style="direction:ltr; text-align:left;">
 <ol style="line-height:1.9; padding-left:22px;">
 <li>You are about to participate in a decision-making study.</li>
-<li>During the study, you will be presented with BI dashboards and asked to answer business analytics questions.</li>
-<li>You may stop your participation at any time.</li>
-<li>Your responses will remain anonymous and will only be used for research purposes.</li>
-<li>The study is expected to take approximately 10 minutes.</li>
+<li>During the study, you will be presented with Business Intelligence (BI) dashboards and asked to answer several business analytics questions.</li>
+<li>You can withdraw your participation at any time or refuse to answer any question; however, participants who withdraw before completing all the tasks will not receive credit for their participation.</li>
+<li>Upon completion of the study, you will reach a completion page where you will receive a verification code confirming your participation. This code may be used, where applicable, to receive compensation or credit for participation.</li>
+<li>Confidentiality as to the identity of each participant is guaranteed, and only summary data will be published. It is impossible to connect the personal details of the participant with the answers and data provided during the study.</li>
+<li>There is no time limit for completing the study, which should take about 15 minutes.</li>
+<li>The study has been approved by the institutional ethics committee of the Department of Industrial Engineering and Management at Ben-Gurion University.</li>
+<li>If you have any questions about the study, you may contact Amit Hadad at <b>hadadami@post.bgu.ac.il</b>, Department of Industrial Engineering and Management, Ben-Gurion University of the Negev.</li>
+<li>Please check one of the following boxes:</li>
 </ol>
-</div>
-
-<div class="welcome-highlight" style="direction:ltr; text-align:left;">
-Among the top participants based on performance in the experiment questions, a prize of ₪1000 will be raffled and divided between the top 3 participants.
 </div>
 
 <hr class="welcome-divider">
@@ -1363,21 +1359,24 @@ Among the top participants based on performance in the experiment questions, a p
     col_l, col_form, col_r = st.columns([1, 2, 1])
 
     with col_form:
-
-        consent_1 = st.checkbox(
-            "I confirm that I have read and understood the information above."
+        consent_confirm = st.checkbox(
+            "I hereby confirm that I have understood the above and freely give my consent to participate in this study. Continue."
         )
 
-        consent_2 = st.checkbox(
-            "I voluntarily agree to participate in this study."
+        consent_decline = st.checkbox(
+            "I do not confirm. Exit."
         )
 
         st.write("")
 
         if st.button("Continue ▶", use_container_width=True):
 
-            if not (consent_1 and consent_2):
-                st.warning("Please confirm both checkboxes before continuing.")
+            if consent_decline:
+                st.warning("You cannot continue without providing consent.")
+
+            elif not consent_confirm:
+                st.warning("Please confirm your consent before continuing.")
+
             else:
                 st.session_state.consent_given = True
                 st.session_state.screen = "demographics"
@@ -1481,7 +1480,7 @@ elif st.session_state.screen == "instructions":
 </div>
 <div class="welcome-section-title">משך הניסוי</div>
 <div class="welcome-text">
-הניסוי צפוי להימשך כ-<strong>10 דקות</strong>. אין הגבלת זמן לכל שאלה בנפרד.
+הניסוי צפוי להימשך כ-<strong>20 דקות</strong>. אין הגבלת זמן לכל שאלה בנפרד.
 </div>
 
 
@@ -1561,20 +1560,17 @@ elif st.session_state.screen == "comprehension":
                 "is_correct": is_check_correct,
             })
 
-            if is_check_correct:
-                st.session_state.comprehension_current += 1
+            st.session_state.comprehension_current += 1
 
-                if st.session_state.comprehension_current >= len(comprehension_questions):
-                    st.session_state.experiment_started = True
-                    st.session_state.session_start_time = time.time()
-                    st.session_state.started_at = datetime.now(ZoneInfo("Asia/Jerusalem")).isoformat()
-                    st.session_state.question_start_time = time.time()
-                    st.session_state.db_saved = False
-                    st.session_state.screen = "experiment"
+            if st.session_state.comprehension_current >= len(comprehension_questions):
+                st.session_state.experiment_started = True
+                st.session_state.session_start_time = time.time()
+                st.session_state.started_at = datetime.now(ZoneInfo("Asia/Jerusalem")).isoformat()
+                st.session_state.question_start_time = time.time()
+                st.session_state.db_saved = False
+                st.session_state.screen = "experiment"
 
-                st.rerun()
-            else:
-                st.warning("התשובה אינה נכונה. אנא קרא/י שוב את ההוראות ונסה/י שוב.")
+            st.rerun()
 
 
 # ==============================
