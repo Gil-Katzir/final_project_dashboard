@@ -1490,7 +1490,7 @@ elif st.session_state.screen == "instructions":
 </div>
 <div class="welcome-section-title">משך הניסוי</div>
 <div class="welcome-text">
-הניסוי צפוי להימשך כ-<strong>10 דקות</strong>. אין הגבלת זמן לכל שאלה בנפרד.
+הניסוי צפוי להימשך כ-<strong>20 דקות</strong>. אין הגבלת זמן לכל שאלה בנפרד.
 </div>
 
 
