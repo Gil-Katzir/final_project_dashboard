@@ -608,7 +608,7 @@ questions = [
     },
     {
         "id": 9,
-        "text": "בחודש בו הפרשי ההכנסות בין קטגוריית T-Shirt לקטגוריית Jeans היו 3K$,מי הקטגורייה בה אחוז ההוצאות על הקמפיניים היה הגבוה ביותר?",
+        "text": "בחודש בו הפרשי ההכנסות בין קטגוריית T-Shirt לקטגוריית Jeans היו 3K$ ,מי הקטגורייה בה אחוז ההוצאות על הקמפיניים היה הגבוה ביותר?",
         "options": [
             "T-Shirt",
             "Dress",
@@ -723,10 +723,10 @@ for key, value in widget_defaults.items():
         st.session_state[key] = value
 
 prev_defaults = {
-    "__prev_chart1_month_select": months_order[0],
-    "__prev_chart2_month_select": months_order[0],
-    "__prev_chart3_category_select": "Dress",
-    "__prev_chart4_category_select": "Dress",
+    "__prev_chart1_month_select": None,
+    "__prev_chart2_month_select": None,
+    "__prev_chart3_category_select": None,
+    "__prev_chart4_category_select": None,
 }
 for key, value in prev_defaults.items():
     if key not in st.session_state:
@@ -757,9 +757,18 @@ def track_dashboard_click(action_type: str, action_value: str = ""):
 
 
 def track_filter_change(widget_key: str, action_type: str):
+    if not st.session_state.experiment_started:
+        return
+
     current_val = st.session_state.get(widget_key)
     prev_key = f"__prev_{widget_key}"
     prev_val = st.session_state.get(prev_key)
+
+    # First automatic widget sync should not count as a dashboard interaction
+    if prev_val is None:
+        st.session_state[prev_key] = current_val
+        return
+
     if current_val != prev_val:
         track_dashboard_click(action_type, f"{widget_key}={current_val}")
         st.session_state[prev_key] = current_val
