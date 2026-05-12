@@ -1591,6 +1591,14 @@ elif st.session_state.screen == "comprehension":
                 st.session_state.started_at = datetime.now(ZoneInfo("Asia/Jerusalem")).isoformat()
                 st.session_state.question_start_time = time.time()
                 st.session_state.db_saved = False
+
+                # מאתחל את ערכי הפילטרים כדי שלא יספרו כאינטראקציה
+                st.session_state["__prev_chart1_month_select"] = st.session_state["chart1_month_select"]
+                st.session_state["__prev_chart2_month_select"] = st.session_state["chart2_month_select"]
+                st.session_state["__prev_chart3_category_select"] = st.session_state["chart3_category_select"]
+                st.session_state["__prev_chart4_category_select"] = st.session_state["chart4_category_select"]
+                st.session_state["__filters_initialized"] = True
+
                 st.session_state.screen = "experiment"
 
             st.rerun()
