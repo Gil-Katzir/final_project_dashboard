@@ -565,7 +565,7 @@ questions = [
     },
     {
         "id": 2,
-        "text": "באיזה חודש הכנסות החנות בתתילת החודש היו גבוהות מההכנסות בסוף החודש?",
+        "text": "באיזה חודש הכנסות החנות בתחילת החודש היו גבוהות מההכנסות בסוף החודש?",
         "options": ["פברואר", "אפריל", "מאי", "מרץ"],
         "correct_answer": "פברואר"
     },
@@ -634,7 +634,7 @@ chart_narratives = {
     "chart1": "📈 בחינת מצב של הכנסות החברה: הגרף מציג את סך ההכנסות החודשיות של חנות הבגדים לאורך זמן.",
     "chart2": "💰 על מנת להמשיך השלים את התמונה, כעת מוצגים בגרף זה גם הרווח הנקי של החברה לאורך זמן",
     "chart3": "🏷️ לשם העמקת הבחינה, מוצגות ההכנסות של חנות הבגדים בחלוקה לפי קטגוריות הלבוש השונות בחנות",
-    "chart4": "📉 בגרף מוצג הרווח הכולל של החנות, לצד שיעור הוצאות על קמפיינים הכולל לאורך זמן. ניתן לבחון להתמקד בקטגוריה לבחירתך."
+    "chart4": "📉 בגרף מוצג הרווח הכולל של החנות, לצד שיעור ממוצע של הוצאות על קמפיינים הכולל לאורך זמן. ניתן לבחון לפי קטגוריה לבחירתך."
 }
 
 # שאלות שבהן נוסף גרף (storytelling) — מפתח = index שאלה (0-based)
@@ -1186,7 +1186,7 @@ def show_chart3():
 
 
 def show_chart4():
-    panel_header("רווחים ואחוזי השקעה בקמפיינים", chart_narratives["chart4"])
+    panel_header("רווחים וממוצע אחוזי השקעה בקמפיינים", chart_narratives["chart4"])
 
     if not st.session_state.chart4_drilled:
         fig = make_subplots(specs=[[{"secondary_y": True}]])
@@ -1195,7 +1195,7 @@ def show_chart4():
             go.Bar(
                 x=monthly_total["Month"],
                 y=monthly_total["Profit Total"],
-                name="Total Store Profit",
+                name="Total Profit",
                 marker=dict(
                     color="#8b5cf6",
                     line=dict(width=0)
@@ -1218,7 +1218,7 @@ def show_chart4():
             secondary_y=True
         )
 
-        fig = apply_common_layout(fig, "Profit & Average Campaign Expense (%) by Month")
+        fig = apply_common_layout(fig, "Profit & Campaign Expense (%) by Month")
         fig.update_yaxes(title_text="Profit", secondary_y=False, tickprefix="$")
         fig.update_yaxes(title_text="Average Campaign Expense (%)", secondary_y=True)
 
@@ -1278,7 +1278,7 @@ def show_chart4():
 
         fig = apply_common_layout(
             fig,
-            f"{st.session_state.chart4_category}: Profit and Campaign Expense (%) by Month"
+            f"{st.session_state.chart4_category}: Profit & Campaign Expense (%) by Month"
         )
         fig.update_yaxes(title_text="Profit", secondary_y=False, tickprefix="$")
         fig.update_yaxes(title_text="Campaign Expense (%)", secondary_y=True)
@@ -1487,6 +1487,10 @@ elif st.session_state.screen == "instructions":
 </div>
 <div class="welcome-text">
 💡 שימו לב - ערכי ציר ה-Y בגרפים לא תמיד יתחילו מ-0
+</div>
+<div class="welcome-section-title">תגמול</div>
+<div class="welcome-text">
+במסגרת הניסוי יוגרלו שלושה פרסים בסך 300 ש"ח כל אחד, כאשר סיכויי הזכייה של כל משתתף נקבעים בהתאם למספר התשובות הנכונות שלו.
 </div>
 <div class="welcome-section-title">משך הניסוי</div>
 <div class="welcome-text">
