@@ -519,8 +519,8 @@ months_order = list(df["Month"].drop_duplicates())
 monthly_total = (
     df.groupby("Month", as_index=False)
     .agg(**{
-        "Revenue Total": ("Revenue", "sum"),
-        "Profit Total":  ("Profit",  "sum")
+        "Total Revenue": ("Revenue", "sum"),
+        "Total Profit":  ("Profit",  "sum")
     })
 )
 monthly_total["Month"] = pd.Categorical(monthly_total["Month"], categories=months_order, ordered=True)
@@ -640,18 +640,51 @@ chart_narratives = {
 # שאלות שבהן נוסף גרף (storytelling) — מפתח = index שאלה (0-based)
 NEW_CHART_AT = {2: "גרף 2 נוסף", 4: "גרף 3 נוסף", 8: "גרף 4 נוסף"}
 
-comprehension_questions = [
+# שאלות קליטה בתחילת הניסוי
+initial_comprehension_questions = [
     {
         "id": 1,
-        "text": "כמה זה 10% מתוך 105?",
-        "options": ["10.5", "15", "9.5", "12"],
-        "correct_answer": "10.5"
+        "text": "כמה זה 15% מתוך 200?",
+        "options": ["20", "25", "30", "35"],
+        "correct_answer": "30"
     },
     {
         "id": 2,
-        "text": "כמה זה 9 כפול 9 פחות 2?",
-        "options": ["79", "81", "77", "72"],
-        "correct_answer": "79"
+        "text": "כמה זה 8 כפול 7 פחות 6?",
+        "options": ["48", "50", "52", "56"],
+        "correct_answer": "50"
+    },
+]
+
+# שאלות קשב באמצע הניסוי
+middle_attention_questions = [
+    {
+        "id": 1,
+        "text": "נא לבחור בתשובה \"אפשרות 3\" בשאלה זו.",
+        "options": ["אפשרות 1", "אפשרות 2", "אפשרות 3", "אפשרות 4"],
+        "correct_answer": "אפשרות 3"
+    },
+    {
+        "id": 2,
+        "text": "לצורך בדיקת קשב, יש לבחור בתשובה \"כחול\".",
+        "options": ["אדום", "ירוק", "כחול", "צהוב"],
+        "correct_answer": "כחול"
+    },
+]
+
+# שאלות קליטה בסוף הניסוי
+final_comprehension_questions = [
+    {
+        "id": 1,
+        "text": "כמה זה 20% מתוך 250?",
+        "options": ["40", "45", "50", "55"],
+        "correct_answer": "50"
+    },
+    {
+        "id": 2,
+        "text": "כמה זה 12 ועוד 18 חלקי 3?",
+        "options": ["10", "18", "20", "30"],
+        "correct_answer": "18"
     },
 ]
 
@@ -673,6 +706,17 @@ defaults = {
     "demographic_ai_experience": "",
     "demographic_bi_experience": "",
     "consent_given": False,
+
+    "initial_comprehension_current": 0,
+    "initial_comprehension_answers": [],
+
+    "middle_attention_current": 0,
+    "middle_attention_answers": [],
+
+    "final_comprehension_current": 0,
+    "final_comprehension_answers": [],
+
+    # נשארים לצורך תאימות לאחור אם השתמשת בהם בסיכומים ישנים
     "comprehension_current": 0,
     "comprehension_answers": [],
     "attention_check_shown": False,
@@ -791,6 +835,11 @@ def build_export_df(total_duration: float) -> pd.DataFrame:
         "demographic_occupation": st.session_state.demographic_occupation,
         "demographic_ai_experience": st.session_state.demographic_ai_experience,
         "demographic_bi_experience": st.session_state.demographic_bi_experience,
+        "initial_comprehension_answers": str(st.session_state.initial_comprehension_answers),
+        "middle_attention_answers": str(st.session_state.middle_attention_answers),
+        "final_comprehension_answers": str(st.session_state.final_comprehension_answers),
+
+        # נשארים לצורך תאימות לאחור
         "comprehension_answers": str(st.session_state.comprehension_answers),
         "attention_check_answer": st.session_state.attention_check_answer,
         "attention_check_is_correct": st.session_state.attention_check_is_correct,
@@ -991,7 +1040,7 @@ def show_chart1():
         fig = px.line(
             monthly_total,
             x="Month",
-            y="Revenue Total",
+            y="Total Revenue",
             markers=True,
             color_discrete_sequence=["#3b82f6"],
             line_shape="spline"
@@ -1052,7 +1101,7 @@ def show_chart2():
         fig = px.line(
             monthly_total,
             x="Month",
-            y="Profit Total",
+            y="Total Profit",
             markers=True,
             color_discrete_sequence=["#10b981"],
             line_shape="spline"
@@ -1062,7 +1111,7 @@ def show_chart2():
             marker=dict(size=7, line=dict(width=2, color="white"))
         )
 
-        fig = apply_common_layout(fig, "Profit Total by Month")
+        fig = apply_common_layout(fig, "Total Profit by Month")
         fig.update_yaxes(tickprefix="$")
 
         fig.update_layout(
@@ -1203,7 +1252,7 @@ def show_chart4():
         fig.add_trace(
             go.Bar(
                 x=monthly_total["Month"],
-                y=monthly_total["Profit Total"],
+                y=monthly_total["Total Profit"],
                 name="Total Profit",
                 marker=dict(
                     color="#8b5cf6",
@@ -1516,35 +1565,32 @@ elif st.session_state.screen == "instructions":
     col_l, col_btn, col_r = st.columns([2, 2, 2])
     with col_btn:
         if st.button("המשך לבדיקת הבנה ▶", use_container_width=True):
-            st.session_state.screen = "comprehension"
+            st.session_state.screen = "initial_comprehension"
             st.rerun()
 
 
 
 
+
 # ==============================
-# SCREEN: COMPREHENSION
+# SCREEN: INITIAL COMPREHENSION
 # ==============================
-elif st.session_state.screen == "comprehension":
-    st.markdown(
-"""
+elif st.session_state.screen == "initial_comprehension":
+    st.markdown('''
 <div style="max-width:820px;margin:2rem auto;">
 <div class="welcome-card">
-<div class="welcome-title">שאלת קליטה לפני שמתחילים</div>
-
+<div class="welcome-title">שאלות קליטה לפני שמתחילים</div>
 </div>
 </div>
-""",
-        unsafe_allow_html=True
-    )
+''', unsafe_allow_html=True)
 
-    cq_check = st.session_state.comprehension_current
+    cq_check = st.session_state.initial_comprehension_current
 
-    if cq_check < len(comprehension_questions):
-        check_q = comprehension_questions[cq_check]
+    if cq_check < len(initial_comprehension_questions):
+        check_q = initial_comprehension_questions[cq_check]
         st.markdown(
             f'<div class="rtl-title" style="font-size:1.35rem;font-weight:700;margin-bottom:0.4rem;font-family:Varela Round, sans-serif;">'
-            f'שאלת הבנה {check_q["id"]} מתוך {len(comprehension_questions)}</div>',
+            f'שאלת קליטה {check_q["id"]} מתוך {len(initial_comprehension_questions)}</div>',
             unsafe_allow_html=True
         )
         st.markdown(
@@ -1568,14 +1614,18 @@ elif st.session_state.screen == "comprehension":
         selected_check = st.radio(
             "",
             check_q["options"],
-            key=f"comprehension_{check_q['id']}",
+            key=f"initial_comprehension_{check_q['id']}",
             label_visibility="collapsed",
             index=None
         )
 
         if st.button("שלח/י תשובה ▶", use_container_width=True):
+            if selected_check is None:
+                st.warning("יש לבחור תשובה לפני ההמשך")
+                st.stop()
+
             is_check_correct = selected_check == check_q["correct_answer"]
-            st.session_state.comprehension_answers.append({
+            st.session_state.initial_comprehension_answers.append({
                 "question_id": check_q["id"],
                 "question_text": check_q["text"],
                 "selected_answer": selected_check,
@@ -1583,9 +1633,18 @@ elif st.session_state.screen == "comprehension":
                 "is_correct": is_check_correct,
             })
 
-            st.session_state.comprehension_current += 1
+            st.session_state.comprehension_answers.append({
+                "stage": "initial",
+                "question_id": check_q["id"],
+                "question_text": check_q["text"],
+                "selected_answer": selected_check,
+                "correct_answer": check_q["correct_answer"],
+                "is_correct": is_check_correct,
+            })
 
-            if st.session_state.comprehension_current >= len(comprehension_questions):
+            st.session_state.initial_comprehension_current += 1
+
+            if st.session_state.initial_comprehension_current >= len(initial_comprehension_questions):
                 st.session_state.experiment_started = True
                 st.session_state.session_start_time = time.time()
                 st.session_state.started_at = datetime.now(ZoneInfo("Asia/Jerusalem")).isoformat()
@@ -1600,6 +1659,96 @@ elif st.session_state.screen == "comprehension":
                 st.session_state["__filters_initialized"] = True
 
                 st.session_state.screen = "experiment"
+
+            st.rerun()
+
+
+# ==============================
+# SCREEN: FINAL COMPREHENSION
+# ==============================
+elif st.session_state.screen == "final_comprehension":
+    st.markdown('''
+<div style="max-width:820px;margin:2rem auto;">
+<div class="welcome-card">
+<div class="welcome-title">שאלות קליטה לסיום</div>
+</div>
+</div>
+''', unsafe_allow_html=True)
+
+    cq_check = st.session_state.final_comprehension_current
+
+    if cq_check < len(final_comprehension_questions):
+        check_q = final_comprehension_questions[cq_check]
+        st.markdown(
+            f'<div class="rtl-title" style="font-size:1.35rem;font-weight:700;margin-bottom:0.4rem;font-family:Varela Round, sans-serif;">'
+            f'שאלת קליטה {check_q["id"]} מתוך {len(final_comprehension_questions)}</div>',
+            unsafe_allow_html=True
+        )
+        st.markdown(
+            f'''
+            <div style="
+                text-align:center;
+                font-size:2rem;
+                font-weight:800;
+                margin-top:4rem;
+                margin-bottom:2rem;
+                font-family:'Varela Round', sans-serif;
+                color:#1e293b;
+                direction:rtl;
+            ">
+                {check_q["text"]}
+            </div>
+            ''',
+            unsafe_allow_html=True
+        )
+
+        selected_check = st.radio(
+            "",
+            check_q["options"],
+            key=f"final_comprehension_{check_q['id']}",
+            label_visibility="collapsed",
+            index=None
+        )
+
+        if st.button("שלח/י תשובה ▶", use_container_width=True):
+            if selected_check is None:
+                st.warning("יש לבחור תשובה לפני ההמשך")
+                st.stop()
+
+            is_check_correct = selected_check == check_q["correct_answer"]
+            st.session_state.final_comprehension_answers.append({
+                "question_id": check_q["id"],
+                "question_text": check_q["text"],
+                "selected_answer": selected_check,
+                "correct_answer": check_q["correct_answer"],
+                "is_correct": is_check_correct,
+            })
+
+            st.session_state.comprehension_answers.append({
+                "stage": "final",
+                "question_id": check_q["id"],
+                "question_text": check_q["text"],
+                "selected_answer": selected_check,
+                "correct_answer": check_q["correct_answer"],
+                "is_correct": is_check_correct,
+            })
+
+            st.session_state.final_comprehension_current += 1
+
+            if st.session_state.final_comprehension_current >= len(final_comprehension_questions):
+                total_duration = time.time() - st.session_state.session_start_time
+                st.session_state.ended_at = datetime.now(ZoneInfo("Asia/Jerusalem")).isoformat()
+
+                if not st.session_state.db_saved:
+                    session_ok, _ = save_session_to_db(total_duration)
+                    responses_ok, _ = save_responses_to_db()
+
+                    if session_ok and responses_ok:
+                        st.session_state.db_saved = True
+                    else:
+                        st.warning("השמירה למסד לא הושלמה, אבל הניסוי הסתיים.")
+
+                st.session_state.screen = "summary" if is_admin_participant() else "thankyou"
 
             st.rerun()
 
@@ -1676,26 +1825,28 @@ elif st.session_state.screen == "experiment":
     # question block
     if cq < len(questions):
 
-        # attention check - shown once in the middle of the experiment, not counted as questions 1-10
-        if cq == 5 and not st.session_state.attention_check_shown:
+        # middle attention checks - shown in the middle of the experiment, not counted as questions 1-10
+        if cq == 5 and st.session_state.middle_attention_current < len(middle_attention_questions):
+            attention_q = middle_attention_questions[st.session_state.middle_attention_current]
+
             st.progress((st.session_state.current_question + 1) / len(questions))
 
             st.markdown(
                 '<div class="rtl-title" style="font-size:1.35rem;font-weight:700;margin-bottom:0.4rem;font-family:Varela Round, sans-serif;">'
-                'שאלת קשב</div>',
+                f'שאלת קשב {attention_q["id"]} מתוך {len(middle_attention_questions)}</div>',
                 unsafe_allow_html=True
             )
 
             st.markdown(
-                '<div class="rtl-question" style="font-size:1.1rem;font-weight:600;margin-bottom:1rem;font-family:Varela Round, sans-serif;">'
-                'נא לבחור בתשובה "אפשרות 3" בשאלה זו.</div>',
+                f'<div class="rtl-question" style="font-size:1.1rem;font-weight:600;margin-bottom:1rem;font-family:Varela Round, sans-serif;">'
+                f'{attention_q["text"]}</div>',
                 unsafe_allow_html=True
             )
 
             attention_selected = st.radio(
                 "",
-                ["אפשרות 1", "אפשרות 2", "אפשרות 3", "אפשרות 4"],
-                key="attention_check_question",
+                attention_q["options"],
+                key=f"middle_attention_{attention_q['id']}",
                 label_visibility="collapsed",
                 index=None
             )
@@ -1706,10 +1857,28 @@ elif st.session_state.screen == "experiment":
                     st.stop()
 
                 response_time = time.time() - st.session_state.question_start_time
-                st.session_state.attention_check_answer = attention_selected
-                st.session_state.attention_check_is_correct = attention_selected == "אפשרות 3"
-                st.session_state.attention_check_time_seconds = round(response_time, 2)
-                st.session_state.attention_check_shown = True
+                is_attention_correct = attention_selected == attention_q["correct_answer"]
+
+                st.session_state.middle_attention_answers.append({
+                    "question_id": attention_q["id"],
+                    "question_text": attention_q["text"],
+                    "selected_answer": attention_selected,
+                    "correct_answer": attention_q["correct_answer"],
+                    "is_correct": is_attention_correct,
+                    "response_time_seconds": round(response_time, 2)
+                })
+
+                # תאימות לאחור לשאלה הישנה שהייתה באמצע
+                if attention_q["id"] == 1:
+                    st.session_state.attention_check_answer = attention_selected
+                    st.session_state.attention_check_is_correct = is_attention_correct
+                    st.session_state.attention_check_time_seconds = round(response_time, 2)
+
+                st.session_state.middle_attention_current += 1
+
+                if st.session_state.middle_attention_current >= len(middle_attention_questions):
+                    st.session_state.attention_check_shown = True
+
                 st.session_state.question_start_time = time.time()
                 st.rerun()
 
@@ -1779,19 +1948,8 @@ elif st.session_state.screen == "experiment":
             st.rerun()
 
     else:
-        total_duration = time.time() - st.session_state.session_start_time
-        st.session_state.ended_at = datetime.now(ZoneInfo("Asia/Jerusalem")).isoformat()
-
-        if not st.session_state.db_saved:
-            session_ok, _ = save_session_to_db(total_duration)
-            responses_ok, _ = save_responses_to_db()
-
-            if session_ok and responses_ok:
-                st.session_state.db_saved = True
-            else:
-                st.warning("השמירה למסד לא הושלמה, אבל הניסוי הסתיים.")
-
-        st.session_state.screen = "summary" if is_admin_participant() else "thankyou"
+        st.session_state.question_start_time = time.time()
+        st.session_state.screen = "final_comprehension"
         st.rerun()
 
 
