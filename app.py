@@ -667,7 +667,7 @@ middle_attention_questions = [
     },
     {
         "id": 2,
-        "text": "לצורך בדיקת קשב, יש לבחור בתשובה \"כחול\".",
+        "text": "יש לבחור בתשובה \"כחול\".",
         "options": ["אדום", "ירוק", "כחול", "צהוב"],
         "correct_answer": "כחול",
         "show_after_question_index": 8
@@ -1592,7 +1592,7 @@ elif st.session_state.screen == "initial_comprehension":
     st.markdown('''
 <div style="max-width:820px;margin:2rem auto;">
 <div class="welcome-card">
-<div class="welcome-title">שאלות קליטה לפני שמתחילים</div>
+<div class="welcome-title">ענה על השאלות הבאות</div>
 </div>
 </div>
 ''', unsafe_allow_html=True)
@@ -1683,7 +1683,7 @@ elif st.session_state.screen == "final_comprehension":
     st.markdown('''
 <div style="max-width:820px;margin:2rem auto;">
 <div class="welcome-card">
-<div class="welcome-title">שאלות קליטה לסיום</div>
+<div class="welcome-title">שאלות לסיום</div>
 </div>
 </div>
 ''', unsafe_allow_html=True)
@@ -2060,8 +2060,7 @@ elif st.session_state.screen == "thankyou":
             <div class="thankyou-title">תודה על השתתפותך!</div>
             <div class="thankyou-sub">
                 השתתפותך בניסוי זה תורמת למחקר אקדמי חשוב בתחום מערכות מידע עסקיות.<br>
-                התוצאות ישמשו לבחינת ההשפעה של נרטיבים מבוססי בינה מלאכותית על קבלת החלטות.<br><br>
-                ניתן לסגור את הדפדפן.
+                התוצאות ישמשו למחקר בלבד.<br><br>
             </div>
         </div>
     """, unsafe_allow_html=True)
