@@ -1362,6 +1362,17 @@ def show_or_empty(show_flag, func, is_storytelling=False):
         pass
 
 
+def get_pending_middle_attention_question(current_question_index: int):
+    for attention_q in middle_attention_questions:
+        already_answered = any(
+            ans["question_id"] == attention_q["id"]
+            for ans in st.session_state.middle_attention_answers
+        )
+        if current_question_index == attention_q["show_after_question_index"] and not already_answered:
+            return attention_q
+    return None
+
+
 # ==============================
 # SCREEN: REGISTER
 # ==============================
@@ -1754,17 +1765,6 @@ elif st.session_state.screen == "final_comprehension":
 
             st.rerun()
 
-
-
-def get_pending_middle_attention_question(current_question_index: int):
-    for attention_q in middle_attention_questions:
-        already_answered = any(
-            ans["question_id"] == attention_q["id"]
-            for ans in st.session_state.middle_attention_answers
-        )
-        if current_question_index == attention_q["show_after_question_index"] and not already_answered:
-            return attention_q
-    return None
 
 
 # ==============================
