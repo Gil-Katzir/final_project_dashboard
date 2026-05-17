@@ -644,15 +644,15 @@ NEW_CHART_AT = {2: "גרף 2 נוסף", 4: "גרף 3 נוסף", 8: "גרף 4 נ�
 initial_comprehension_questions = [
     {
         "id": 1,
-        "text": "כמה זה 15% מתוך 200?",
-        "options": ["20", "25", "30", "35"],
-        "correct_answer": "30"
+        "text": "כמה זה 10% מתוך 105?",
+        "options": ["10.5", "15", "9.5", "12"],
+        "correct_answer": "10.5"
     },
     {
         "id": 2,
-        "text": "כמה זה 8 כפול 7 פחות 6?",
-        "options": ["48", "50", "52", "56"],
-        "correct_answer": "50"
+        "text": "כמה זה 9 כפול 9 פחות 2?",
+        "options": ["79", "81", "77", "72"],
+        "correct_answer": "79"
     },
 ]
 
@@ -662,13 +662,15 @@ middle_attention_questions = [
         "id": 1,
         "text": "נא לבחור בתשובה \"אפשרות 3\" בשאלה זו.",
         "options": ["אפשרות 1", "אפשרות 2", "אפשרות 3", "אפשרות 4"],
-        "correct_answer": "אפשרות 3"
+        "correct_answer": "אפשרות 3",
+        "show_after_question_index": 4
     },
     {
         "id": 2,
         "text": "לצורך בדיקת קשב, יש לבחור בתשובה \"כחול\".",
         "options": ["אדום", "ירוק", "כחול", "צהוב"],
-        "correct_answer": "כחול"
+        "correct_answer": "כחול",
+        "show_after_question_index": 8
     },
 ]
 
@@ -1753,6 +1755,18 @@ elif st.session_state.screen == "final_comprehension":
             st.rerun()
 
 
+
+def get_pending_middle_attention_question(current_question_index: int):
+    for attention_q in middle_attention_questions:
+        already_answered = any(
+            ans["question_id"] == attention_q["id"]
+            for ans in st.session_state.middle_attention_answers
+        )
+        if current_question_index == attention_q["show_after_question_index"] and not already_answered:
+            return attention_q
+    return None
+
+
 # ==============================
 # SCREEN: EXPERIMENT
 # ==============================
@@ -1825,10 +1839,10 @@ elif st.session_state.screen == "experiment":
     # question block
     if cq < len(questions):
 
-        # middle attention checks - shown in the middle of the experiment, not counted as questions 1-10
-        if cq == 5 and st.session_state.middle_attention_current < len(middle_attention_questions):
-            attention_q = middle_attention_questions[st.session_state.middle_attention_current]
+        # middle attention checks - shown after selected regular questions, not counted as questions 1-10
+        attention_q = get_pending_middle_attention_question(cq)
 
+        if attention_q is not None:
             st.progress((st.session_state.current_question + 1) / len(questions))
 
             st.markdown(
@@ -1851,7 +1865,7 @@ elif st.session_state.screen == "experiment":
                 index=None
             )
 
-            if st.button("שלח/י תשובה ✨", use_container_width=True):
+            if st.button("שלח/י תשובה ✨", key=f"middle_attention_submit_{attention_q['id']}", use_container_width=True):
                 if attention_selected is None:
                     st.warning("יש לבחור תשובה לפני ההמשך")
                     st.stop()
@@ -1868,15 +1882,15 @@ elif st.session_state.screen == "experiment":
                     "response_time_seconds": round(response_time, 2)
                 })
 
-                # תאימות לאחור לשאלה הישנה שהייתה באמצע
+                # backward compatibility for the first old attention-check fields
                 if attention_q["id"] == 1:
                     st.session_state.attention_check_answer = attention_selected
                     st.session_state.attention_check_is_correct = is_attention_correct
                     st.session_state.attention_check_time_seconds = round(response_time, 2)
 
-                st.session_state.middle_attention_current += 1
+                st.session_state.middle_attention_current = len(st.session_state.middle_attention_answers)
 
-                if st.session_state.middle_attention_current >= len(middle_attention_questions):
+                if len(st.session_state.middle_attention_answers) >= len(middle_attention_questions):
                     st.session_state.attention_check_shown = True
 
                 st.session_state.question_start_time = time.time()
@@ -2046,8 +2060,7 @@ elif st.session_state.screen == "thankyou":
             <div class="thankyou-title">תודה על השתתפותך!</div>
             <div class="thankyou-sub">
                 השתתפותך בניסוי זה תורמת למחקר אקדמי חשוב בתחום מערכות מידע עסקיות.<br>
-                התוצאות ישמשו לבחינת ההשפעה של נרטיבים מבוססי בינה מלאכותית על קבלת החלטות.<br><br>
-                ניתן לסגור את הדפדפן.
+                התוצאות ישמשו למחקר בלבד.<br><br>
             </div>
         </div>
     """, unsafe_allow_html=True)
