@@ -506,6 +506,102 @@ st.markdown("""
         line-height: 1.7 !important;
     }
 
+    /* ---- Post experiment survey ---- */
+    .post-survey-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 28px;
+        padding: 38px 44px;
+        box-shadow: 0 20px 40px -10px rgba(0,0,0,0.08);
+        direction: rtl;
+        text-align: right;
+        max-width: 900px;
+        margin: 2rem auto;
+        font-family: 'Varela Round', sans-serif;
+    }
+
+    .post-survey-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #1e293b;
+        text-align: center;
+        margin-bottom: 0.6rem;
+        font-family: 'Varela Round', sans-serif;
+    }
+
+    .post-survey-subtitle {
+        font-size: 1rem;
+        color: #64748b;
+        text-align: center;
+        margin-bottom: 1.8rem;
+        line-height: 1.7;
+        font-family: 'Varela Round', sans-serif;
+    }
+
+    .likert-banner {
+        background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 100%);
+        border: 1px solid #dbeafe;
+        border-radius: 20px;
+        padding: 18px 22px;
+        margin-bottom: 28px;
+        box-shadow: 0 8px 20px rgba(59,130,246,0.08);
+        direction: rtl;
+        text-align: center;
+        font-family: 'Varela Round', sans-serif;
+    }
+
+    .likert-banner-main {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #1e293b;
+        margin-bottom: 10px;
+    }
+
+    .likert-scale-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        direction: rtl;
+        margin-top: 12px;
+    }
+
+    .likert-number {
+        flex: 1;
+        background: #ffffff;
+        border: 1px solid #dbe4ee;
+        border-radius: 12px;
+        padding: 8px 0;
+        font-weight: 800;
+        color: #334155;
+    }
+
+    .likert-label-row {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+        color: #475569;
+        font-weight: 700;
+        font-size: 0.95rem;
+    }
+
+    .post-survey-question {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 18px;
+        padding: 18px 22px;
+        margin-bottom: 20px;
+        direction: rtl;
+        text-align: right;
+        font-family: 'Varela Round', sans-serif;
+    }
+
+    .post-survey-question-title {
+        font-size: 1.08rem;
+        font-weight: 800;
+        color: #1e293b;
+        margin-bottom: 10px;
+        font-family: 'Varela Round', sans-serif;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -641,52 +737,86 @@ chart_narratives = {
 NEW_CHART_AT = {2: "גרף 2 נוסף", 4: "גרף 3 נוסף", 8: "גרף 4 נוסף"}
 
 # שאלות קליטה בתחילת הניסוי
+# IDs 100-101
 initial_comprehension_questions = [
     {
-        "id": 1,
+        "id": 100,
         "text": "כמה זה 10% מתוך 105?",
         "options": ["10.5", "15", "9.5", "12"],
-        "correct_answer": "10.5"
+        "correct_answer": "10.5",
+        "question_type": "initial_comprehension"
     },
     {
-        "id": 2,
+        "id": 101,
         "text": "כמה זה 9 כפול 9 פחות 2?",
         "options": ["79", "81", "77", "72"],
-        "correct_answer": "79"
+        "correct_answer": "79",
+        "question_type": "initial_comprehension"
     },
 ]
 
 # שאלות קשב באמצע הניסוי
+# IDs 102-103
 middle_attention_questions = [
     {
-        "id": 1,
+        "id": 102,
         "text": "נא לבחור בתשובה \"אפשרות 3\" בשאלה זו.",
         "options": ["אפשרות 1", "אפשרות 2", "אפשרות 3", "אפשרות 4"],
         "correct_answer": "אפשרות 3",
-        "show_after_question_index": 4
+        "show_after_question_index": 4,
+        "question_type": "middle_attention"
     },
     {
-        "id": 2,
+        "id": 103,
         "text": "יש לבחור בתשובה \"כחול\".",
         "options": ["אדום", "ירוק", "כחול", "צהוב"],
         "correct_answer": "כחול",
-        "show_after_question_index": 8
+        "show_after_question_index": 8,
+        "question_type": "middle_attention"
     },
 ]
 
 # שאלות קליטה בסוף הניסוי
+# IDs 104-105
 final_comprehension_questions = [
     {
-        "id": 1,
+        "id": 104,
         "text": "כמה זה 20% מתוך 250?",
         "options": ["40", "45", "50", "55"],
-        "correct_answer": "50"
+        "correct_answer": "50",
+        "question_type": "final_comprehension"
     },
     {
-        "id": 2,
+        "id": 105,
         "text": "כמה זה 12 ועוד 18 חלקי 3?",
         "options": ["10", "18", "20", "30"],
-        "correct_answer": "18"
+        "correct_answer": "18",
+        "question_type": "final_comprehension"
+    },
+]
+
+# שאלות סיכום בסוף הניסוי
+# IDs 110-113
+post_experiment_survey_questions = [
+    {
+        "id": 110,
+        "text": "עד כמה נהנית מהמשימה?",
+        "question_type": "post_survey_enjoyment"
+    },
+    {
+        "id": 111,
+        "text": "עד כמה אתה חושב שהצלחת בניסוי?",
+        "question_type": "post_survey_perceived_success"
+    },
+    {
+        "id": 112,
+        "text": "האם הרגשת עומס מידע במהלך הניסוי?",
+        "question_type": "post_survey_information_overload"
+    },
+    {
+        "id": 113,
+        "text": "האם הרגשת כי הנתונים הוצגו כחלק מסיפור או רצף רעיוני?",
+        "question_type": "post_survey_storytelling_feeling"
     },
 ]
 
@@ -694,7 +824,7 @@ final_comprehension_questions = [
 # Session state
 # -----------------------------
 defaults = {
-    "screen": "register",   # register | consent | demographics | instructions | comprehension | experiment | summary | thankyou
+    "screen": "register",   # register | consent | demographics | instructions | initial_comprehension | experiment | final_comprehension | post_experiment_survey | summary | thankyou
     "experiment_started": False,
     "participant_id": "",
     "experiment_group": "",
@@ -717,6 +847,8 @@ defaults = {
 
     "final_comprehension_current": 0,
     "final_comprehension_answers": [],
+
+    "post_experiment_survey_answers": [],
 
     # נשארים לצורך תאימות לאחור אם השתמשת בהם בסיכומים ישנים
     "comprehension_current": 0,
@@ -840,6 +972,7 @@ def build_export_df(total_duration: float) -> pd.DataFrame:
         "initial_comprehension_answers": str(st.session_state.initial_comprehension_answers),
         "middle_attention_answers": str(st.session_state.middle_attention_answers),
         "final_comprehension_answers": str(st.session_state.final_comprehension_answers),
+        "post_experiment_survey_answers": str(st.session_state.post_experiment_survey_answers),
 
         # נשארים לצורך תאימות לאחור
         "comprehension_answers": str(st.session_state.comprehension_answers),
@@ -896,20 +1029,49 @@ def save_session_to_db(total_duration):
         return False, None
 
 
+def build_response_row(answer, default_question_type="regular_experiment"):
+    selected_answer = answer.get("selected_answer")
+
+    return {
+        "session_id": str(st.session_state.session_id),
+        "participant_id": str(st.session_state.participant_id),
+        "experiment_group": str(st.session_state.experiment_group),
+
+        "question_id": int(answer["question_id"]),
+        "question_text": str(answer["question_text"]) if answer.get("question_text") is not None else None,
+        "selected_answer": str(selected_answer) if selected_answer is not None else None,
+        "correct_answer": str(answer["correct_answer"]) if answer.get("correct_answer") is not None else None,
+        "is_correct": bool(answer["is_correct"]) if answer.get("is_correct") is not None else None,
+        "response_time_seconds": float(answer["response_time_seconds"]) if answer.get("response_time_seconds") is not None else None,
+
+        # New fields for easier analysis
+        "question_type": str(answer.get("question_type", default_question_type)),
+        "answer_numeric": float(selected_answer) if isinstance(selected_answer, (int, float)) else None,
+    }
+
+
 def save_responses_to_db():
     rows = []
+
+    # Regular experiment questions: 1-10
     for answer in st.session_state.answers:
-        rows.append({
-            "session_id": str(st.session_state.session_id),
-            "participant_id": str(st.session_state.participant_id),
-            "experiment_group": str(st.session_state.experiment_group),
-            "question_id": int(answer["question_id"]),
-            "question_text": str(answer["question_text"]) if answer["question_text"] is not None else None,
-            "selected_answer": str(answer["selected_answer"]) if answer["selected_answer"] is not None else None,
-            "correct_answer": str(answer["correct_answer"]) if answer["correct_answer"] is not None else None,
-            "is_correct": bool(answer["is_correct"]) if answer["is_correct"] is not None else None,
-            "response_time_seconds": float(answer["response_time_seconds"]) if answer["response_time_seconds"] is not None else None,
-        })
+        rows.append(build_response_row(answer, "regular_experiment"))
+
+    # Initial comprehension questions: 100-101
+    for answer in st.session_state.initial_comprehension_answers:
+        rows.append(build_response_row(answer, "initial_comprehension"))
+
+    # Middle attention questions: 102-103
+    for answer in st.session_state.middle_attention_answers:
+        rows.append(build_response_row(answer, "middle_attention"))
+
+    # Final comprehension questions: 104-105
+    for answer in st.session_state.final_comprehension_answers:
+        rows.append(build_response_row(answer, "final_comprehension"))
+
+    # Post experiment survey questions: 110-113
+    for answer in st.session_state.post_experiment_survey_answers:
+        rows.append(build_response_row(answer, "post_experiment_survey"))
 
     if not rows:
         return True, None
@@ -1490,7 +1652,7 @@ elif st.session_state.screen == "demographics":
     with col_form:
         age = st.selectbox(
             "טווח גילאים",
-            ["", "18–24", "25–34", "35–44", "45 ומעלה"]
+            ["", "18–21", "22–27", "28–35", "35 ומעלה"]
         )
 
         gender = st.selectbox(
@@ -1499,8 +1661,8 @@ elif st.session_state.screen == "demographics":
         )
 
         experience = st.selectbox(
-            "מהי רמת ההיכרות שלך עם דשבורדים או גרפים עסקיים?",
-            ["", "ללא ניסיון", "ניסיון מועט", "ניסיון בינוני", "ניסיון רב"]
+            "מהי רמת ההשכלה שלך?",
+            ["", "השכלה תיכונית", "סטודנט לתואר ראשון", "בעל תואר רא שון", "בעל תואר שני ומעלה"]
         )
 
         education = st.selectbox(
@@ -1577,7 +1739,7 @@ elif st.session_state.screen == "instructions":
 
     col_l, col_btn, col_r = st.columns([2, 2, 2])
     with col_btn:
-        if st.button("המשך לבדיקת הבנה ▶", use_container_width=True):
+        if st.button("המשך ▶", use_container_width=True):
             st.session_state.screen = "initial_comprehension"
             st.rerun()
 
@@ -1603,7 +1765,7 @@ elif st.session_state.screen == "initial_comprehension":
         check_q = initial_comprehension_questions[cq_check]
         st.markdown(
             f'<div class="rtl-title" style="font-size:1.35rem;font-weight:700;margin-bottom:0.4rem;font-family:Varela Round, sans-serif;">'
-            f'שאלת קליטה {check_q["id"]} מתוך {len(initial_comprehension_questions)}</div>',
+            f'ענה/י על השאלה הבאה:</div>',
             unsafe_allow_html=True
         )
         st.markdown(
@@ -1644,6 +1806,8 @@ elif st.session_state.screen == "initial_comprehension":
                 "selected_answer": selected_check,
                 "correct_answer": check_q["correct_answer"],
                 "is_correct": is_check_correct,
+                "response_time_seconds": None,
+                "question_type": check_q["question_type"],
             })
 
             st.session_state.comprehension_answers.append({
@@ -1653,6 +1817,7 @@ elif st.session_state.screen == "initial_comprehension":
                 "selected_answer": selected_check,
                 "correct_answer": check_q["correct_answer"],
                 "is_correct": is_check_correct,
+                "question_type": check_q["question_type"],
             })
 
             st.session_state.initial_comprehension_current += 1
@@ -1694,7 +1859,7 @@ elif st.session_state.screen == "final_comprehension":
         check_q = final_comprehension_questions[cq_check]
         st.markdown(
             f'<div class="rtl-title" style="font-size:1.35rem;font-weight:700;margin-bottom:0.4rem;font-family:Varela Round, sans-serif;">'
-            f'שאלת קליטה {check_q["id"]} מתוך {len(final_comprehension_questions)}</div>',
+            f'ענה/י על השאלה הבאה:</div>',
             unsafe_allow_html=True
         )
         st.markdown(
@@ -1735,37 +1900,120 @@ elif st.session_state.screen == "final_comprehension":
                 "selected_answer": selected_check,
                 "correct_answer": check_q["correct_answer"],
                 "is_correct": is_check_correct,
+                "response_time_seconds": None,
+                "question_type": check_q["question_type"],
             })
 
             st.session_state.comprehension_answers.append({
-                "stage": "final",
-                "question_id": check_q["id"],
-                "question_text": check_q["text"],
-                "selected_answer": selected_check,
-                "correct_answer": check_q["correct_answer"],
-                "is_correct": is_check_correct,
+            "stage": "final",
+            "question_id": check_q["id"],
+            "question_text": check_q["text"],
+            "selected_answer": selected_check,
+            "correct_answer": check_q["correct_answer"],
+            "is_correct": is_check_correct,
+            "question_type": check_q["question_type"],
             })
 
             st.session_state.final_comprehension_current += 1
 
             if st.session_state.final_comprehension_current >= len(final_comprehension_questions):
-                total_duration = time.time() - st.session_state.session_start_time
-                st.session_state.ended_at = datetime.now(ZoneInfo("Asia/Jerusalem")).isoformat()
-
-                if not st.session_state.db_saved:
-                    session_ok, _ = save_session_to_db(total_duration)
-                    responses_ok, _ = save_responses_to_db()
-
-                    if session_ok and responses_ok:
-                        st.session_state.db_saved = True
-                    else:
-                        st.warning("השמירה למסד לא הושלמה, אבל הניסוי הסתיים.")
-
-                st.session_state.screen = "summary" if is_admin_participant() else "thankyou"
+                st.session_state.screen = "post_experiment_survey"
 
             st.rerun()
 
+# ==============================
+# SCREEN: POST EXPERIMENT SURVEY
+# ==============================
+elif st.session_state.screen == "post_experiment_survey":
+    st.markdown("""
+    <div class="post-survey-card">
+        <div class="post-survey-title">שאלות סיכום הניסוי</div>
+        <div class="post-survey-subtitle">
+            אנא דרג/י את התחושה שלך ביחס לכל אחת מהשאלות הבאות.
+        </div>
 
+        <div class="likert-banner">
+            <div class="likert-banner-main">סולם הדירוג</div>
+
+            <div class="likert-scale-row">
+                <div class="likert-number">7</div>
+                <div class="likert-number">6</div>
+                <div class="likert-number">5</div>
+                <div class="likert-number">4</div>
+                <div class="likert-number">3</div>
+                <div class="likert-number">2</div>
+                <div class="likert-number">1</div>
+            </div>
+
+            <div class="likert-label-row">
+                <span>במידה רבה מאוד</span>
+                <span>במידה מועטה מאוד</span>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    temp_answers = {}
+
+    for survey_q in post_experiment_survey_questions:
+        st.markdown(
+            f"""
+            <div class="post-survey-question">
+                <div class="post-survey-question-title">{survey_q["text"]}</div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+        temp_answers[survey_q["id"]] = st.select_slider(
+            "",
+            options=[1, 2, 3, 4, 5, 6, 7],
+            value=None,
+            key=f"post_survey_{survey_q['id']}",
+            label_visibility="collapsed"
+        )
+
+    st.write("")
+
+    if st.button("סיום ושליחת תשובות ▶", use_container_width=True):
+        unanswered = [
+            q for q in post_experiment_survey_questions
+            if temp_answers.get(q["id"]) is None
+        ]
+
+        if unanswered:
+            st.warning("יש לענות על כל שאלות הסיכום לפני סיום הניסוי.")
+            st.stop()
+
+        st.session_state.post_experiment_survey_answers = []
+
+        for survey_q in post_experiment_survey_questions:
+            selected_value = temp_answers[survey_q["id"]]
+
+            st.session_state.post_experiment_survey_answers.append({
+                "question_id": survey_q["id"],
+                "question_text": survey_q["text"],
+                "selected_answer": selected_value,
+                "correct_answer": None,
+                "is_correct": None,
+                "response_time_seconds": None,
+                "question_type": survey_q["question_type"],
+            })
+
+        total_duration = time.time() - st.session_state.session_start_time
+        st.session_state.ended_at = datetime.now(ZoneInfo("Asia/Jerusalem")).isoformat()
+
+        if not st.session_state.db_saved:
+            session_ok, _ = save_session_to_db(total_duration)
+            responses_ok, _ = save_responses_to_db()
+
+            if session_ok and responses_ok:
+                st.session_state.db_saved = True
+            else:
+                st.warning("השמירה למסד לא הושלמה, אבל הניסוי הסתיים.")
+
+        st.session_state.screen = "summary" if is_admin_participant() else "thankyou"
+        st.rerun()
 
 # ==============================
 # SCREEN: EXPERIMENT
@@ -1847,7 +2095,7 @@ elif st.session_state.screen == "experiment":
 
             st.markdown(
                 '<div class="rtl-title" style="font-size:1.35rem;font-weight:700;margin-bottom:0.4rem;font-family:Varela Round, sans-serif;">'
-                f'שאלת קשב {attention_q["id"]} מתוך {len(middle_attention_questions)}</div>',
+                f'ענה/י על השאלה הבאה:</div>',
                 unsafe_allow_html=True
             )
 
@@ -1879,11 +2127,12 @@ elif st.session_state.screen == "experiment":
                     "selected_answer": attention_selected,
                     "correct_answer": attention_q["correct_answer"],
                     "is_correct": is_attention_correct,
-                    "response_time_seconds": round(response_time, 2)
+                    "response_time_seconds": round(response_time, 2),
+                    "question_type": attention_q["question_type"],
                 })
 
                 # backward compatibility for the first old attention-check fields
-                if attention_q["id"] == 1:
+                if attention_q["id"] == 102:
                     st.session_state.attention_check_answer = attention_selected
                     st.session_state.attention_check_is_correct = is_attention_correct
                     st.session_state.attention_check_time_seconds = round(response_time, 2)
@@ -1951,7 +2200,8 @@ elif st.session_state.screen == "experiment":
                 "selected_answer": selected,
                 "correct_answer": q["correct_answer"],
                 "is_correct": is_correct,
-                "response_time_seconds": round(response_time, 2)
+                "response_time_seconds": round(response_time, 2),
+                "question_type": "regular_experiment",
             })
 
             if is_correct:
