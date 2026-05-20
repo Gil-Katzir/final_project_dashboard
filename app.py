@@ -604,6 +604,85 @@ st.markdown("""
         font-family: 'Varela Round', sans-serif;
     }
 
+/* ---- Opening register screen ---- */
+.opening-wrapper {
+    max-width: 760px;
+    margin: 2.5rem auto 1.5rem auto;
+    direction: rtl;
+    text-align: center;
+}
+
+.opening-hero {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fbff 55%, #eff6ff 100%);
+    border: 1px solid #dbe4ee;
+    border-radius: 32px;
+    padding: 44px 48px;
+    box-shadow: 0 22px 45px rgba(15, 23, 42, 0.08);
+    font-family: 'Varela Round', sans-serif;
+}
+
+.opening-badge {
+    display: inline-block;
+    background: #eff6ff;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+    border-radius: 999px;
+    padding: 7px 16px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+}
+
+.opening-title {
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 12px;
+    letter-spacing: -0.03em;
+}
+
+.opening-title span {
+    background: linear-gradient(90deg, #2563eb, #1e293b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.opening-subtitle {
+    color: #64748b;
+    font-size: 1.05rem;
+    line-height: 1.9;
+    max-width: 620px;
+    margin: 0 auto 22px auto;
+}
+
+.opening-info-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 22px;
+}
+
+.opening-info-pill {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    color: #334155;
+    border-radius: 16px;
+    padding: 10px 16px;
+    font-size: 0.92rem;
+    font-weight: 700;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.05);
+}
+
+.opening-form-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #1e293b;
+    text-align: center;
+    margin-bottom: 18px;
+    font-family: 'Varela Round', sans-serif;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -812,12 +891,12 @@ post_experiment_survey_questions = [
     },
     {
         "id": 112,
-        "text": "האם הרגשת עומס מידע במהלך הניסוי?",
+        "text": "עד כמה הרגשת עומס מידע במהלך הניסוי?",
         "question_type": "post_survey_information_overload"
     },
     {
         "id": 113,
-        "text": "האם הרגשת כי הנתונים הוצגו כחלק מסיפור או רצף רעיוני?",
+        "text": "עד כמה הרגשת כי הנתונים הוצגו כחלק מסיפור או רצף רעיוני?",
         "question_type": "post_survey_storytelling_feeling"
     },
 ]
@@ -1541,20 +1620,56 @@ def get_pending_middle_attention_question(current_question_index: int):
 # ==============================
 # SCREEN: REGISTER
 # ==============================
+# ==============================
+# SCREEN: REGISTER
+# ==============================
 if st.session_state.screen == "register":
+
+    st.markdown("""<div class="opening-wrapper">
+<div class="opening-hero">
+<div class="opening-badge">ניסוי אקדמי במערכות מידע עסקיות</div>
+
+<div class="opening-title">
+ברוכים הבאים ל<span>ניסוי ניתוח נתונים</span>
+</div>
+
+<div class="opening-subtitle">
+במהלך הניסוי יוצג בפניך דשבורד אינטראקטיבי של חנות אופנה.
+המטרה היא לענות על שאלות המבוססות על הנתונים המוצגים, תוך בחינת אופן קבלת החלטות בסביבת BI.
+במסכים הבאים יינתן הסבר נוסף על מהלך הניסוי.
+</div>
+
+<div class="opening-info-row">
+<div class="opening-info-pill">⏱️ משך משוער: כ-20 דקות</div>
+<div class="opening-info-pill">📊 דשבורד אינטראקטיבי</div>
+<div class="opening-info-pill">🔒 הנתונים נשמרים באופן אנונימי</div>
+</div>
+</div>
+</div>""", unsafe_allow_html=True)
+
     st.markdown("""
-        <div style="max-width:520px;margin:3rem auto 1rem auto;">
-            <div class="reg-card">
-                <div class="reg-title">פרטי משתתף</div>
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
+<div style="max-width:520px;margin:1.5rem auto 1rem auto;">
+<div class="reg-card">
+<div class="opening-form-title">התחלת הניסוי</div>
+</div>
+</div>
+""", unsafe_allow_html=True)
 
     col_l, col_form, col_r = st.columns([1, 2, 1])
+
     with col_form:
-        participant_id_input = st.text_input("מספר משתתף", placeholder="הזינו את מספר המשתתף המוקצה ברשימה")
-        experiment_group_input = st.selectbox("קבוצת ניסוי", ["control", "storytelling"])
+        participant_id_input = st.text_input(
+            "מספר משתתף",
+            placeholder="הזינו את מספר המשתתף המוקצה ברשימה"
+        )
+
+        experiment_group_input = st.selectbox(
+            "קבוצת ניסוי",
+            ["control", "storytelling"]
+        )
+
         st.write("")
+
         if st.button("המשך לטופס ההסכמה ▶", use_container_width=True):
             if participant_id_input.strip() == "":
                 st.warning("יש להזין מספר משתתף")
