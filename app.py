@@ -582,6 +582,7 @@ st.markdown("""
         color: #475569;
         font-weight: 700;
         font-size: 0.95rem;
+        direction: rtl;
     }
 
     .post-survey-question {
@@ -602,6 +603,7 @@ st.markdown("""
         margin-bottom: 10px;
         font-family: 'Varela Round', sans-serif;
     }
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -1013,6 +1015,8 @@ def save_session_to_db(total_duration):
         "demographic_gender": str(st.session_state.demographic_gender),
         "demographic_experience": str(st.session_state.demographic_experience),
         "demographic_education": str(st.session_state.demographic_education),
+        "demographic_ai_experience": str(st.session_state.demographic_ai_experience),
+        "demographic_bi_experience": str(st.session_state.demographic_bi_experience),
     }
 
     try:
@@ -1046,7 +1050,6 @@ def build_response_row(answer, default_question_type="regular_experiment"):
 
         # New fields for easier analysis
         "question_type": str(answer.get("question_type", default_question_type)),
-        "answer_numeric": float(selected_answer) if isinstance(selected_answer, (int, float)) else None,
     }
 
 
@@ -1925,31 +1928,36 @@ elif st.session_state.screen == "final_comprehension":
 # SCREEN: POST EXPERIMENT SURVEY
 # ==============================
 elif st.session_state.screen == "post_experiment_survey":
+
     st.markdown("""
     <div class="post-survey-card">
         <div class="post-survey-title">שאלות סיכום הניסוי</div>
         <div class="post-survey-subtitle">
             אנא דרג/י את התחושה שלך ביחס לכל אחת מהשאלות הבאות.
         </div>
+    </div>
+    """, unsafe_allow_html=True)
 
-        <div class="likert-banner">
-            <div class="likert-banner-main">סולם הדירוג</div>
+    st.markdown("""
+    <div class="likert-banner">
+        <div class="likert-banner-main">סולם הדירוג</div>
 
-            <div class="likert-scale-row">
-                <div class="likert-number">7</div>
-                <div class="likert-number">6</div>
-                <div class="likert-number">5</div>
-                <div class="likert-number">4</div>
-                <div class="likert-number">3</div>
-                <div class="likert-number">2</div>
-                <div class="likert-number">1</div>
-            </div>
+         <div class="likert-label-row">
+            <span>במידה רבה מאוד</span>
+            <span>במידה מועטה מאוד</span>
+         </div>
 
-            <div class="likert-label-row">
-                <span>במידה רבה מאוד</span>
-                <span>במידה מועטה מאוד</span>
-            </div>
+        <div class="likert-scale-row">
+            <div class="likert-number">7</div>
+            <div class="likert-number">6</div>
+            <div class="likert-number">5</div>
+            <div class="likert-number">4</div>
+            <div class="likert-number">3</div>
+            <div class="likert-number">2</div>
+            <div class="likert-number">1</div>
         </div>
+
+
     </div>
     """, unsafe_allow_html=True)
 
@@ -1965,12 +1973,10 @@ elif st.session_state.screen == "post_experiment_survey":
             unsafe_allow_html=True
         )
 
-        temp_answers[survey_q["id"]] = st.select_slider(
-            "",
-            options=[1, 2, 3, 4, 5, 6, 7],
-            value=None,
-            key=f"post_survey_{survey_q['id']}",
-            label_visibility="collapsed"
+        temp_answers[survey_q["id"]] = st.selectbox(
+            "בחר/י דירוג בין 1 ל-7",
+            options=["", 1, 2, 3, 4, 5, 6, 7],
+            key=f"post_survey_{survey_q['id']}"
         )
 
     st.write("")
@@ -1978,7 +1984,7 @@ elif st.session_state.screen == "post_experiment_survey":
     if st.button("סיום ושליחת תשובות ▶", use_container_width=True):
         unanswered = [
             q for q in post_experiment_survey_questions
-            if temp_answers.get(q["id"]) is None
+            if temp_answers.get(q["id"]) == ""
         ]
 
         if unanswered:
