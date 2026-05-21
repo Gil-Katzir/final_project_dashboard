@@ -675,7 +675,7 @@ st.markdown("""
 }
 
 .opening-form-title {
-    font-size: 1.25rem;
+    font-size: 1.75rem;
     font-weight: 800;
     color: #1e293b;
     text-align: center;
@@ -1627,7 +1627,6 @@ if st.session_state.screen == "register":
 
     st.markdown("""<div class="opening-wrapper">
 <div class="opening-hero">
-<div class="opening-badge">ניסוי אקדמי במערכות מידע עסקיות</div>
 
 <div class="opening-title">
 ברוכים הבאים ל<span>ניסוי ניתוח נתונים</span>
