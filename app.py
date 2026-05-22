@@ -2468,7 +2468,7 @@ elif st.session_state.screen == "thankyou":
     final_redirect_url = (
         st.session_state.redirect_url
         if st.session_state.redirect_url
-        else "https://dashboard-experiment.streamlit.app/"
+        else "https://dashboard-experiment.streamlit.app/?completed=1"
     )
 
     st.markdown("""<div class="thankyou-card">
@@ -2484,13 +2484,27 @@ elif st.session_state.screen == "thankyou":
     col_l, col_btn, col_r = st.columns([2, 2, 2])
 
     with col_btn:
-        if st.button("לחץ לסיום", use_container_width=True):
-            safe_url = json.dumps(final_redirect_url)
-            components.html(
-                f"""
-                <script>
-                    window.parent.location.href = {safe_url};
-                </script>
-                """,
-                height=0
-            )
+        safe_url = json.dumps(final_redirect_url)
+
+        components.html(
+            f"""
+            <div style="width:100%;">
+                <button onclick='window.parent.location.href = {safe_url};'
+                    style="
+                        width:100%;
+                        font-family: Varela Round, sans-serif;
+                        font-weight:700;
+                        font-size:1rem;
+                        border-radius:12px;
+                        padding:0.75rem 2rem;
+                        background-color:#2563eb;
+                        color:white;
+                        border:none;
+                        cursor:pointer;
+                    ">
+                    לחץ לסיום
+                </button>
+            </div>
+            """,
+            height=70
+        )
