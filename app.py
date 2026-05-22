@@ -919,6 +919,7 @@ defaults = {
     "demographic_ai_experience": "",
     "demographic_bi_experience": "",
     "consent_given": False,
+    "redirect_url": "",
 
     "initial_comprehension_current": 0,
     "initial_comprehension_answers": [],
@@ -970,6 +971,18 @@ defaults = {
 for key, value in defaults.items():
     if key not in st.session_state:
         st.session_state[key] = value
+
+# -----------------------------
+# Read redirect_url from URL
+# -----------------------------
+try:
+    query_params = st.query_params
+    if "redirect_url" in query_params and st.session_state.redirect_url == "":
+        st.session_state.redirect_url = query_params["redirect_url"]
+except Exception:
+    pass
+
+
 
 widget_defaults = {
     "chart1_month_select": months_order[0],
@@ -2415,20 +2428,38 @@ elif st.session_state.screen == "summary":
 # SCREEN: THANK YOU
 # ==============================
 elif st.session_state.screen == "thankyou":
-    st.markdown("""
-        <div class="thankyou-card">
-            <div class="thankyou-emoji">🎉</div>
-            <div class="thankyou-title">תודה על השתתפותך!</div>
-            <div class="thankyou-sub">
-                השתתפותך בניסוי זה תורמת למחקר אקדמי חשוב בתחום מערכות מידע עסקיות.<br>
-                התוצאות ישמשו למחקר בלבד.<br><br>
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
+
+    final_redirect_url = st.session_state.redirect_url if st.session_state.redirect_url else "https://dashboard-experiment.streamlit.app/"
+
+    st.markdown("""<div class="thankyou-card">
+<div class="thankyou-emoji">🎉</div>
+<div class="thankyou-title">תודה על השתתפותך!</div>
+<div class="thankyou-sub">
+השתתפותך בניסוי זה תורמת למחקר אקדמי חשוב בתחום מערכות מידע עסקיות.<br>
+התוצאות ישמשו למחקר בלבד.<br><br>
+לחצ/י על הכפתור לסיום וחזרה לקישור המקורי.
+</div>
+</div>""", unsafe_allow_html=True)
 
     col_l, col_btn, col_r = st.columns([2, 2, 2])
+
     with col_btn:
-        if st.button("התחל מחדש 🔄", use_container_width=True):
-            for key in list(st.session_state.keys()):
-                del st.session_state[key]
-            st.rerun()
+        st.markdown(
+            f"""<a href="{final_redirect_url}" target="_self" style="text-decoration:none;">
+<button style="
+width:100%;
+font-family:'Varela Round', sans-serif;
+font-weight:700;
+font-size:1rem;
+border-radius:12px;
+padding:0.75rem 2rem;
+background-color:#2563eb;
+color:white;
+border:none;
+cursor:pointer;
+">
+לחץ לסיום
+</button>
+</a>""",
+            unsafe_allow_html=True
+        )
