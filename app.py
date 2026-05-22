@@ -5,6 +5,8 @@ import time
 import uuid
 from datetime import datetime
 import random
+import json
+import streamlit.components.v1 as components
 from zoneinfo import ZoneInfo
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -953,6 +955,7 @@ defaults = {
     "dashboard_interaction_clicks": 0,
     "interaction_log": [],
     "filters_ready_for_tracking": False,
+    "tracked_filters_initialized": {},
 
     
     "db_saved": False,
@@ -1040,19 +1043,20 @@ def track_filter_change(widget_key: str, action_type: str):
 
     current_val = st.session_state.get(widget_key)
     prev_key = f"__prev_{widget_key}"
+
+    if "tracked_filters_initialized" not in st.session_state:
+        st.session_state.tracked_filters_initialized = {}
+
+    # אם הפילטר הזה עדיין לא הופיע קודם במסך —
+    # רק נאתחל אותו ולא נספור אינטראקציה
+    if not st.session_state.tracked_filters_initialized.get(widget_key, False):
+        st.session_state[prev_key] = current_val
+        st.session_state.tracked_filters_initialized[widget_key] = True
+        return
+
     prev_val = st.session_state.get(prev_key)
 
-    # First render / automatic widget sync should not count
-    if prev_val is None:
-        st.session_state[prev_key] = current_val
-        return
-
-    # Do not count filter changes until the dashboard is fully ready
-    if not st.session_state.get("filters_ready_for_tracking", False):
-        st.session_state[prev_key] = current_val
-        return
-
-    # Count only real user changes
+    # סופרים רק אם המשתתף באמת שינה את הערך
     if current_val != prev_val:
         track_dashboard_click(action_type, f"{widget_key}={current_val}")
         st.session_state[prev_key] = current_val
@@ -1337,7 +1341,7 @@ def show_chart1():
             st.selectbox(
                 "בחר/י חודש לפירוט:", months_order,
                 key="chart1_month_select",
-                on_change=track_filter_change,
+                #on_change=track_filter_change,
                 args=("chart1_month_select", "chart1_filter_month_change")
             )
         with c2:
@@ -1397,7 +1401,7 @@ def show_chart2():
             st.selectbox(
                 "בחר/י חודש לפירוט:", months_order,
                 key="chart2_month_select",
-                on_change=track_filter_change,
+                #on_change=track_filter_change,
                 args=("chart2_month_select", "chart2_filter_month_change")
             )
         with c2:
@@ -1457,7 +1461,7 @@ def show_chart3():
             st.selectbox(
                 "קטגוריה:", ["T-shirt", "Dress", "Jeans"],
                 key="chart3_category_select",
-                on_change=track_filter_change,
+                #on_change=track_filter_change,
                 args=("chart3_category_select", "chart3_filter_category_change")
             )
         with c2:
@@ -1564,7 +1568,7 @@ def show_chart4():
                 "בחר/י קטגוריה לפירוט:",
                 ["T-shirt", "Dress", "Jeans"],
                 key="chart4_category_select",
-                on_change=track_filter_change,
+                #on_change=track_filter_change,
                 args=("chart4_category_select", "chart4_filter_category_change")
             )
         with c2:
@@ -1982,12 +1986,19 @@ elif st.session_state.screen == "initial_comprehension":
                 st.session_state.db_saved = False
                 st.session_state.filters_ready_for_tracking = False
 
+                st.session_state.tracked_filters_initialized = {}
+
+                st.session_state["__prev_chart1_month_select"] = None
+                st.session_state["__prev_chart2_month_select"] = None
+                st.session_state["__prev_chart3_category_select"] = None
+                st.session_state["__prev_chart4_category_select"] = None
+
                 # מאתחל את ערכי הפילטרים כדי שלא יספרו כאינטראקציה
-                st.session_state["__prev_chart1_month_select"] = st.session_state["chart1_month_select"]
-                st.session_state["__prev_chart2_month_select"] = st.session_state["chart2_month_select"]
-                st.session_state["__prev_chart3_category_select"] = st.session_state["chart3_category_select"]
-                st.session_state["__prev_chart4_category_select"] = st.session_state["chart4_category_select"]
-                st.session_state["__filters_initialized"] = True
+                #st.session_state["__prev_chart1_month_select"] = st.session_state["chart1_month_select"]
+                #st.session_state["__prev_chart2_month_select"] = st.session_state["chart2_month_select"]
+                #st.session_state["__prev_chart3_category_select"] = st.session_state["chart3_category_select"]
+                #st.session_state["__prev_chart4_category_select"] = st.session_state["chart4_category_select"]
+                #st.session_state["__filters_initialized"] = True
 
                 st.session_state.screen = "experiment"
 
@@ -2224,8 +2235,8 @@ elif st.session_state.screen == "experiment":
     with bottom_right:
         show_or_empty(show_fig4, show_chart4, is_storytelling)
 
-    if not st.session_state.filters_ready_for_tracking:
-        st.session_state.filters_ready_for_tracking = True
+    #if not st.session_state.filters_ready_for_tracking:
+    #   st.session_state.filters_ready_for_tracking = True
 
     st.markdown(
         '<div class="dashboard-note">💡 שים לב! ניתן לשנות את הבחירה לפני לחיצה על "שלח/י תשובה"</div>',
@@ -2473,24 +2484,13 @@ elif st.session_state.screen == "thankyou":
     col_l, col_btn, col_r = st.columns([2, 2, 2])
 
     with col_btn:
-        st.markdown(
-            f"""<a href="{final_redirect_url}" target="_self" style="
-display:block;
-width:100%;
-text-align:center;
-text-decoration:none;
-font-family:'Varela Round', sans-serif;
-font-weight:700;
-font-size:1rem;
-border-radius:12px;
-padding:0.75rem 2rem;
-background-color:#2563eb;
-color:white;
-border:none;
-cursor:pointer;
-box-sizing:border-box;
-">
-לחץ לסיום
-</a>""",
-            unsafe_allow_html=True
-        )
+        if st.button("לחץ לסיום", use_container_width=True):
+            safe_url = json.dumps(final_redirect_url)
+            components.html(
+                f"""
+                <script>
+                    window.parent.location.href = {safe_url};
+                </script>
+                """,
+                height=0
+            )
