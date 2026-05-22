@@ -4,6 +4,7 @@ import plotly.express as px
 import time
 import uuid
 from datetime import datetime
+import random
 from zoneinfo import ZoneInfo
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -1647,7 +1648,7 @@ if st.session_state.screen == "register":
 
 <div class="opening-subtitle">
 במהלך הניסוי יוצג בפניך דשבורד אינטראקטיבי של חנות אופנה.
-המטרה היא לענות על שאלות המבוססות על הנתונים המוצגים, תוך בחינת אופן קבלת החלטות בסביבת BI.
+המטרה היא לענות על שאלות המבוססות על הנתונים המוצגים BI.
 במסכים הבאים יינתן הסבר נוסף על מהלך הניסוי.
 </div>
 
@@ -1675,10 +1676,13 @@ if st.session_state.screen == "register":
             placeholder="הזינו את מספר המשתתף המוקצה ברשימה"
         )
 
-        experiment_group_input = st.selectbox(
-            "קבוצת ניסוי",
-            ["control", "storytelling"]
-        )
+        manual_group = None
+
+        if participant_id_input.strip() == "999":
+            manual_group = st.selectbox(
+                "קבוצת ניסוי לבדיקה",
+                ["control", "storytelling"]
+            )
 
         st.write("")
 
@@ -1687,7 +1691,13 @@ if st.session_state.screen == "register":
                 st.warning("יש להזין מספר משתתף")
             else:
                 st.session_state.participant_id = participant_id_input.strip()
-                st.session_state.experiment_group = experiment_group_input
+
+                if participant_id_input.strip() == "999":
+                    st.session_state.experiment_group = manual_group
+                else:
+                    # Random assignment: 50% control, 50% storytelling
+                    st.session_state.experiment_group = random.choice(["control", "storytelling"])
+
                 st.session_state.screen = "consent"
                 st.rerun()
 
@@ -2437,7 +2447,7 @@ elif st.session_state.screen == "thankyou":
 <div class="thankyou-sub">
 השתתפותך בניסוי זה תורמת למחקר אקדמי חשוב בתחום מערכות מידע עסקיות.<br>
 התוצאות ישמשו למחקר בלבד.<br><br>
-לחצ/י על הכפתור לסיום וחזרה לקישור המקורי.
+על מנת להירשם במערכת על כך שביצעת את הניסוי - לחץ על הכפתור לסיום.
 </div>
 </div>""", unsafe_allow_html=True)
 
