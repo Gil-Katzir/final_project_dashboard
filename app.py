@@ -921,6 +921,7 @@ defaults = {
     "demographic_bi_experience": "",
     "consent_given": False,
     "redirect_url": "",
+    
 
     "initial_comprehension_current": 0,
     "initial_comprehension_answers": [],
@@ -951,6 +952,7 @@ defaults = {
     "correct_count": 0,
     "dashboard_interaction_clicks": 0,
     "interaction_log": [],
+    "filters_ready_for_tracking": False,
 
     
     "db_saved": False,
@@ -1033,15 +1035,24 @@ def track_filter_change(widget_key: str, action_type: str):
     if not st.session_state.experiment_started:
         return
 
+    if st.session_state.current_question >= len(questions):
+        return
+
     current_val = st.session_state.get(widget_key)
     prev_key = f"__prev_{widget_key}"
     prev_val = st.session_state.get(prev_key)
 
-    # First automatic widget sync should not count as a dashboard interaction
+    # First render / automatic widget sync should not count
     if prev_val is None:
         st.session_state[prev_key] = current_val
         return
 
+    # Do not count filter changes until the dashboard is fully ready
+    if not st.session_state.get("filters_ready_for_tracking", False):
+        st.session_state[prev_key] = current_val
+        return
+
+    # Count only real user changes
     if current_val != prev_val:
         track_dashboard_click(action_type, f"{widget_key}={current_val}")
         st.session_state[prev_key] = current_val
@@ -1650,7 +1661,7 @@ if st.session_state.screen == "register":
 במהלך הניסוי יוצג בפניך דשבורד אינטראקטיבי של חנות אופנה.
 המטרה היא לענות על שאלות המבוססות על הנתונים המוצגים BI.
 במסכים הבאים יינתן הסבר נוסף על מהלך הניסוי.
-אנא הזן את מספר המשתתף שקיבלת
+אנא הזן את מספר המשתתף שקיבלת במקום המיועד במסך - 
 </div>
 
 <div class="opening-info-row">
@@ -1969,6 +1980,7 @@ elif st.session_state.screen == "initial_comprehension":
                 st.session_state.started_at = datetime.now(ZoneInfo("Asia/Jerusalem")).isoformat()
                 st.session_state.question_start_time = time.time()
                 st.session_state.db_saved = False
+                st.session_state.filters_ready_for_tracking = False
 
                 # מאתחל את ערכי הפילטרים כדי שלא יספרו כאינטראקציה
                 st.session_state["__prev_chart1_month_select"] = st.session_state["chart1_month_select"]
@@ -2212,6 +2224,9 @@ elif st.session_state.screen == "experiment":
     with bottom_right:
         show_or_empty(show_fig4, show_chart4, is_storytelling)
 
+    if not st.session_state.filters_ready_for_tracking:
+        st.session_state.filters_ready_for_tracking = True
+
     st.markdown(
         '<div class="dashboard-note">💡 שים לב! ניתן לשנות את הבחירה לפני לחיצה על "שלח/י תשובה"</div>',
         unsafe_allow_html=True
@@ -2433,14 +2448,17 @@ elif st.session_state.screen == "summary":
             for key in list(st.session_state.keys()):
                 del st.session_state[key]
             st.rerun()
-
-
+            
 # ==============================
 # SCREEN: THANK YOU
 # ==============================
 elif st.session_state.screen == "thankyou":
 
-    final_redirect_url = st.session_state.redirect_url if st.session_state.redirect_url else "https://dashboard-experiment.streamlit.app/"
+    final_redirect_url = (
+        st.session_state.redirect_url
+        if st.session_state.redirect_url
+        else "https://dashboard-experiment.streamlit.app/"
+    )
 
     st.markdown("""<div class="thankyou-card">
 <div class="thankyou-emoji">🎉</div>
@@ -2448,29 +2466,15 @@ elif st.session_state.screen == "thankyou":
 <div class="thankyou-sub">
 השתתפותך בניסוי זה תורמת למחקר אקדמי חשוב בתחום מערכות מידע עסקיות.<br>
 התוצאות ישמשו למחקר בלבד.<br><br>
-על מנת להירשם במערכת על כך שביצעת את הניסוי - לחץ על הכפתור לסיום.
+על מנת להירשם במערכת על כך שביצעת את הניסוי - לחץ/י על הכפתור לסיום.
 </div>
 </div>""", unsafe_allow_html=True)
 
     col_l, col_btn, col_r = st.columns([2, 2, 2])
 
     with col_btn:
-        st.markdown(
-            f"""<a href="{final_redirect_url}" target="_self" style="text-decoration:none;">
-<button style="
-width:100%;
-font-family:'Varela Round', sans-serif;
-font-weight:700;
-font-size:1rem;
-border-radius:12px;
-padding:0.75rem 2rem;
-background-color:#2563eb;
-color:white;
-border:none;
-cursor:pointer;
-">
-לחץ לסיום
-</button>
-</a>""",
-            unsafe_allow_html=True
+        st.link_button(
+            "לחץ לסיום",
+            final_redirect_url,
+            use_container_width=True
         )
