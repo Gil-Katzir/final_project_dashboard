@@ -1650,6 +1650,7 @@ if st.session_state.screen == "register":
 במהלך הניסוי יוצג בפניך דשבורד אינטראקטיבי של חנות אופנה.
 המטרה היא לענות על שאלות המבוססות על הנתונים המוצגים BI.
 במסכים הבאים יינתן הסבר נוסף על מהלך הניסוי.
+אנא הזן את מספר המשתתף שקיבלת
 </div>
 
 <div class="opening-info-row">
@@ -1673,7 +1674,7 @@ if st.session_state.screen == "register":
     with col_form:
         participant_id_input = st.text_input(
             "מספר משתתף",
-            placeholder="הזינו את מספר המשתתף המוקצה ברשימה"
+            placeholder="הזינו את מספר המשתתף"
         )
 
         manual_group = None
