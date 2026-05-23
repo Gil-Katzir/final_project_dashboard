@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 import time
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 import random
 import json
 import streamlit.components.v1 as components
@@ -1107,6 +1107,13 @@ def build_interactions_df() -> pd.DataFrame:
         ])
     return pd.DataFrame(st.session_state.interaction_log)
 
+def db_israel_time():
+    """
+    Returns current time shifted +3 hours for DB display.
+    This is used because Supabase displays timestamps 3 hours behind Israel time.
+    """
+    return (datetime.utcnow() + timedelta(hours=3)).isoformat(sep=" ", timespec="seconds")
+
 
 def save_session_to_db(total_duration):
     data = {
@@ -1158,6 +1165,7 @@ def build_response_row(answer, default_question_type="regular_experiment"):
 
         # New fields for easier analysis
         "question_type": str(answer.get("question_type", default_question_type)),
+        "created_at": db_israel_time(),
     }
 
 
@@ -1981,7 +1989,7 @@ elif st.session_state.screen == "initial_comprehension":
             if st.session_state.initial_comprehension_current >= len(initial_comprehension_questions):
                 st.session_state.experiment_started = True
                 st.session_state.session_start_time = time.time()
-                st.session_state.started_at = datetime.now(ZoneInfo("Asia/Jerusalem")).isoformat()
+                st.session_state.started_at = db_israel_time()
                 st.session_state.question_start_time = time.time()
                 st.session_state.db_saved = False
                 st.session_state.filters_ready_for_tracking = False
@@ -2159,8 +2167,7 @@ elif st.session_state.screen == "post_experiment_survey":
             })
 
         total_duration = time.time() - st.session_state.session_start_time
-        st.session_state.ended_at = datetime.now(ZoneInfo("Asia/Jerusalem")).isoformat()
-
+        st.session_state.ended_at = db_israel_time()
         if not st.session_state.db_saved:
             session_ok, _ = save_session_to_db(total_duration)
             responses_ok, _ = save_responses_to_db()
@@ -2387,7 +2394,7 @@ elif st.session_state.screen == "summary":
         st.rerun()
 
     total_duration = time.time() - st.session_state.session_start_time
-    st.session_state.ended_at = datetime.now(ZoneInfo("Asia/Jerusalem")).isoformat()
+    st.session_state.ended_at = db_israel_time()
 
     export_df = build_export_df(total_duration)
     interactions_df = build_interactions_df()
@@ -2468,7 +2475,7 @@ elif st.session_state.screen == "thankyou":
     final_redirect_url = (
         st.session_state.redirect_url
         if st.session_state.redirect_url
-        else "https://www.prolific.com/"
+        else "https://app.prolific.com/submissions/complete?cc=TESTCODE"
     )
 
     st.markdown("""<div class="thankyou-card">
