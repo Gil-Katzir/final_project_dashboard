@@ -1663,7 +1663,7 @@ if st.session_state.screen == "register":
 
 <div class="opening-subtitle">
 במהלך הניסוי יוצג בפניך דשבורד אינטראקטיבי של חנות אופנה.
-המטרה היא לענות על שאלות המבוססות על הנתונים המוצגים BI.
+המטרה היא לענות על שאלות המבוססות על הנתונים המוצגים.
 במסכים הבאים יינתן הסבר נוסף על מהלך הניסוי.
 אנא הזן את מספר המשתתף שקיבלת במקום המיועד במסך - 
 </div>
@@ -2468,7 +2468,7 @@ elif st.session_state.screen == "thankyou":
     final_redirect_url = (
         st.session_state.redirect_url
         if st.session_state.redirect_url
-        else "https://www.google.com"
+        else "https://www.prolific.com/"
     )
 
     st.markdown("""<div class="thankyou-card">
