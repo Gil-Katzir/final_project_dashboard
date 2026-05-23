@@ -2483,27 +2483,10 @@ elif st.session_state.screen == "thankyou":
 
     col_l, col_btn, col_r = st.columns([2, 2, 2])
 
-with col_btn:
-    st.markdown(
-        f"""<a href="{final_redirect_url}" target="_self" style="
-display:block;
-width:100%;
-text-align:center;
-text-decoration:none;
-font-family:'Varela Round', sans-serif;
-font-weight:700;
-font-size:1rem;
-border-radius:12px;
-padding:0.75rem 2rem;
-background-color:#2563eb;
-color:white;
-border:none;
-cursor:pointer;
-box-sizing:border-box;
-">
-לחץ לסיום
-</a>""",
-            unsafe_allow_html=True
+    with col_btn:
+        st.link_button(
+            "לחץ לסיום",
+            final_redirect_url,
+            use_container_width=True
         )
 
-        st.caption(f"Debug redirect URL: {final_redirect_url}")
