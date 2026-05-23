@@ -2483,9 +2483,9 @@ elif st.session_state.screen == "thankyou":
 
     col_l, col_btn, col_r = st.columns([2, 2, 2])
 
-    with col_btn:
-        st.markdown(
-            f"""<a href="{final_redirect_url}" target="_self" style="
+with col_btn:
+    st.markdown(
+        f"""<a href="{final_redirect_url}" target="_self" style="
 display:block;
 width:100%;
 text-align:center;
