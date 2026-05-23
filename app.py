@@ -2126,18 +2126,18 @@ Please move the scale between 1 and 7.
 <div class="likert-banner-main">Rating Scale</div>
 
 <div class="likert-label-row">
-<span>To a very great extent</span>
 <span>To a very small extent</span>
+<span>To a very great extent</span>
 </div>
 
 <div class="likert-scale-row">
-<div class="likert-number">7</div>
-<div class="likert-number">6</div>
-<div class="likert-number">5</div>
-<div class="likert-number">4</div>
-<div class="likert-number">3</div>
-<div class="likert-number">2</div>
 <div class="likert-number">1</div>
+<div class="likert-number">2</div>
+<div class="likert-number">3</div>
+<div class="likert-number">4</div>
+<div class="likert-number">5</div>
+<div class="likert-number">6</div>
+<div class="likert-number">7</div>
 </div>
 </div>""", unsafe_allow_html=True)
 
