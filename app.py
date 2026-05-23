@@ -1915,6 +1915,10 @@ elif st.session_state.screen == "instructions":
 # SCREEN: INITIAL COMPREHENSION
 # ==============================
 elif st.session_state.screen == "initial_comprehension":
+
+    if st.session_state.question_start_time is None:
+        st.session_state.question_start_time = time.time()
+
     st.markdown('''
 <div style="max-width:820px;margin:2rem auto;">
 <div class="welcome-card">
@@ -1963,6 +1967,7 @@ elif st.session_state.screen == "initial_comprehension":
                 st.warning("יש לבחור תשובה לפני ההמשך")
                 st.stop()
 
+            response_time = time.time() - st.session_state.question_start_time
             is_check_correct = selected_check == check_q["correct_answer"]
             st.session_state.initial_comprehension_answers.append({
                 "question_id": check_q["id"],
@@ -1970,7 +1975,7 @@ elif st.session_state.screen == "initial_comprehension":
                 "selected_answer": selected_check,
                 "correct_answer": check_q["correct_answer"],
                 "is_correct": is_check_correct,
-                "response_time_seconds": None,
+                "response_time_seconds": round(response_time, 2),
                 "question_type": check_q["question_type"],
             })
 
@@ -1981,10 +1986,12 @@ elif st.session_state.screen == "initial_comprehension":
                 "selected_answer": selected_check,
                 "correct_answer": check_q["correct_answer"],
                 "is_correct": is_check_correct,
+                "response_time_seconds": round(response_time, 2),
                 "question_type": check_q["question_type"],
             })
 
             st.session_state.initial_comprehension_current += 1
+            st.session_state.question_start_time = time.time()
 
             if st.session_state.initial_comprehension_current >= len(initial_comprehension_questions):
                 st.session_state.experiment_started = True
@@ -2017,6 +2024,10 @@ elif st.session_state.screen == "initial_comprehension":
 # SCREEN: FINAL COMPREHENSION
 # ==============================
 elif st.session_state.screen == "final_comprehension":
+
+    if st.session_state.question_start_time is None:
+        st.session_state.question_start_time = time.time()
+
     st.markdown('''
 <div style="max-width:820px;margin:2rem auto;">
 <div class="welcome-card">
@@ -2065,6 +2076,7 @@ elif st.session_state.screen == "final_comprehension":
                 st.warning("יש לבחור תשובה לפני ההמשך")
                 st.stop()
 
+            response_time = time.time() - st.session_state.question_start_time
             is_check_correct = selected_check == check_q["correct_answer"]
             st.session_state.final_comprehension_answers.append({
                 "question_id": check_q["id"],
@@ -2072,7 +2084,7 @@ elif st.session_state.screen == "final_comprehension":
                 "selected_answer": selected_check,
                 "correct_answer": check_q["correct_answer"],
                 "is_correct": is_check_correct,
-                "response_time_seconds": None,
+                "response_time_seconds": round(response_time, 2),
                 "question_type": check_q["question_type"],
             })
 
@@ -2083,10 +2095,12 @@ elif st.session_state.screen == "final_comprehension":
             "selected_answer": selected_check,
             "correct_answer": check_q["correct_answer"],
             "is_correct": is_check_correct,
+            "response_time_seconds": round(response_time, 2),
             "question_type": check_q["question_type"],
             })
 
             st.session_state.final_comprehension_current += 1
+            st.session_state.question_start_time = time.time()
 
             if st.session_state.final_comprehension_current >= len(final_comprehension_questions):
                 st.session_state.screen = "post_experiment_survey"
