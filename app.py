@@ -825,14 +825,14 @@ NEW_CHART_AT = {2: "Chart 2 added", 4: "Chart 3 added", 8: "Chart 4 added"}
 initial_comprehension_questions = [
     {
         "id": 100,
-        "text": "What is 10% of 105?",
+        "text": "?What is 10% of 105",
         "options": ["10.5", "15", "9.5", "12"],
         "correct_answer": "10.5",
         "question_type": "initial_comprehension"
     },
     {
         "id": 101,
-        "text": "What is 9 multiplied by 9 minus 2?",
+        "text": "?What is 9 multiplied by 9 minus 2",
         "options": ["79", "81", "77", "72"],
         "correct_answer": "79",
         "question_type": "initial_comprehension"
@@ -865,14 +865,14 @@ middle_attention_questions = [
 final_comprehension_questions = [
     {
         "id": 104,
-        "text": "What is 20% of 250?",
+        "text": "?What is 20% of 250",
         "options": ["40", "45", "50", "55"],
         "correct_answer": "50",
         "question_type": "final_comprehension"
     },
     {
         "id": 105,
-        "text": "What is 12 plus 18 divided by 3?",
+        "text": "?What is 12 plus 18 divided by 3",
         "options": ["10", "18", "20", "30"],
         "correct_answer": "18",
         "question_type": "final_comprehension"
@@ -1887,7 +1887,7 @@ You can explore the data using the magnifying glass icon (🔍), which allows yo
 </div>
 <div class="welcome-section-title">Reward</div>
 <div class="welcome-text">
-As part of the experiment, three prizes of NIS 300 each will be raffled. Each participant’s chance of winning is determined by the number of correct answers.
+As part of the experiment, three prizes of 100$ each will be raffled. Each participant’s chance of winning is determined by the number of correct answers.
 </div>
 <div class="welcome-section-title">Experiment duration</div>
 <div class="welcome-text">
