@@ -1353,15 +1353,15 @@ def show_chart1():
             y="Total Revenue",
             markers=True,
             color_discrete_sequence=["#3b82f6"],
-            line_shape="spline",
-            text=monthly_total["Total Revenue"].apply(format_k)
+            line_shape="spline"
         )
 
         fig.update_traces(
             line=dict(width=3),
             marker=dict(size=7, line=dict(width=2, color="white")),
             mode="lines+markers+text",
-            textposition="top center"
+            textposition="top center",
+            text=monthly_total["Total Revenue"].apply(format_k)
         )
 
         fig = apply_common_layout(fig, "Total Revenue by Month")
