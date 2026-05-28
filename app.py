@@ -1352,9 +1352,13 @@ def show_chart1():
             color_discrete_sequence=["#3b82f6"],
             line_shape="spline"
         )
+        
         fig.update_traces(
             line=dict(width=3),
-            marker=dict(size=7, line=dict(width=2, color="white"))
+            marker=dict(size=7, line=dict(width=2, color="white")),
+            text=monthly_total["Total Revenue"].round(0),
+            textposition="top center",
+            mode="lines+markers+text"
         )
 
         
