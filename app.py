@@ -806,9 +806,9 @@ questions = [
     },
     {
         "id": 8,
-        "text": "בקטגוריה שבה ישנה מגמה הפוכה בין הרווחים להכנסות, בחודש בו הרווחים מהקטגוריה היו 4,619.85$ מה היה הרווח הכולל של החנות?",
-        "options": ["56.1k $", "12,85575$", "55k $", "לא ניתן לדעת"],
-        "correct_answer": "12,85575$"
+        "text": "בקטגוריה שבה ישנה מגמה הפוכה בין הרווחים להכנסות, בחודש בו הרווחים מהקטגוריה היו 4.62K$ מה היה הרווח הכולל של החנות?",
+        "options": ["56.1k $", "12.86K $", "55k $", "לא ניתן לדעת"],
+        "correct_answer": "12.86K $"
     },
     {
         "id": 9,
@@ -1526,6 +1526,7 @@ def show_chart3():
                     name=category,
                     text=category_df["Revenue"].apply(format_k),
                     textposition="top center",
+                    hovertemplate="Month: %{x}<br>Category: " + category + "<br>Revenue: %{text}<extra></extra>",
                     line=dict(
                         width=3,
                         color=category_colors[category]
@@ -1579,6 +1580,7 @@ def show_chart3():
                 name="Revenue",
                 text=drill_df["Revenue"].apply(format_k),
                 textposition="outside",
+                hovertemplate="Month: %{x}<br>Revenue: %{text}<extra></extra>",
                 opacity=0.9
             )
         )
@@ -1590,6 +1592,7 @@ def show_chart3():
                 name="Profit",
                 text=drill_df["Profit"].apply(format_k),
                 textposition="outside",
+                hovertemplate="Month: %{x}<br>Profit: %{text}<extra></extra>",
                 opacity=0.9
             )
         )
