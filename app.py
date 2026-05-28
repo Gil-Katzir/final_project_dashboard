@@ -1265,6 +1265,8 @@ def category_monthly_totals(category_name):
     d["Month"] = pd.Categorical(d["Month"], categories=months_order, ordered=True)
     return d.sort_values("Month")
 
+def format_k(value):
+    return f"{value / 1000:.2f}K"
 
 def apply_common_layout(fig, title_text):
     fig.update_layout(
@@ -1344,15 +1346,21 @@ def show_chart1():
     panel_header("הכנסות לפי חודש", chart_narratives["chart1"])
 
     if not st.session_state.chart1_drilled:
+        chart_df = monthly_total.copy()
+        chart_df["Revenue Label"] = chart_df["Total Revenue"].apply(format_k)
+
         fig = px.line(
             monthly_total,
             x="Month",
             y="Total Revenue",
             markers=True,
             color_discrete_sequence=["#3b82f6"],
-            line_shape="spline"
+            line_shape="spline",
+            text="Revenue Label"
         )
+
         
+
         fig.update_traces(
             line=dict(width=3),
             marker=dict(size=7, line=dict(width=2, color="white")),
