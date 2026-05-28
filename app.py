@@ -1594,21 +1594,24 @@ def show_chart3():
         st.plotly_chart(fig, use_container_width=True)
 
         c1, c2 = st.columns([2.2, 1])
+
         with c1:
-            st.segmented_control(
+            selected_category = st.segmented_control(
                 "לבחינת רווח מול הכנסות ביכולתך לבחור קטגוריה וללחוץ על זכוכית המגדלת ----->",
                 ["T-shirt", "Dress", "Jeans"],
-                key="chart3_category_select",
-                selection_mode="single"
+                key="chart3_category_segment",
+                selection_mode="single",
+                default=None
             )
 
         with c2:
             st.write("")
             if st.button("הכנסות vs. רווח 🔍", key="chart3_drill_btn", use_container_width=True):
-                st.session_state.chart3_category = st.session_state.chart3_category_select
-                st.session_state.chart3_drilled = True
-                track_dashboard_click("chart3_drill_down", st.session_state.chart3_category)
-                st.rerun()
+                if selected_category is not None:
+                    st.session_state.chart3_category = selected_category
+                    st.session_state.chart3_drilled = True
+                    track_dashboard_click("chart3_drill_down", st.session_state.chart3_category)
+                    st.rerun()
 
     else:
         drill_df = category_monthly_totals(st.session_state.chart3_category)
@@ -1713,21 +1716,24 @@ def show_chart4():
         st.plotly_chart(fig, use_container_width=True)
 
         c1, c2 = st.columns([2.2, 1])
+
         with c1:
-            st.segmented_control(
+            selected_category = st.segmented_control(
                 "ביכולתך לבחור קטגוריה וללחוץ על זכוכית המגדלת ----->",
                 ["T-shirt", "Dress", "Jeans"],
-                key="chart4_category_select",
-                selection_mode="single"
+                key="chart4_category_segment",
+                selection_mode="single",
+                default=None
             )
 
         with c2:
             st.write("")
             if st.button("Drill Through 🔍", key="chart4_drill_btn", use_container_width=True):
-                st.session_state.chart4_category = st.session_state.chart4_category_select
-                st.session_state.chart4_drilled = True
-                track_dashboard_click("chart4_drill_down", st.session_state.chart4_category)
-                st.rerun()
+                if selected_category is not None:
+                    st.session_state.chart4_category = selected_category
+                    st.session_state.chart4_drilled = True
+                    track_dashboard_click("chart4_drill_down", st.session_state.chart4_category)
+                    st.rerun()
 
     else:
         drill_df = category_monthly_profit_discount(st.session_state.chart4_category)
