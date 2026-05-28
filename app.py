@@ -730,6 +730,25 @@ div[data-testid="stSegmentedControl"] button {
     font-size: 0.95rem !important;
 }
 
+/* segmented control - font for label + options */
+div[data-testid="stSegmentedControl"],
+div[data-testid="stSegmentedControl"] *,
+div[data-testid="stSegmentedControl"] label,
+div[data-testid="stSegmentedControl"] p,
+div[data-testid="stSegmentedControl"] span,
+div[data-testid="stSegmentedControl"] button,
+div[data-testid="stSegmentedControl"] button * {
+    font-family: 'Varela Round', sans-serif !important;
+}
+
+/* The label above segmented_control */
+div[data-testid="stSegmentedControl"] > label,
+div[data-testid="stSegmentedControl"] > label *,
+div[data-testid="stWidgetLabel"],
+div[data-testid="stWidgetLabel"] * {
+    font-family: 'Varela Round', sans-serif !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
