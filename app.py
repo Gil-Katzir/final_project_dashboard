@@ -1423,7 +1423,7 @@ def show_chart1():
             st.rerun()
 
 
-ddef show_chart2():
+def show_chart2():
     panel_header("רווחים נטו לפי חודש", chart_narratives["chart2"])
 
     if not st.session_state.chart2_drilled:
@@ -1727,7 +1727,7 @@ def show_chart4():
             st.session_state.chart4_drilled = False
             track_dashboard_click("chart4_back", st.session_state.chart4_category)
             st.rerun()
-            
+
 
 def show_or_empty(show_flag, func, is_storytelling=False):
     if show_flag:
