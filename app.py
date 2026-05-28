@@ -1507,26 +1507,35 @@ def show_chart3():
     panel_header("הכנסות לפי קטגוריה", chart_narratives["chart3"])
 
     if not st.session_state.chart3_drilled:
-        fig = px.line(
-            monthly_category,
-            x="Month",
-            y="Revenue",
-            color="Category",
-            markers=True,
-            color_discrete_map={
-                "T-shirt": "#3b82f6",
-                "Dress": "#f43f5e",
-                "Jeans": "#8b5cf6"
-            }
-        )
+        fig = go.Figure()
 
-        fig.update_traces(
-            line=dict(width=3),
-            marker=dict(size=7, line=dict(width=2, color="white")),
-            text=monthly_category["Revenue"].apply(format_k),
-            textposition="top center",
-            mode="lines+markers+text"
-        )
+        category_colors = {
+            "T-shirt": "#3b82f6",
+            "Dress": "#f43f5e",
+            "Jeans": "#8b5cf6"
+        }
+
+        for category in ["T-shirt", "Dress", "Jeans"]:
+            category_df = monthly_category[monthly_category["Category"] == category]
+
+            fig.add_trace(
+                go.Scatter(
+                    x=category_df["Month"],
+                    y=category_df["Revenue"],
+                    mode="lines+markers+text",
+                    name=category,
+                    text=category_df["Revenue"].apply(format_k),
+                    textposition="top center",
+                    line=dict(
+                        width=3,
+                        color=category_colors[category]
+                    ),
+                    marker=dict(
+                        size=7,
+                        line=dict(width=2, color="white")
+                    )
+                )
+            )
 
         fig.update_layout(legend_title_text="")
 
