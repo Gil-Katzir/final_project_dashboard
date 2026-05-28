@@ -1348,7 +1348,7 @@ def show_chart1():
     if not st.session_state.chart1_drilled:
 
         fig = px.line(
-            chart_df,
+            monthly_total,
             x="Month",
             y="Total Revenue",
             markers=True,
@@ -1359,8 +1359,10 @@ def show_chart1():
         fig.update_traces(
             line=dict(width=3),
             marker=dict(size=7, line=dict(width=2, color="white")),
-            mode="lines+markers+text",
-            textposition="top center"        )
+            text=monthly_total["Total Revenue"].apply(format_k),
+            textposition="top center",
+            mode="lines+markers+text"
+        )
 
         fig = apply_common_layout(fig, "Total Revenue by Month")
         fig.update_yaxes(tickprefix="$")
@@ -1375,10 +1377,12 @@ def show_chart1():
         c1, c2 = st.columns([2.2, 1])
         with c1:
             st.selectbox(
-                "בחר/י חודש לפירוט:", months_order,
+                "בחר/י חודש לפירוט:",
+                months_order,
                 key="chart1_month_select",
                 args=("chart1_month_select", "chart1_filter_month_change")
             )
+
         with c2:
             st.write("")
             if st.button("Drill Down 🔍", key="chart1_drill_btn", use_container_width=True):
@@ -1389,7 +1393,20 @@ def show_chart1():
 
     else:
         drill_df = month_daily_totals(st.session_state.chart1_month)
-        fig = px.line(drill_df, x="Day", y="Revenue", color_discrete_sequence=['#60a5fa'])
+
+        fig = px.line(
+            drill_df,
+            x="Day",
+            y="Revenue",
+            color_discrete_sequence=['#60a5fa']
+        )
+
+        fig.update_traces(
+            mode="lines+markers+text",
+            text=drill_df["Revenue"].apply(format_k),
+            textposition="top center"
+        )
+
         fig = apply_common_layout(fig, f"Daily Revenue — {st.session_state.chart1_month}")
         fig.update_yaxes(tickprefix="$")
 
@@ -1399,6 +1416,7 @@ def show_chart1():
         )
 
         st.plotly_chart(fig, use_container_width=True)
+
         if st.button("⬅️ חזרה", key="chart1_back_btn", use_container_width=True):
             st.session_state.chart1_drilled = False
             track_dashboard_click("chart1_back", st.session_state.chart1_month)
