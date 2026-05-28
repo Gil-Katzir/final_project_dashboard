@@ -1360,9 +1360,7 @@ def show_chart1():
             line=dict(width=3),
             marker=dict(size=7, line=dict(width=2, color="white")),
             mode="lines+markers+text",
-            textposition="top center",
-            text=monthly_total["Total Revenue"].apply(format_k)
-        )
+            textposition="top center"        )
 
         fig = apply_common_layout(fig, "Total Revenue by Month")
         fig.update_yaxes(tickprefix="$")
