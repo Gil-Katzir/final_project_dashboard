@@ -1350,7 +1350,7 @@ def show_chart1():
         chart_df["Revenue Label"] = chart_df["Total Revenue"].apply(format_k)
 
         fig = px.line(
-            monthly_total,
+            chart_df,
             x="Month",
             y="Total Revenue",
             markers=True,
@@ -1359,17 +1359,13 @@ def show_chart1():
             text="Revenue Label"
         )
 
-        
-
         fig.update_traces(
             line=dict(width=3),
             marker=dict(size=7, line=dict(width=2, color="white")),
-            text=monthly_total["Total Revenue"].round(0),
-            textposition="top center",
-            mode="lines+markers+text"
+            mode="lines+markers+text",
+            textposition="top center"
         )
 
-        
         fig = apply_common_layout(fig, "Total Revenue by Month")
         fig.update_yaxes(tickprefix="$")
 
@@ -1385,7 +1381,6 @@ def show_chart1():
             st.selectbox(
                 "בחר/י חודש לפירוט:", months_order,
                 key="chart1_month_select",
-                #on_change=track_filter_change,
                 args=("chart1_month_select", "chart1_filter_month_change")
             )
         with c2:
@@ -1395,6 +1390,7 @@ def show_chart1():
                 st.session_state.chart1_drilled = True
                 track_dashboard_click("chart1_drill_down", st.session_state.chart1_month)
                 st.rerun()
+                
     else:
         drill_df = month_daily_totals(st.session_state.chart1_month)
         fig = px.line(drill_df, x="Day", y="Revenue", color_discrete_sequence=['#60a5fa'])
