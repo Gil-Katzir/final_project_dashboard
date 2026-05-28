@@ -1555,7 +1555,7 @@ def show_chart3():
         c1, c2 = st.columns([2.2, 1])
         with c1:
             st.segmented_control(
-                "קטגוריה:",
+                "בחר קטגוריה ולחץ על זכוכית המגדלת <--",
                 ["T-shirt", "Dress", "Jeans"],
                 key="chart3_category_select",
                 selection_mode="single"
