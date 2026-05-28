@@ -710,7 +710,25 @@ div[data-testid="stRadio"]:has(input[name="consent_choice"]) [role="radiogroup"]
     text-align: left !important;
 }
 
+/* segmented control - chart filters */
+div[data-testid="stSegmentedControl"] {
+    font-family: 'Varela Round', sans-serif !important;
+    direction: rtl;
+    text-align: right;
+}
 
+div[data-testid="stSegmentedControl"] label,
+div[data-testid="stSegmentedControl"] p,
+div[data-testid="stSegmentedControl"] span,
+div[data-testid="stSegmentedControl"] button {
+    font-family: 'Varela Round', sans-serif !important;
+}
+
+div[data-testid="stSegmentedControl"] button {
+    border-radius: 12px !important;
+    font-weight: 700 !important;
+    font-size: 0.95rem !important;
+}
 
 </style>
 """, unsafe_allow_html=True)
