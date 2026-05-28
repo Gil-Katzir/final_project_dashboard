@@ -1629,6 +1629,7 @@ def show_chart4():
                 name="Total Profit",
                 text=monthly_total["Total Profit"].apply(format_k),
                 textposition="outside",
+                hovertemplate="Month: %{x}<br>Total Profit: %{text}<extra></extra>",
                 marker=dict(
                     color="#8b5cf6",
                     line=dict(width=0)
@@ -1647,6 +1648,7 @@ def show_chart4():
                 text=monthly_discount_total["Campaign Expense Total"].apply(lambda x: f"{x:.2f}%"),
                 textposition="top center",
                 name="Campaign Expense %",
+                hovertemplate="Month: %{x}<br>Campaign Expense: %{text}<extra></extra>",
                 line=dict(color="#f59e0b", width=3, dash="dot"),
                 marker=dict(size=7, line=dict(width=2, color="white"))
             ),
@@ -1687,12 +1689,13 @@ def show_chart4():
         fig = make_subplots(specs=[[{"secondary_y": True}]])
 
         fig.add_trace(
-            go.Bar(
+           go.Bar(
                 x=drill_df["Month"],
                 y=drill_df["Profit"],
                 name="Profit",
                 text=drill_df["Profit"].apply(format_k),
                 textposition="outside",
+                hovertemplate="Month: %{x}<br>Profit: %{text}<extra></extra>",
                 marker=dict(
                     color="#8b5cf6",
                     line=dict(width=0)
@@ -1711,6 +1714,7 @@ def show_chart4():
                 text=drill_df["Discount"].apply(lambda x: f"{x:.2f}%"),
                 textposition="top center",
                 name="Campaign Expense (%)",
+                hovertemplate="Month: %{x}<br>Campaign Expense: %{text}<extra></extra>",
                 line=dict(color="#f59e0b", width=3, dash="dot"),
                 marker=dict(size=7, line=dict(width=2, color="white"))
             ),
