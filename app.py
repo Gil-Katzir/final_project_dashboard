@@ -1828,30 +1828,30 @@ div[data-testid="stRadio"] [role="radiogroup"] label span {
     col_l, col_form, col_r = st.columns([1, 2, 1])
 
     with col_form:
-    consent_choice = st.radio(
-        "Please select one of the following options:",
-        [
-            "I hereby confirm that I have understood the above and freely give my consent to participate in this study. Continue.",
-            "I do not confirm. Exit."
-        ],
-        index=None,
-        key="consent_choice"
-    )
+        consent_choice = st.radio(
+            "Please select one of the following options:",
+            [
+                "I hereby confirm that I have understood the above and freely give my consent to participate in this study. Continue.",
+                "I do not confirm. Exit."
+            ],
+            index=None,
+            key="consent_choice"
+        )
 
-    st.write("")
+        st.write("")
 
-    if st.button("Continue ▶", use_container_width=True):
+        if st.button("Continue ▶", use_container_width=True):
 
-        if consent_choice is None:
-            st.warning("Please select one option before continuing.")
+            if consent_choice is None:
+                st.warning("Please select one option before continuing.")
 
-        elif consent_choice == "I do not confirm. Exit.":
-            st.warning("You cannot continue without providing consent.")
+            elif consent_choice == "I do not confirm. Exit.":
+                st.warning("You cannot continue without providing consent.")
 
-        else:
-            st.session_state.consent_given = True
-            st.session_state.screen = "demographics"
-            st.rerun()
+            else:
+                st.session_state.consent_given = True
+                st.session_state.screen = "demographics"
+                st.rerun()
 
 
 # ==============================
