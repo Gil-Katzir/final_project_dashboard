@@ -1460,7 +1460,7 @@ def show_chart2():
         c1, c2 = st.columns([2.2, 1])
         with c1:
             st.segmented_control(
-                "בחר/י חודש לפירוט:",
+                "ביכולתך לבחור חודש לפירוט וללחוץ על זכוכית המגדלת ----->",
                 months_order,
                 key="chart2_month_segment",
                 selection_mode="single",
