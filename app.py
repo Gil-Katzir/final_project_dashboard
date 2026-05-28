@@ -1673,11 +1673,11 @@ def show_chart4():
 
         c1, c2 = st.columns([2.2, 1])
         with c1:
-            st.selectbox(
-                "בחר/י קטגוריה לפירוט:",
+            st.segmented_control(
+                "בחר קטגוריה ולחץ על זכוכית המגדלת ----->",
                 ["T-shirt", "Dress", "Jeans"],
                 key="chart4_category_select",
-                args=("chart4_category_select", "chart4_filter_category_change")
+                selection_mode="single"
             )
 
         with c2:
