@@ -1415,7 +1415,7 @@ def show_chart1():
 
         c1, c2 = st.columns([2.2, 1])
         with c1:
-            st.segmented_control(
+             selected_month = st.segmented_control(
                 "ביכולתך לבחור חודש לפירוט וללחוץ  על זכוכית המגדלת ----->",
                 months_order,
                 key="chart1_month_segment",
@@ -1497,14 +1497,14 @@ def show_chart2():
 
         c1, c2 = st.columns([2.2, 1])
         with c1:
-            st.segmented_control(
+             selected_month = st.segmented_control(
                 "ביכולתך לבחור חודש לפירוט וללחוץ על זכוכית המגדלת ----->",
                 months_order,
                 key="chart2_month_segment",
                 selection_mode="single",
                 default=None
             )
-            
+
         with c2:
             st.write("")
             if st.button("Drill Down 🔍", key="chart2_drill_btn", use_container_width=True):
