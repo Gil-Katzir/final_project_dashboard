@@ -1423,7 +1423,7 @@ def show_chart1():
             st.rerun()
 
 
-def show_chart2():
+ddef show_chart2():
     panel_header("רווחים נטו לפי חודש", chart_narratives["chart2"])
 
     if not st.session_state.chart2_drilled:
@@ -1435,9 +1435,13 @@ def show_chart2():
             color_discrete_sequence=["#10b981"],
             line_shape="spline"
         )
+
         fig.update_traces(
             line=dict(width=3),
-            marker=dict(size=7, line=dict(width=2, color="white"))
+            marker=dict(size=7, line=dict(width=2, color="white")),
+            text=monthly_total["Total Profit"].apply(format_k),
+            textposition="top center",
+            mode="lines+markers+text"
         )
 
         fig = apply_common_layout(fig, "Total Profit by Month")
@@ -1453,11 +1457,12 @@ def show_chart2():
         c1, c2 = st.columns([2.2, 1])
         with c1:
             st.selectbox(
-                "בחר/י חודש לפירוט:", months_order,
+                "בחר/י חודש לפירוט:",
+                months_order,
                 key="chart2_month_select",
-                #on_change=track_filter_change,
                 args=("chart2_month_select", "chart2_filter_month_change")
             )
+
         with c2:
             st.write("")
             if st.button("Drill Down 🔍", key="chart2_drill_btn", use_container_width=True):
@@ -1465,9 +1470,23 @@ def show_chart2():
                 st.session_state.chart2_drilled = True
                 track_dashboard_click("chart2_drill_down", st.session_state.chart2_month)
                 st.rerun()
+
     else:
         drill_df = month_daily_totals(st.session_state.chart2_month)
-        fig = px.line(drill_df, x="Day", y="Profit", color_discrete_sequence=['#34d399'])
+
+        fig = px.line(
+            drill_df,
+            x="Day",
+            y="Profit",
+            color_discrete_sequence=["#34d399"]
+        )
+
+        fig.update_traces(
+            mode="lines+markers+text",
+            text=drill_df["Profit"].apply(format_k),
+            textposition="top center"
+        )
+
         fig = apply_common_layout(fig, f"Daily Profit — {st.session_state.chart2_month}")
         fig.update_yaxes(tickprefix="$")
 
@@ -1477,6 +1496,7 @@ def show_chart2():
         )
 
         st.plotly_chart(fig, use_container_width=True)
+
         if st.button("⬅️ חזרה", key="chart2_back_btn", use_container_width=True):
             st.session_state.chart2_drilled = False
             track_dashboard_click("chart2_back", st.session_state.chart2_month)
@@ -1488,14 +1508,24 @@ def show_chart3():
 
     if not st.session_state.chart3_drilled:
         fig = px.line(
-            monthly_category, x="Month", y="Revenue", color="Category",
+            monthly_category,
+            x="Month",
+            y="Revenue",
+            color="Category",
             markers=True,
-            color_discrete_map={"T-shirt": "#3b82f6", "Dress": "#f43f5e", "Jeans": "#8b5cf6"}
+            color_discrete_map={
+                "T-shirt": "#3b82f6",
+                "Dress": "#f43f5e",
+                "Jeans": "#8b5cf6"
+            }
         )
 
         fig.update_traces(
             line=dict(width=3),
-            marker=dict(size=7, line=dict(width=2, color="white"))
+            marker=dict(size=7, line=dict(width=2, color="white")),
+            text=monthly_category["Revenue"].apply(format_k),
+            textposition="top center",
+            mode="lines+markers+text"
         )
 
         fig.update_layout(legend_title_text="")
@@ -1513,11 +1543,12 @@ def show_chart3():
         c1, c2 = st.columns([2.2, 1])
         with c1:
             st.selectbox(
-                "קטגוריה:", ["T-shirt", "Dress", "Jeans"],
+                "קטגוריה:",
+                ["T-shirt", "Dress", "Jeans"],
                 key="chart3_category_select",
-                #on_change=track_filter_change,
                 args=("chart3_category_select", "chart3_filter_category_change")
             )
+
         with c2:
             st.write("")
             if st.button("הכנסות vs. רווח 🔍", key="chart3_drill_btn", use_container_width=True):
@@ -1525,6 +1556,7 @@ def show_chart3():
                 st.session_state.chart3_drilled = True
                 track_dashboard_click("chart3_drill_down", st.session_state.chart3_category)
                 st.rerun()
+
     else:
         drill_df = category_monthly_totals(st.session_state.chart3_category)
         months_list = drill_df["Month"].astype(str).tolist()
@@ -1536,9 +1568,10 @@ def show_chart3():
                 x=months_list,
                 y=drill_df["Revenue"],
                 name="Revenue",
+                text=drill_df["Revenue"].apply(format_k),
+                textposition="outside",
                 opacity=0.9
-            ),
-
+            )
         )
 
         fig.add_trace(
@@ -1546,12 +1579,14 @@ def show_chart3():
                 x=months_list,
                 y=drill_df["Profit"],
                 name="Profit",
+                text=drill_df["Profit"].apply(format_k),
+                textposition="outside",
                 opacity=0.9
-            ),
-
+            )
         )
 
         fig.update_layout(barmode="group")
+
         fig = apply_common_layout(
             fig,
             f"{st.session_state.chart3_category} — Monthly Revenue vs Profit"
@@ -1577,12 +1612,14 @@ def show_chart4():
 
     if not st.session_state.chart4_drilled:
         fig = make_subplots(specs=[[{"secondary_y": True}]])
-        
+
         fig.add_trace(
             go.Bar(
                 x=monthly_total["Month"],
                 y=monthly_total["Total Profit"],
                 name="Total Profit",
+                text=monthly_total["Total Profit"].apply(format_k),
+                textposition="outside",
                 marker=dict(
                     color="#8b5cf6",
                     line=dict(width=0)
@@ -1597,7 +1634,9 @@ def show_chart4():
             go.Scatter(
                 x=monthly_discount_total["Month"],
                 y=monthly_discount_total["Campaign Expense Total"],
-                mode="lines+markers",
+                mode="lines+markers+text",
+                text=monthly_discount_total["Campaign Expense Total"].apply(lambda x: f"{x:.2f}%"),
+                textposition="top center",
                 name="Campaign Expense %",
                 line=dict(color="#f59e0b", width=3, dash="dot"),
                 marker=dict(size=7, line=dict(width=2, color="white"))
@@ -1622,9 +1661,9 @@ def show_chart4():
                 "בחר/י קטגוריה לפירוט:",
                 ["T-shirt", "Dress", "Jeans"],
                 key="chart4_category_select",
-                #on_change=track_filter_change,
                 args=("chart4_category_select", "chart4_filter_category_change")
             )
+
         with c2:
             st.write("")
             if st.button("Drill Through 🔍", key="chart4_drill_btn", use_container_width=True):
@@ -1632,15 +1671,19 @@ def show_chart4():
                 st.session_state.chart4_drilled = True
                 track_dashboard_click("chart4_drill_down", st.session_state.chart4_category)
                 st.rerun()
+
     else:
         drill_df = category_monthly_profit_discount(st.session_state.chart4_category)
+
         fig = make_subplots(specs=[[{"secondary_y": True}]])
-        
+
         fig.add_trace(
             go.Bar(
                 x=drill_df["Month"],
                 y=drill_df["Profit"],
                 name="Profit",
+                text=drill_df["Profit"].apply(format_k),
+                textposition="outside",
                 marker=dict(
                     color="#8b5cf6",
                     line=dict(width=0)
@@ -1650,12 +1693,14 @@ def show_chart4():
             ),
             secondary_y=False
         )
-        
+
         fig.add_trace(
             go.Scatter(
                 x=drill_df["Month"],
                 y=drill_df["Discount"],
-                mode="lines+markers",
+                mode="lines+markers+text",
+                text=drill_df["Discount"].apply(lambda x: f"{x:.2f}%"),
+                textposition="top center",
                 name="Campaign Expense (%)",
                 line=dict(color="#f59e0b", width=3, dash="dot"),
                 marker=dict(size=7, line=dict(width=2, color="white"))
@@ -1667,6 +1712,7 @@ def show_chart4():
             fig,
             f"{st.session_state.chart4_category}: Profit & Campaign Expense (%) by Month"
         )
+
         fig.update_yaxes(title_text="Profit", secondary_y=False, tickprefix="$")
         fig.update_yaxes(title_text="Campaign Expense (%)", secondary_y=True)
 
@@ -1674,13 +1720,14 @@ def show_chart4():
             plot_bgcolor="#f7f7f7",
             paper_bgcolor="#f7f7f7"
         )
-        
+
         st.plotly_chart(fig, use_container_width=True)
 
         if st.button("⬅️ חזרה", key="chart4_back_btn", use_container_width=True):
             st.session_state.chart4_drilled = False
             track_dashboard_click("chart4_back", st.session_state.chart4_category)
             st.rerun()
+            
 
 def show_or_empty(show_flag, func, is_storytelling=False):
     if show_flag:
