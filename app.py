@@ -1346,8 +1346,6 @@ def show_chart1():
     panel_header("הכנסות לפי חודש", chart_narratives["chart1"])
 
     if not st.session_state.chart1_drilled:
-        chart_df = monthly_total.copy()
-        chart_df["Revenue Label"] = chart_df["Total Revenue"].apply(format_k)
 
         fig = px.line(
             chart_df,
@@ -1356,7 +1354,7 @@ def show_chart1():
             markers=True,
             color_discrete_sequence=["#3b82f6"],
             line_shape="spline",
-            text="Revenue Label"
+            text=monthly_total["Total Revenue"].apply(format_k)
         )
 
         fig.update_traces(
@@ -1390,7 +1388,7 @@ def show_chart1():
                 st.session_state.chart1_drilled = True
                 track_dashboard_click("chart1_drill_down", st.session_state.chart1_month)
                 st.rerun()
-                
+
     else:
         drill_df = month_daily_totals(st.session_state.chart1_month)
         fig = px.line(drill_df, x="Day", y="Revenue", color_discrete_sequence=['#60a5fa'])
