@@ -710,6 +710,8 @@ div[data-testid="stRadio"]:has(input[name="consent_choice"]) [role="radiogroup"]
     text-align: left !important;
 }
 
+
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -1552,11 +1554,11 @@ def show_chart3():
 
         c1, c2 = st.columns([2.2, 1])
         with c1:
-            st.selectbox(
+            st.segmented_control(
                 "קטגוריה:",
                 ["T-shirt", "Dress", "Jeans"],
                 key="chart3_category_select",
-                args=("chart3_category_select", "chart3_filter_category_change")
+                selection_mode="single"
             )
 
         with c2:
