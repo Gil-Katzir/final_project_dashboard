@@ -1379,7 +1379,7 @@ def show_chart1():
         c1, c2 = st.columns([2.2, 1])
         with c1:
             st.segmented_control(
-                "בחר/י חודש לפירוט ולחץ על זכוכית המגדלת ----->",
+                "ביכולתך לבחור חודש לפירוט וללחוץ  על זכוכית המגדלת ----->",
                 months_order,
                 key="chart1_month_segment",
                 selection_mode="single",
@@ -1459,17 +1459,18 @@ def show_chart2():
 
         c1, c2 = st.columns([2.2, 1])
         with c1:
-            st.selectbox(
+            st.segmented_control(
                 "בחר/י חודש לפירוט:",
                 months_order,
-                key="chart2_month_select",
-                args=("chart2_month_select", "chart2_filter_month_change")
+                key="chart2_month_segment",
+                selection_mode="single",
+                default=st.session_state.chart2_month
             )
 
         with c2:
             st.write("")
             if st.button("Drill Down 🔍", key="chart2_drill_btn", use_container_width=True):
-                st.session_state.chart2_month = st.session_state.chart2_month_select
+                st.session_state.chart2_month = st.session_state.chart2_month_segment
                 st.session_state.chart2_drilled = True
                 track_dashboard_click("chart2_drill_down", st.session_state.chart2_month)
                 st.rerun()
@@ -1675,7 +1676,7 @@ def show_chart4():
         c1, c2 = st.columns([2.2, 1])
         with c1:
             st.segmented_control(
-                "בחר קטגוריה ולחץ על זכוכית המגדלת ----->",
+                "ביכולתך לבחור קטגוריה וללחוץ על זכוכית המגדלת ----->",
                 ["T-shirt", "Dress", "Jeans"],
                 key="chart4_category_select",
                 selection_mode="single"
