@@ -1420,12 +1420,16 @@ def show_chart1():
                 months_order,
                 key="chart1_month_segment",
                 selection_mode="single",
-                default=st.session_state.chart1_month
+                default=None
             )
 
         with c2:
             st.write("")
             if st.button("Drill Down 🔍", key="chart1_drill_btn", use_container_width=True):
+                if st.session_state.chart1_month_segment is None:
+                    st.warning("יש לבחור חודש לפני ביצוע Drill Down")
+                    st.stop()
+
                 st.session_state.chart1_month = st.session_state.chart1_month_segment
                 st.session_state.chart1_drilled = True
                 track_dashboard_click("chart1_drill_down", st.session_state.chart1_month)
@@ -1501,12 +1505,16 @@ def show_chart2():
                 months_order,
                 key="chart2_month_segment",
                 selection_mode="single",
-                default=st.session_state.chart2_month
+                default=None
             )
 
         with c2:
             st.write("")
             if st.button("Drill Down 🔍", key="chart2_drill_btn", use_container_width=True):
+                if st.session_state.chart2_month_segment is None:
+                    st.warning("יש לבחור חודש לפני ביצוע Drill Down")
+                    st.stop()
+
                 st.session_state.chart2_month = st.session_state.chart2_month_segment
                 st.session_state.chart2_drilled = True
                 track_dashboard_click("chart2_drill_down", st.session_state.chart2_month)
