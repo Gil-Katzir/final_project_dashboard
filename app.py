@@ -686,6 +686,30 @@ st.markdown("""
     font-family: 'Varela Round', sans-serif;
 }
 
+/* consent radio - LTR */
+div[data-testid="stRadio"]:has(input[name="consent_choice"]) {
+    direction: ltr !important;
+    text-align: left !important;
+}
+
+div[data-testid="stRadio"]:has(input[name="consent_choice"]) > div[role="radiogroup"] {
+    direction: ltr !important;
+    align-items: stretch !important;
+}
+
+div[data-testid="stRadio"]:has(input[name="consent_choice"]) [role="radiogroup"] label {
+    direction: ltr !important;
+    text-align: left !important;
+    justify-content: flex-start !important;
+    flex-direction: row !important;
+}
+
+div[data-testid="stRadio"]:has(input[name="consent_choice"]) [role="radiogroup"] label p,
+div[data-testid="stRadio"]:has(input[name="consent_choice"]) [role="radiogroup"] label span {
+    direction: ltr !important;
+    text-align: left !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
