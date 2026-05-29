@@ -1482,8 +1482,10 @@ def show_chart2():
             marker=dict(size=7, line=dict(width=2, color="white")),
             text=monthly_total["Total Profit"].apply(format_k),
             textposition="top center",
-            mode="lines+markers+text"
+            mode="lines+markers+text",
+            hovertemplate="Month: %{x}<br>Total Profit: %{text}<extra></extra>"
         )
+
 
         fig = apply_common_layout(fig, "Total Profit by Month")
         fig.update_yaxes(tickprefix="$")
@@ -1527,7 +1529,8 @@ def show_chart2():
         fig.update_traces(
             mode="lines+markers+text",
             text=drill_df["Profit"].apply(format_k),
-            textposition="top center"
+            textposition="top center",
+            hovertemplate="Day: %{x}<br>Profit: %{text}<extra></extra>"
         )
 
         fig = apply_common_layout(fig, f"Daily Profit — {st.session_state.chart2_month}")
@@ -1553,8 +1556,8 @@ def show_chart3():
         fig = go.Figure()
 
         category_colors = {
-            "T-shirt": "#3b82f6",
             "Dress": "#f43f5e",
+            "T-shirt": "#3b82f6",
             "Jeans": "#8b5cf6"
         }
 
