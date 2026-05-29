@@ -807,12 +807,12 @@ questions = [
     "id": 5,
     "text": "What were the expenses in the month when the store revenues were the lowest, and which category's revenues decreased from that month to the following month?",
     "options": [
-        "$35K - $38K, T-Shirt",
-        "$40K - $42K, Jeans",
-        "$53K - $55K, Dress",
-        "$13K - $15K, Jeans"
+        "35K - 38K, T-Shirt",
+        "40K - 42K, Jeans",
+        "53K - 55K, Dress",
+        "13K - 15K, Jeans"
     ],
-    "correct_answer": "$40K - $42K, Jeans"
+    "correct_answer": "40K - 42K, Jeans"
     },
 
     {
@@ -2510,8 +2510,7 @@ elif st.session_state.screen == "experiment":
             q["options"],
             key=f"question_{q['id']}",
             label_visibility="collapsed",
-            index=None,
-            width="stretch"
+            index=None
         )
 
         if st.button("Submit Answer ✨", use_container_width=True):
