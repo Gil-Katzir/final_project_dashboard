@@ -807,12 +807,12 @@ questions = [
     "id": 5,
     "text": "What were the expenses in the month when the store revenues were the lowest, and which category's revenues decreased from that month to the following month?",
     "options": [
-        "$35K-$38K, T-Shirt",
-        "$40K-$42K, Jeans",
-        "$53K-$55K, Dress",
-        "$13K-$15K, Jeans"
+        "$35K-$38K and The Category is T-Shirt",
+        "$40K-$42K and The Category is Jeans",
+        "$53K-$55K and The Category is Dress",
+        "$13K-$15K and The Category is Jeans"
     ],
-    "correct_answer": "$40K-$42K, Jeans"
+    "correct_answer": "$40K-$42K and The Category is Jeans"
     },
 
     {
