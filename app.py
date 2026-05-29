@@ -804,10 +804,15 @@ questions = [
         "correct_answer": "June"
     },
     {
-        "id": 5,
-        "text": "What were the expenses in the month when the store revenues were the lowest, and which category's revenues decreased from that month to the following month?",
-        "options": ["$35K-$38K, T-Shirt", "$40K-$42K, Jeans", "$53K-$55K, Dress", "$13K-$15K, Jeans"],
-        "correct_answer": "$40K-$42K, Jeans"
+    "id": 5,
+    "text": "What were the expenses in the month when the store revenues were the lowest, and which category's revenues decreased from that month to the following month?",
+    "options": [
+        "$35K – $38K, T-Shirt",
+        "$40K – $42K, Jeans",
+        "$53K – $55K, Dress",
+        "$13K – $15K, Jeans"
+    ],
+    "correct_answer": "$40K – $42K, Jeans"
     },
 
     {
@@ -867,14 +872,14 @@ NEW_CHART_AT = {2: "Chart 2 added", 4: "Chart 3 added", 8: "Chart 4 added"}
 initial_comprehension_questions = [
     {
         "id": 100,
-        "text": "What is 10% of 105?",
+        "text": "?What is 10% of 105",
         "options": ["10.5", "15", "9.5", "12"],
         "correct_answer": "10.5",
         "question_type": "initial_comprehension"
     },
     {
         "id": 101,
-        "text": "What is 9 multiplied by 9 minus 2?",
+        "text": "?What is 9 multiplied by 9 minus 2",
         "options": ["79", "81", "77", "72"],
         "correct_answer": "79",
         "question_type": "initial_comprehension"
@@ -907,14 +912,14 @@ middle_attention_questions = [
 final_comprehension_questions = [
     {
         "id": 104,
-        "text": "What is 20% of 250?",
+        "text": "?What is 20% of 250",
         "options": ["40", "45", "50", "55"],
         "correct_answer": "50",
         "question_type": "final_comprehension"
     },
     {
         "id": 105,
-        "text": "What is 12 plus 18 divided by 3?",
+        "text": "?What is 12 plus 18 divided by 3",
         "options": ["10", "18", "20", "30"],
         "correct_answer": "18",
         "question_type": "final_comprehension"
@@ -1396,7 +1401,7 @@ def show_chart1():
         c1, c2 = st.columns([2.2, 1])
         with c1:
             selected_month = st.segmented_control(
-                "You may select a month for details and then click the magnifying glass ----->",
+                "You may select a month for details and then click the 🔍 ----->",
                 months_order,
                 key="chart1_month_segment",
                 selection_mode="single",
@@ -1480,7 +1485,7 @@ def show_chart2():
         c1, c2 = st.columns([2.2, 1])
         with c1:
             selected_month = st.segmented_control(
-                "You may select a month for details and then click the magnifying glass ----->",
+                "You may select a month for details and then click the 🔍 ----->",
                 months_order,
                 key="chart2_month_segment",
                 selection_mode="single",
@@ -1580,7 +1585,7 @@ def show_chart3():
 
         with c1:
             selected_category = st.segmented_control(
-                "To examine revenue vs. profit, you may select a category and then click the magnifying glass ----->",
+                "To examine revenue vs. profit, you may select a category and then click the 🔍 ----->",
                 ["T-shirt", "Dress", "Jeans"],
                 key="chart3_category_segment",
                 selection_mode="single",
@@ -1701,7 +1706,7 @@ def show_chart4():
         c1, c2 = st.columns([2.2, 1])
         with c1:
             selected_category = st.segmented_control(
-                "You may select a category and then click the magnifying glass ----->",
+                "You may select a category and then click the 🔍 ----->",
                 ["T-shirt", "Dress", "Jeans"],
                 key="chart4_category_segment",
                 selection_mode="single",
