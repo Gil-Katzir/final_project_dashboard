@@ -2510,7 +2510,8 @@ elif st.session_state.screen == "experiment":
             q["options"],
             key=f"question_{q['id']}",
             label_visibility="collapsed",
-            index=None
+            index=None,
+            width="stretch"
         )
 
         if st.button("Submit Answer ✨", use_container_width=True):
