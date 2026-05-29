@@ -542,21 +542,21 @@ st.markdown("""
     }
 
     .likert-banner {
-        background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 100%);
-        border: 1px solid #dbeafe;
-        border-radius: 20px;
-        padding: 18px 22px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 16px 20px;
         margin-bottom: 28px;
-        box-shadow: 0 8px 20px rgba(59,130,246,0.08);
+        box-shadow: none;
         direction: rtl;
         text-align: center;
         font-family: 'Varela Round', sans-serif;
     }
 
     .likert-banner-main {
-        font-size: 1.25rem;
+        font-size: 1.05rem;
         font-weight: 800;
-        color: #1e293b;
+        color: #334155;
         margin-bottom: 10px;
     }
 
@@ -570,12 +570,14 @@ st.markdown("""
 
     .likert-number {
         flex: 1;
-        background: #ffffff;
-        border: 1px solid #dbe4ee;
-        border-radius: 12px;
-        padding: 8px 0;
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        padding: 2px 0;
         font-weight: 800;
-        color: #334155;
+        color: #475569;
+        box-shadow: none;
+        cursor: default;
     }
 
     .likert-label-row {
@@ -2319,7 +2321,7 @@ elif st.session_state.screen == "post_experiment_survey":
 <div class="post-survey-subtitle">
 אנא דרג/י את התחושה שלך ביחס לכל אחת מהשאלות הבאות.
 <br>
-הינך מתבקש להזיז את הסקאלה בין 1 ל-7.
+מתחת לכל שאלה יש סקאלה - הינך מתבקש להזיז את הסקאלה בין 1 ל-7.
 </div>
 </div>""", unsafe_allow_html=True)
 
