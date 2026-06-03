@@ -1081,6 +1081,37 @@ for key, value in prev_defaults.items():
 def is_admin_participant() -> bool:
     return str(st.session_state.participant_id).strip() == "999"
 
+def assign_balanced_group():
+    try:
+        control_result = (
+            supabase
+            .table("sessions")
+            .select("session_id", count="exact")
+            .eq("experiment_group", "control")
+            .execute()
+        )
+
+        storytelling_result = (
+            supabase
+            .table("sessions")
+            .select("session_id", count="exact")
+            .eq("experiment_group", "storytelling")
+            .execute()
+        )
+
+        control_count = control_result.count or 0
+        storytelling_count = storytelling_result.count or 0
+
+        if control_count < storytelling_count:
+            return "control"
+        elif storytelling_count < control_count:
+            return "storytelling"
+        else:
+            return random.choice(["control", "storytelling"])
+
+    except Exception:
+        return random.choice(["control", "storytelling"])
+        
 
 def track_dashboard_click(action_type: str, action_value: str = ""):
     if not st.session_state.experiment_started:
@@ -1882,8 +1913,7 @@ if st.session_state.screen == "register":
                 if participant_id_input.strip() == "999":
                     st.session_state.experiment_group = manual_group
                 else:
-                    # Random assignment: 50% control, 50% storytelling
-                    st.session_state.experiment_group = random.choice(["control", "storytelling"])
+                    st.session_state.experiment_group = assign_balanced_group()
 
                 st.session_state.screen = "consent"
                 st.rerun()
