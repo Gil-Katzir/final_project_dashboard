@@ -2120,7 +2120,7 @@ elif st.session_state.screen == "instructions":
 </div>
 <div class="welcome-section-title">תגמול</div>
 <div class="welcome-text">
-במסגרת הניסוי יוגרלו שלושה פרסים בסך 300 ש"ח כל אחד, כאשר סיכויי הזכייה של כל משתתף נקבעים בהתאם למספר התשובות הנכונות שלו.
+במסגרת הניסוי יוגרלו שלושה פרסים בסך 100 דולר כל אחד, כאשר סיכויי הזכייה של כל משתתף נקבעים בהתאם למספר התשובות הנכונות ולא לפי הזמן.
 </div>
 <div class="welcome-section-title">משך הניסוי</div>
 <div class="welcome-text">
