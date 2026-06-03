@@ -939,7 +939,7 @@ final_comprehension_questions = [
         "id": 105,
         "text": "כמה זה 12 ועוד 18 חלקי 3?",
         "options": ["10", "18", "20", "30"],
-        "correct_answer": "18",
+        "correct_answer": "10",
         "question_type": "final_comprehension"
     },
 ]
