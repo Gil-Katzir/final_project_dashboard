@@ -16,7 +16,7 @@ from supabase import create_client, Client
 # Page config - must be first Streamlit command
 # -----------------------------
 st.set_page_config(
-    page_title="ניסוי ניתוח נתונים",
+    page_title="Data Analysis Experiment",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
@@ -28,6 +28,8 @@ supabase: Client = create_client(
     st.secrets["SUPABASE_URL"],
     st.secrets["SUPABASE_KEY"]
 )
+
+REDIRECT_URL = "https://dashboard-experiment.streamlit.app/"
 
 # -----------------------------
 # Styling
@@ -60,16 +62,16 @@ st.markdown("""
         background: linear-gradient(90deg, #1e293b, #3b82f6);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        direction: rtl;
-        text-align: right;
+        direction: ltr;
+        text-align: left;
     }
 
     .sub-title {
         font-size: 1.05rem;
         color: #64748b;
         margin-bottom: 2rem;
-        direction: rtl;
-        text-align: right;
+        direction: ltr;
+        text-align: left;
     }
 
     /* ---- Welcome screen ---- */
@@ -79,8 +81,8 @@ st.markdown("""
         border-radius: 28px;
         padding: 44px 52px;
         box-shadow: 0 20px 40px -10px rgba(0,0,0,0.08);
-        direction: rtl;
-        text-align: right;
+        direction: ltr;
+        text-align: left;
         max-width: 820px;
         margin: 0 auto;
     }
@@ -109,8 +111,8 @@ st.markdown("""
         font-weight: 700;
         color: #1e293b;
         margin: 1.4rem 0 0.45rem 0;
-        border-right: 4px solid #3b82f6;
-        padding-right: 10px;
+        border-left: 4px solid #3b82f6;
+        padding-left: 10px;
         font-family: 'Varela Round', sans-serif;
     }
 
@@ -124,7 +126,7 @@ st.markdown("""
 
     .welcome-highlight {
         background: #eff6ff;
-        border-right: 4px solid #3b82f6;
+        border-left: 4px solid #3b82f6;
         border-radius: 10px;
         padding: 13px 16px;
         color: #1e40af;
@@ -151,8 +153,8 @@ st.markdown("""
         border-radius: 20px;
         padding: 32px 36px;
         box-shadow: 0 10px 25px -5px rgba(0,0,0,0.07);
-        direction: rtl;
-        text-align: right;
+        direction: ltr;
+        text-align: left;
         max-width: 520px;
         margin: 0 auto;
     }
@@ -162,8 +164,8 @@ st.markdown("""
         font-weight: 700;
         color: #1e293b;
         margin-bottom: 1.4rem;
-        border-right: 4px solid #3b82f6;
-        padding-right: 10px;
+        border-left: 4px solid #3b82f6;
+        padding-left: 10px;
         font-family: 'Varela Round', sans-serif;
     }
 
@@ -203,10 +205,10 @@ st.markdown("""
         font-weight: 800;
         color: #1e293b;
         margin: 1.8rem 0 1.1rem 0;
-        padding-right: 12px;
-        border-right: 5px solid #3b82f6;
-        direction: rtl;
-        text-align: right;
+        padding-left: 12px;
+        border-left: 5px solid #3b82f6;
+        direction: ltr;
+        text-align: left;
         font-family: 'Varela Round', sans-serif;
     }
 
@@ -240,8 +242,8 @@ st.markdown("""
         font-weight: 800;
         color: #0f172a;
         margin-bottom: 0.9rem;
-        direction: rtl;
-        text-align: right;
+        direction: ltr;
+        text-align: left;
         font-family: 'Varela Round', sans-serif;
         letter-spacing: -0.02em;
     }
@@ -249,15 +251,15 @@ st.markdown("""
     .story-box {
         background: linear-gradient(180deg, #f8fbff 0%, #eef6ff 100%);
         border: 1px solid #dbeafe;
-        border-right: 4px solid #3b82f6;
+        border-left: 4px solid #3b82f6;
         border-radius: 14px;
         padding: 12px 15px;
         color: #1e40af;
         font-size: 0.93rem;
         line-height: 1.7;
         margin-bottom: 1.1rem;
-        direction: rtl;
-        text-align: right;
+        direction: ltr;
+        text-align: left;
         font-family: 'Varela Round', sans-serif;
     }
 
@@ -275,7 +277,7 @@ st.markdown("""
         margin-bottom: 1rem;
         box-shadow: 0 2px 10px rgba(16,185,129,0.35);
         animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
-        direction: rtl;
+        direction: ltr;
     }
 
     @keyframes popIn {
@@ -287,13 +289,13 @@ st.markdown("""
 
     /* ---- Modern radio answers - Fixed Width & Alignment ---- */
     
-    /* מוודא שהקומפוננטה עצמה תופסת 100% */
+    /* Ensures the component takes full width */
     div[data-testid="stRadio"] {
         width: 100% !important;
-        direction: rtl !important;
+        direction: ltr !important;
     }
 
-    /* מוודא שהמיכל הפנימי (הקבוצה) תופס 100% */
+    /* Ensures the inner radio group takes full width */
     div[data-testid="stRadio"] > div[role="radiogroup"] {
         width: 100% !important;
         display: flex !important;
@@ -301,9 +303,9 @@ st.markdown("""
         gap: 12px !important;
     }
 
-    /* הכפתור עצמו - הופך אותו לבלוק מלא שמתנהג כמו כפתור */
+    /* Radio option as a full-width button */
     div[data-testid="stRadio"] [role="radiogroup"] label {
-        display: flex !important; /* שינוי מ-block ל-flex */
+        display: flex !important; /* changed from block to flex */
         width: 100% !important;
         min-width: 100% !important;
         max-width: 100% !important;
@@ -318,31 +320,31 @@ st.markdown("""
         cursor: pointer !important;
         transition: all 0.2s ease !important;
         
-        /* יישור לימין */
+        /* left alignment */
         justify-content: flex-start !important;
-        text-align: right !important;
-        direction: rtl !important;
+        text-align: left !important;
+        direction: ltr !important;
         box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
     }
 
-    /* שינוי צבע ב-Hover */
+    /* Hover color change */
     div[data-testid="stRadio"] [role="radiogroup"] label:hover {
         border-color: #3b82f6 !important;
         background: #f8fbff !important;
         box-shadow: 0 6px 18px rgba(59, 130, 246, 0.10) !important;
     }
 
-    /* הסתרת עיגול הבחירה המקורי */
+    /* Hide original radio circle */
     div[data-testid="stRadio"] input[type="radio"] {
         display: none !important;
     }
 
-    /* עיצוב הטקסט בתוך הכפתור */
+    /* Style text inside the button */
     div[data-testid="stRadio"] [role="radiogroup"] label p,
     div[data-testid="stRadio"] [role="radiogroup"] label span {
         width: 100% !important;
-        text-align: right !important;
-        direction: rtl !important;
+        text-align: left !important;
+        direction: ltr !important;
         font-family: 'Varela Round', sans-serif !important;
         font-size: 0.98rem !important;
         color: #1e293b !important;
@@ -353,7 +355,7 @@ st.markdown("""
     
 
 
-    /* כל סוגי הכפתורים ב-Streamlit */
+    /* All Streamlit button types */
     div.stButton > button,
     div[data-testid="stButton"] button,
     button[kind="primary"],
@@ -370,7 +372,7 @@ st.markdown("""
         transition: all 0.18s ease;
     }
 
-    /* הטקסט שבתוך הכפתור */
+    /* Text inside the button */
     div.stButton > button *,
     div[data-testid="stButton"] button *,
     button[kind="primary"] *,
@@ -398,12 +400,12 @@ st.markdown("""
         font-size: 0.87rem;
         margin-top: 1.1rem;
         display: inline-block;
-        direction: rtl;
+        direction: ltr;
     }
 
     .rtl-title, .rtl-question, .rtl-label {
-        direction: rtl;
-        text-align: right;
+        direction: ltr;
+        text-align: left;
     }
 
     /* ---- Thank-you screen ---- */
@@ -417,7 +419,7 @@ st.markdown("""
         max-width: 620px;
         margin: 4rem auto;
         animation: fadeIn 0.6s ease;
-        direction: rtl;
+        direction: ltr;
         font-family: 'Varela Round', sans-serif;
     }
 
@@ -438,56 +440,56 @@ st.markdown("""
         font-family: 'Varela Round', sans-serif;
     }
 
-        /* selectbox טקסט כללי */
+        /* General selectbox text */
     div[data-testid="stSelectbox"] {
-        direction: rtl;
-        text-align: right;
+        direction: ltr;
+        text-align: left;
         font-family: 'Varela Round', sans-serif;
     }
 
-    /* הטקסט שנבחר */
+    /* Selected text */
     div[data-testid="stSelectbox"] div {
-        text-align: right !important;
-        direction: rtl;
+        text-align: left !important;
+        direction: ltr;
         font-family: 'Varela Round', sans-serif !important;
     }
 
     /* dropdown options */
     ul[role="listbox"] li {
-        text-align: right !important;
-        direction: rtl;
+        text-align: left !important;
+        direction: ltr;
         font-family: 'Varela Round', sans-serif !important;
     }
 
-        /* תיבת הבחירה עצמה */
+        /* Selectbox itself */
     div[data-testid="stSelectbox"] > div {
         border-radius: 12px;
     }
 
-    /* כל ה-text input */
+    /* All text inputs */
     div[data-testid="stTextInput"] {
-        direction: rtl;
-        text-align: right;
+        direction: ltr;
+        text-align: left;
         font-family: 'Varela Round', sans-serif;
     }
 
-    /* ה-input עצמו (מה שכותבים בו) */
+    /* Input field text */
     div[data-testid="stTextInput"] input {
-        text-align: right !important;
-        direction: rtl;
+        text-align: left !important;
+        direction: ltr;
         font-family: 'Varela Round', sans-serif !important;
     }
 
-    /* ה-placeholder */
+    /* Placeholder */
     div[data-testid="stTextInput"] input::placeholder {
-        text-align: right;
-        direction: rtl;
+        text-align: left;
+        direction: ltr;
         font-family: 'Varela Round', sans-serif;
     }
 
     div[data-testid="stTextInput"] label {
-        direction: rtl;
-        text-align: right;
+        direction: ltr;
+        text-align: left;
         font-family: 'Varela Round', sans-serif;
     }
 
@@ -516,8 +518,8 @@ st.markdown("""
         border-radius: 28px;
         padding: 38px 44px;
         box-shadow: 0 20px 40px -10px rgba(0,0,0,0.08);
-        direction: rtl;
-        text-align: right;
+        direction: ltr;
+        text-align: left;
         max-width: 900px;
         margin: 2rem auto;
         font-family: 'Varela Round', sans-serif;
@@ -548,7 +550,7 @@ st.markdown("""
         padding: 16px 20px;
         margin-bottom: 28px;
         box-shadow: none;
-        direction: rtl;
+        direction: ltr;
         text-align: center;
         font-family: 'Varela Round', sans-serif;
     }
@@ -564,7 +566,7 @@ st.markdown("""
         display: flex;
         justify-content: space-between;
         gap: 8px;
-        direction: rtl;
+        direction: ltr;
         margin-top: 12px;
     }
 
@@ -587,7 +589,7 @@ st.markdown("""
         color: #475569;
         font-weight: 700;
         font-size: 0.95rem;
-        direction: rtl;
+        direction: ltr;
     }
 
     .post-survey-question {
@@ -596,8 +598,8 @@ st.markdown("""
         border-radius: 18px;
         padding: 18px 22px;
         margin-bottom: 20px;
-        direction: rtl;
-        text-align: right;
+        direction: ltr;
+        text-align: left;
         font-family: 'Varela Round', sans-serif;
     }
 
@@ -613,7 +615,7 @@ st.markdown("""
 .opening-wrapper {
     max-width: 760px;
     margin: 2.5rem auto 1.5rem auto;
-    direction: rtl;
+    direction: ltr;
     text-align: center;
 }
 
@@ -688,35 +690,12 @@ st.markdown("""
     font-family: 'Varela Round', sans-serif;
 }
 
-/* consent radio - LTR */
-div[data-testid="stRadio"]:has(input[name="consent_choice"]) {
-    direction: ltr !important;
-    text-align: left !important;
-}
-
-div[data-testid="stRadio"]:has(input[name="consent_choice"]) > div[role="radiogroup"] {
-    direction: ltr !important;
-    align-items: stretch !important;
-}
-
-div[data-testid="stRadio"]:has(input[name="consent_choice"]) [role="radiogroup"] label {
-    direction: ltr !important;
-    text-align: left !important;
-    justify-content: flex-start !important;
-    flex-direction: row !important;
-}
-
-div[data-testid="stRadio"]:has(input[name="consent_choice"]) [role="radiogroup"] label p,
-div[data-testid="stRadio"]:has(input[name="consent_choice"]) [role="radiogroup"] label span {
-    direction: ltr !important;
-    text-align: left !important;
-}
 
 /* segmented control - chart filters */
 div[data-testid="stSegmentedControl"] {
     font-family: 'Varela Round', sans-serif !important;
-    direction: rtl;
-    text-align: right;
+    direction: ltr;
+    text-align: left;
 }
 
 div[data-testid="stSegmentedControl"] label,
@@ -804,167 +783,172 @@ monthly_discount_total = monthly_discount_total.sort_values("Month")
 questions = [
     {
         "id": 1,
-        "text": "בחודש מאי - מה היה היום בו הכנסות החנות היו הגבוהות ביותר?",
+        "text": "In May, on which day were the store revenues the highest?",
         "options": ["20", "16", "3", "10"],
         "correct_answer": "16"
     },
     {
         "id": 2,
-        "text": "באיזה חודש הכנסות החנות בתחילת החודש היו גבוהות מההכנסות בסוף החודש?",
-        "options": ["פברואר", "אפריל", "מאי", "מרץ"],
-        "correct_answer": "פברואר"
+        "text": "In which month were the store revenues at the beginning of the month higher than at the end of the month?",
+        "options": ["February", "April", "May", "March"],
+        "correct_answer": "February"
     },
     {
         "id": 3,
-        "text": "מה היו הוצאות החנות בקירוב בחודש מרץ?",
+        "text": "What were the store expenses approximately in March?",
         "options": ["35K-38K", "49K-55K", "43K-45K", "13K-15K"],
         "correct_answer": "43K-45K"
     },
     {
         "id": 4,
-        "text": "באיזה חודש הוצאות החנות היו הגבוהות ביותר?",
-        "options": ["ינואר", "יוני", "מרץ", "אפריל"],
-        "correct_answer": "יוני"
+        "text": "In which month were the store expenses the highest?",
+        "options": ["January", "June", "March", "April"],
+        "correct_answer": "June"
     },
     {
-        "id": 5,
-        "text": "מהם ההוצאות בחודש שבו ההכנסות של החנות היו הנמוכות ביותר, ומי הקטגוריה שההכנסות שלה ירדו מחודש זה לחודש העוקב לו?",
-        "options": ["35K-38K,  T-Shirt", "40K-42K,  Jeans", "53K-55K,  Dress", "13K-15K,   Jeans"],
-        "correct_answer": "40K-42K,  Jeans"
+    "id": 5,
+    "text": "What were the expenses in the month when the store revenues were the lowest, and which category's revenues decreased from that month to the following month?",
+    "options": [
+        "35K - 38K, T-Shirt",
+        "40K - 42K, Jeans",
+        "53K - 55K, Dress",
+        "13K - 15K, Jeans"
+    ],
+    "correct_answer": "40K - 42K, Jeans"
     },
 
     {
         "id": 6,
-        "text": "בחודש שהכנסות החנות היו הגבוהות ביותר, מה היו ההכנסות מקטגוריית T-Shirt?",
+        "text": "In the month when the store revenues were the highest, what were the revenues from the T-Shirt category?",
         "options": ["49K", "18K", "18.5K", "15.5K"],
         "correct_answer": "18.5K"
     },
     {
         "id": 7,
-        "text": "בחודש שבו ההכנסות החנות היו בין 57K-60K והרווחים היו בין 11K-12K, מה היו ההכנסות בקטגוריית DRESS?",
+        "text": "In the month when store revenues were between $57K and $60K and profits were between $11K and $12K, what were the revenues from the Dress category?",
         "options": ["24K", "25.5K", "18.3K", "27K"],
         "correct_answer": "25.5K"
     },
     {
         "id": 8,
-        "text": "בקטגוריה שבה ישנה מגמה הפוכה בין הרווחים להכנסות, בחודש בו הרווחים מהקטגוריה היו 4.62K$ מה היה הרווח הכולל של החנות?",
-        "options": ["56.1k $", "12.86K $", "55k $", "לא ניתן לדעת"],
-        "correct_answer": "12.86K $"
+        "text": "In the category where profits and revenues show an opposite trend, in the month when the category profit was $4.62K, what was the total store profit?",
+        "options": ["$56.10K", "$12.86K", "$55.00K", "Cannot be determined"],
+        "correct_answer": "$12.86K"
     },
     {
         "id": 9,
-        "text": "בחודש בו הפרשי ההכנסות בין קטגוריית T-Shirt לקטגוריית Jeans היו 3K$ ,מי הקטגורייה בה אחוז ההוצאות על הקמפיניים היה הגבוה ביותר?",
+        "text": "In the first month when the revenue difference between the T-Shirt and Jeans categories was $3K, which category had the highest campaign expense percentage?",
         "options": [
             "T-Shirt",
             "Dress",
             "Jeans",
-            "לא ניתן לדעת"
+            "Cannot be determined"
         ],
         "correct_answer": "Dress"
     },
     {
         "id": 10,
-        "text": "מהי המסקנה העסקית המרכזית מהנתונים?",
+        "text": "What is the main business conclusion from the data?",
         "options": [
-            "יש להפחית בהשקעה בהוצאות על קמפיניים בכל אחת מהקטגוריות בחנות",
-            "עלייה בהכנסות החברה מחודש יולי צפויה להגדיל לאורך זמן את הרווחים של החנות",
-            "הגידול בהוצאות על הקמפיינים בקטגוריה מסויימת עשוי לגרום לירידה ברווחים",
-            "קטגוריית החולצות והג'ינסים אינן מניבות מספיק רווחים לחנות, יש לנקוט בפעולות לשיפור"
+            "The store should reduce campaign spending across all categories",
+            "An increase in company revenues from July is expected to increase store profits over time",
+            "An increase in campaign expenses in a specific category may lead to a decrease in profits",
+            "The T-Shirt and Jeans categories are not generating enough profit for the store, and improvement actions should be taken"
         ],
-        "correct_answer": "הגידול בהוצאות על הקמפיינים בקטגוריה מסויימת עשוי לגרום לירידה ברווחים"
+        "correct_answer": "An increase in campaign expenses in a specific category may lead to a decrease in profits"
     },
 ]
 
 chart_narratives = {
-    "chart1": "📈 בחינת מצב של הכנסות החברה: הגרף מציג את סך ההכנסות החודשיות של חנות הבגדים לאורך זמן.",
-    "chart2": "💰 על מנת להמשיך השלים את התמונה, כעת מוצגים בגרף זה גם הרווח הנקי של החברה לאורך זמן",
-    "chart3": "🏷️ לשם העמקת הבחינה, מוצגות ההכנסות של חנות הבגדים בחלוקה לפי קטגוריות הלבוש השונות בחנות",
-    "chart4": "📉 בגרף מוצג הרווח הכולל של החנות, לצד שיעור ממוצע של הוצאות על קמפיינים הכולל לאורך זמן. ניתן לבחון לפי קטגוריה לבחירתך."
+    "chart1": "📈 Revenue overview: This chart presents the clothing store’s total monthly revenues over time.",
+    "chart2": "💰 To complete the picture, this chart now presents the company’s net profit over time.",
+    "chart3": "🏷️ To deepen the analysis, the store’s revenues are displayed by clothing category.",
+    "chart4": "📉 This chart presents the store’s total profit alongside the average campaign expense percentage over time. You can examine the data by selected category."
 }
 
-# שאלות שבהן נוסף גרף (storytelling) — מפתח = index שאלה (0-based)
-NEW_CHART_AT = {2: "גרף 2 נוסף", 4: "גרף 3 נוסף", 9: "גרף 4 נוסף"}
+# Questions where a new chart is added (storytelling) — key = question index (0-based)
+NEW_CHART_AT = {2: "Chart 2 added", 4: "Chart 3 added", 8: "Chart 4 added"}
 
-# שאלות קליטה בתחילת הניסוי
+# Initial comprehension questions
 # IDs 100-101
 initial_comprehension_questions = [
     {
         "id": 100,
-        "text": "כמה זה 10% מתוך 105?",
+        "text": "?What is 10% of 105",
         "options": ["10.5", "15", "9.5", "12"],
         "correct_answer": "10.5",
         "question_type": "initial_comprehension"
     },
     {
         "id": 101,
-        "text": "כמה זה 9 כפול 9 פחות 2?",
+        "text": "?What is 9 multiplied by 9 minus 2",
         "options": ["79", "81", "77", "72"],
         "correct_answer": "79",
         "question_type": "initial_comprehension"
     },
 ]
 
-# שאלות קשב באמצע הניסוי
+# Middle attention questions
 # IDs 102-103
 middle_attention_questions = [
     {
         "id": 102,
-        "text": "נא לבחור בתשובה \"אפשרות 3\" בשאלה זו.",
-        "options": ["אפשרות 1", "אפשרות 2", "אפשרות 3", "אפשרות 4"],
-        "correct_answer": "אפשרות 3",
+        "text": "Please select the answer \"Option 3\" for this question.",
+        "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
+        "correct_answer": "Option 3",
         "show_after_question_index": 4,
         "question_type": "middle_attention"
     },
     {
         "id": 103,
-        "text": "יש לבחור בתשובה \"כחול\".",
-        "options": ["אדום", "ירוק", "כחול", "צהוב"],
-        "correct_answer": "כחול",
+        "text": "Please select the answer \"Blue\".",
+        "options": ["Red", "Green", "Blue", "Yellow"],
+        "correct_answer": "Blue",
         "show_after_question_index": 8,
         "question_type": "middle_attention"
     },
 ]
 
-# שאלות קליטה בסוף הניסוי
+# Final comprehension questions
 # IDs 104-105
 final_comprehension_questions = [
     {
         "id": 104,
-        "text": "כמה זה 20% מתוך 250?",
+        "text": "?What is 20% of 250",
         "options": ["40", "45", "50", "55"],
         "correct_answer": "50",
         "question_type": "final_comprehension"
     },
     {
         "id": 105,
-        "text": "כמה זה 12 ועוד 18 חלקי 3?",
+        "text": "?What is 12 plus 18 divided by 3",
         "options": ["10", "18", "20", "30"],
         "correct_answer": "10",
         "question_type": "final_comprehension"
     },
 ]
 
-# שאלות סיכום בסוף הניסוי
+# Post-experiment survey questions
 # IDs 110-113
 post_experiment_survey_questions = [
     {
         "id": 110,
-        "text": "עד כמה נהנית מהמשימה?",
+        "text": "To what extent did you enjoy the task?",
         "question_type": "post_survey_enjoyment"
     },
     {
         "id": 111,
-        "text": "עד כמה אתה חושב שהצלחת בניסוי?",
+        "text": "To what extent do you think you succeeded in the experiment?",
         "question_type": "post_survey_perceived_success"
     },
     {
         "id": 112,
-        "text": "עד כמה הרגשת עומס מידע במהלך הניסוי?",
+        "text": "To what extent did you feel information overload during the experiment?",
         "question_type": "post_survey_information_overload"
     },
     {
         "id": 113,
-        "text": "עד כמה הרגשת כי הנתונים הוצגו כחלק מסיפור או רצף רעיוני?",
+        "text": "To what extent did you feel that the data were presented as part of a story or conceptual sequence?",
         "question_type": "post_survey_storytelling_feeling"
     },
 ]
@@ -1001,7 +985,7 @@ defaults = {
 
     "post_experiment_survey_answers": [],
 
-    # נשארים לצורך תאימות לאחור אם השתמשת בהם בסיכומים ישנים
+    # Kept for backward compatibility with older summaries
     "comprehension_current": 0,
     "comprehension_answers": [],
     "attention_check_shown": False,
@@ -1044,12 +1028,19 @@ for key, value in defaults.items():
         st.session_state[key] = value
 
 # -----------------------------
-# Read redirect_url from URL
+# Read parameters from URL
+# Example:
+# ?participant_id=123&redirect_url=https://example.com
 # -----------------------------
 try:
     query_params = st.query_params
+
+    if "participant_id" in query_params and st.session_state.participant_id == "":
+        st.session_state.participant_id = str(query_params["participant_id"]).strip()
+
     if "redirect_url" in query_params and st.session_state.redirect_url == "":
-        st.session_state.redirect_url = query_params["redirect_url"]
+        st.session_state.redirect_url = str(query_params["redirect_url"]).strip()
+
 except Exception:
     pass
 
@@ -1081,6 +1072,23 @@ for key, value in prev_defaults.items():
 def is_admin_participant() -> bool:
     return str(st.session_state.participant_id).strip() == "999"
 
+
+def track_dashboard_click(action_type: str, action_value: str = ""):
+    if not st.session_state.experiment_started:
+        return
+    if st.session_state.current_question >= len(questions):
+        return
+    st.session_state.dashboard_interaction_clicks += 1
+    st.session_state.interaction_log.append({
+        "session_id": st.session_state.session_id,
+        "participant_id": st.session_state.participant_id,
+        "experiment_group": st.session_state.experiment_group,
+        "timestamp": round(time.time(), 3),
+        "question_index_at_time": st.session_state.current_question + 1,
+        "action_type": action_type,
+        "action_value": action_value
+    })
+
 def assign_balanced_group():
     try:
         control_result = (
@@ -1109,26 +1117,24 @@ def assign_balanced_group():
         else:
             return random.choice(["control", "storytelling"])
 
-    except Exception:
+    except Exception as e:
+        st.error("Error counting experiment groups from Supabase")
+        st.code(str(e))
         return random.choice(["control", "storytelling"])
-        
 
-def track_dashboard_click(action_type: str, action_value: str = ""):
-    if not st.session_state.experiment_started:
-        return
-    if st.session_state.current_question >= len(questions):
-        return
-    st.session_state.dashboard_interaction_clicks += 1
-    st.session_state.interaction_log.append({
-        "session_id": st.session_state.session_id,
-        "participant_id": st.session_state.participant_id,
-        "experiment_group": st.session_state.experiment_group,
-        "timestamp": round(time.time(), 3),
-        "question_index_at_time": st.session_state.current_question + 1,
-        "action_type": action_type,
-        "action_value": action_value
-    })
 
+def save_initial_session_to_db():
+    try:
+        supabase.table("sessions").upsert({
+            "session_id": str(st.session_state.session_id),
+            "participant_id": str(st.session_state.participant_id),
+            "experiment_group": str(st.session_state.experiment_group),
+            "started_at": db_israel_time()
+        }, on_conflict="session_id").execute()
+
+    except Exception as e:
+        st.error("Error saving initial session")
+        st.code(str(e))
 
 def track_filter_change(widget_key: str, action_type: str):
     if not st.session_state.experiment_started:
@@ -1143,8 +1149,8 @@ def track_filter_change(widget_key: str, action_type: str):
     if "tracked_filters_initialized" not in st.session_state:
         st.session_state.tracked_filters_initialized = {}
 
-    # אם הפילטר הזה עדיין לא הופיע קודם במסך —
-    # רק נאתחל אותו ולא נספור אינטראקציה
+    # If this filter has not appeared on the screen before —
+    # Initialize it only and do not count an interaction
     if not st.session_state.tracked_filters_initialized.get(widget_key, False):
         st.session_state[prev_key] = current_val
         st.session_state.tracked_filters_initialized[widget_key] = True
@@ -1152,7 +1158,7 @@ def track_filter_change(widget_key: str, action_type: str):
 
     prev_val = st.session_state.get(prev_key)
 
-    # סופרים רק אם המשתתף באמת שינה את הערך
+    # Count only if the participant actually changed the value
     if current_val != prev_val:
         track_dashboard_click(action_type, f"{widget_key}={current_val}")
         st.session_state[prev_key] = current_val
@@ -1180,7 +1186,7 @@ def build_export_df(total_duration: float) -> pd.DataFrame:
         "final_comprehension_answers": str(st.session_state.final_comprehension_answers),
         "post_experiment_survey_answers": str(st.session_state.post_experiment_survey_answers),
 
-        # נשארים לצורך תאימות לאחור
+        # Kept for backward compatibility
         "comprehension_answers": str(st.session_state.comprehension_answers),
         "attention_check_answer": st.session_state.attention_check_answer,
         "attention_check_is_correct": st.session_state.attention_check_is_correct,
@@ -1239,7 +1245,7 @@ def save_session_to_db(total_duration):
         )
         return True, result
     except Exception as e:
-        st.error("שגיאה בשמירת session")
+        st.error("Error saving session")
         st.code(str(e))
         return False, None
 
@@ -1295,7 +1301,7 @@ def save_responses_to_db():
         result = supabase.table("responses").insert(rows).execute()
         return True, result
     except Exception as e:
-        st.error("שגיאה בשמירת responses")
+        st.error("Error saving responses")
         st.code(str(e))
         return False, None
 
@@ -1336,6 +1342,7 @@ def category_monthly_totals(category_name):
     )
     d["Month"] = pd.Categorical(d["Month"], categories=months_order, ordered=True)
     return d.sort_values("Month")
+
 
 def format_k(value):
     return f"{value / 1000:.2f}K"
@@ -1415,10 +1422,9 @@ def panel_header(title: str, narrative: str):
 # Chart renderers
 # -----------------------------
 def show_chart1():
-    panel_header("הכנסות לפי חודש", chart_narratives["chart1"])
+    panel_header("Revenue by Month", chart_narratives["chart1"])
 
     if not st.session_state.chart1_drilled:
-
         fig = px.line(
             monthly_total,
             x="Month",
@@ -1433,7 +1439,8 @@ def show_chart1():
             marker=dict(size=7, line=dict(width=2, color="white")),
             text=monthly_total["Total Revenue"].apply(format_k),
             textposition="top center",
-            mode="lines+markers+text"
+            mode="lines+markers+text",
+            hovertemplate="Month: %{x}<br>Total Revenue: %{text}<extra></extra>"
         )
 
         fig = apply_common_layout(fig, "Total Revenue by Month")
@@ -1448,8 +1455,8 @@ def show_chart1():
 
         c1, c2 = st.columns([2.2, 1])
         with c1:
-             selected_month = st.segmented_control(
-                "ביכולתך לבחור חודש לפירוט וללחוץ  על זכוכית המגדלת ----->",
+            selected_month = st.segmented_control(
+                "You may select a month for details and then click the 🔍 ----->",
                 months_order,
                 key="chart1_month_segment",
                 selection_mode="single",
@@ -1472,13 +1479,14 @@ def show_chart1():
             drill_df,
             x="Day",
             y="Revenue",
-            color_discrete_sequence=['#60a5fa']
+            color_discrete_sequence=["#60a5fa"]
         )
 
         fig.update_traces(
             mode="lines+markers+text",
             text=drill_df["Revenue"].apply(format_k),
-            textposition="top center"
+            textposition="top center",
+            hovertemplate="Day: %{x}<br>Revenue: %{text}<extra></extra>"
         )
 
         fig = apply_common_layout(fig, f"Daily Revenue — {st.session_state.chart1_month}")
@@ -1491,14 +1499,14 @@ def show_chart1():
 
         st.plotly_chart(fig, use_container_width=True)
 
-        if st.button("⬅️ חזרה", key="chart1_back_btn", use_container_width=True):
+        if st.button("⬅️ Back", key="chart1_back_btn", use_container_width=True):
             st.session_state.chart1_drilled = False
             track_dashboard_click("chart1_back", st.session_state.chart1_month)
             st.rerun()
 
 
 def show_chart2():
-    panel_header("רווחים נטו לפי חודש", chart_narratives["chart2"])
+    panel_header("Net Profit by Month", chart_narratives["chart2"])
 
     if not st.session_state.chart2_drilled:
         fig = px.line(
@@ -1519,7 +1527,6 @@ def show_chart2():
             hovertemplate="Month: %{x}<br>Total Profit: %{text}<extra></extra>"
         )
 
-
         fig = apply_common_layout(fig, "Total Profit by Month")
         fig.update_yaxes(tickprefix="$")
 
@@ -1532,8 +1539,8 @@ def show_chart2():
 
         c1, c2 = st.columns([2.2, 1])
         with c1:
-             selected_month = st.segmented_control(
-                "ביכולתך לבחור חודש לפירוט וללחוץ על זכוכית המגדלת ----->",
+            selected_month = st.segmented_control(
+                "You may select a month for details and then click the 🔍 ----->",
                 months_order,
                 key="chart2_month_segment",
                 selection_mode="single",
@@ -1576,14 +1583,14 @@ def show_chart2():
 
         st.plotly_chart(fig, use_container_width=True)
 
-        if st.button("⬅️ חזרה", key="chart2_back_btn", use_container_width=True):
+        if st.button("⬅️ Back", key="chart2_back_btn", use_container_width=True):
             st.session_state.chart2_drilled = False
             track_dashboard_click("chart2_back", st.session_state.chart2_month)
             st.rerun()
 
 
 def show_chart3():
-    panel_header("הכנסות לפי קטגוריה", chart_narratives["chart3"])
+    panel_header("Revenue by Category", chart_narratives["chart3"])
 
     if not st.session_state.chart3_drilled:
         fig = go.Figure()
@@ -1633,7 +1640,7 @@ def show_chart3():
 
         with c1:
             selected_category = st.segmented_control(
-                "לבחינת רווח מול הכנסות ביכולתך לבחור קטגוריה וללחוץ על זכוכית המגדלת ----->",
+                "To examine revenue vs. profit, you may select a category and then click the 🔍 ----->",
                 ["T-shirt", "Dress", "Jeans"],
                 key="chart3_category_segment",
                 selection_mode="single",
@@ -1642,7 +1649,7 @@ def show_chart3():
 
         with c2:
             st.write("")
-            if st.button("הכנסות vs. רווח 🔍", key="chart3_drill_btn", use_container_width=True):
+            if st.button("Revenue vs. Profit 🔍", key="chart3_drill_btn", use_container_width=True):
                 if selected_category is not None:
                     st.session_state.chart3_category = selected_category
                     st.session_state.chart3_drilled = True
@@ -1695,14 +1702,14 @@ def show_chart3():
 
         st.plotly_chart(fig, use_container_width=True)
 
-        if st.button("⬅️ חזרה", key="chart3_back_btn", use_container_width=True):
+        if st.button("⬅️ Back", key="chart3_back_btn", use_container_width=True):
             st.session_state.chart3_drilled = False
             track_dashboard_click("chart3_back", st.session_state.chart3_category)
             st.rerun()
 
 
 def show_chart4():
-    panel_header("רווחים וממוצע אחוזי השקעה בקמפיינים", chart_narratives["chart4"])
+    panel_header("Profit and Average Campaign Expense Percentage", chart_narratives["chart4"])
 
     if not st.session_state.chart4_drilled:
         fig = make_subplots(specs=[[{"secondary_y": True}]])
@@ -1752,10 +1759,9 @@ def show_chart4():
         st.plotly_chart(fig, use_container_width=True)
 
         c1, c2 = st.columns([2.2, 1])
-
         with c1:
             selected_category = st.segmented_control(
-                "ביכולתך לבחור קטגוריה וללחוץ על זכוכית המגדלת ----->",
+                "You may select a category and then click the 🔍 ----->",
                 ["T-shirt", "Dress", "Jeans"],
                 key="chart4_category_segment",
                 selection_mode="single",
@@ -1777,7 +1783,7 @@ def show_chart4():
         fig = make_subplots(specs=[[{"secondary_y": True}]])
 
         fig.add_trace(
-           go.Bar(
+            go.Bar(
                 x=drill_df["Month"],
                 y=drill_df["Profit"],
                 name="Profit",
@@ -1824,11 +1830,10 @@ def show_chart4():
 
         st.plotly_chart(fig, use_container_width=True)
 
-        if st.button("⬅️ חזרה", key="chart4_back_btn", use_container_width=True):
+        if st.button("⬅️ Back", key="chart4_back_btn", use_container_width=True):
             st.session_state.chart4_drilled = False
             track_dashboard_click("chart4_back", st.session_state.chart4_category)
             st.rerun()
-
 
 def show_or_empty(show_flag, func, is_storytelling=False):
     if show_flag:
@@ -1860,20 +1865,20 @@ if st.session_state.screen == "register":
 <div class="opening-hero">
 
 <div class="opening-title">
-ברוכים הבאים ל<span>ניסוי ניתוח נתונים</span>
+Welcome to the <span>Data Analysis Experiment</span>
 </div>
 
 <div class="opening-subtitle">
-במהלך הניסוי יוצג בפניך דשבורד אינטראקטיבי של חנות אופנה.
-המטרה היא לענות על שאלות המבוססות על הנתונים המוצגים.
-במסכים הבאים יינתן הסבר נוסף על מהלך הניסוי.
-אנא הזן את מספר המשתתף שקיבלת במקום המיועד במסך - 
+During the experiment, you will be presented with an interactive dashboard of a fashion store.
+Your task is to answer questions based on the data displayed.
+The following screens will provide additional information about the experiment process.
+Please enter the participant number you received in the designated field below.
 </div>
 
 <div class="opening-info-row">
-<div class="opening-info-pill">⏱️ משך משוער: כ-20 דקות</div>
-<div class="opening-info-pill">📊 דשבורד אינטראקטיבי</div>
-<div class="opening-info-pill">🔒 הנתונים נשמרים באופן אנונימי</div>
+<div class="opening-info-pill">⏱️ Estimated duration: about 20 minutes</div>
+<div class="opening-info-pill">📊 Interactive dashboard</div>
+<div class="opening-info-pill">🔒 Data are stored anonymously</div>
 </div>
 </div>
 </div>""", unsafe_allow_html=True)
@@ -1881,7 +1886,7 @@ if st.session_state.screen == "register":
     st.markdown("""
 <div style="max-width:520px;margin:1.5rem auto 1rem auto;">
 <div class="reg-card">
-<div class="opening-form-title">התחלת הניסוי</div>
+<div class="opening-form-title">Start the Experiment</div>
 </div>
 </div>
 """, unsafe_allow_html=True)
@@ -1889,31 +1894,40 @@ if st.session_state.screen == "register":
     col_l, col_form, col_r = st.columns([1, 2, 1])
 
     with col_form:
-        participant_id_input = st.text_input(
-            "מספר משתתף",
-            placeholder="הזינו את מספר המשתתף"
-        )
+        participant_id_input = st.session_state.participant_id
+
+        if participant_id_input:
+            st.success(f"Participant ID detected: {participant_id_input}")
+        else:
+            st.error("Participant ID is missing from the URL.")
 
         manual_group = None
 
         if participant_id_input.strip() == "999":
             manual_group = st.selectbox(
-                "קבוצת ניסוי לבדיקה",
+                "Test experiment group",
                 ["control", "storytelling"]
             )
 
         st.write("")
 
-        if st.button("המשך לטופס ההסכמה ▶", use_container_width=True):
-            if participant_id_input.strip() == "":
-                st.warning("יש להזין מספר משתתף")
+        if st.button("Continue to Consent Form ▶", use_container_width=True):
+            if participant_id_input == "":
+                st.warning("Participant ID is missing from the URL.")
             else:
-                st.session_state.participant_id = participant_id_input.strip()
+                st.session_state.participant_id = participant_id_input
 
-                if participant_id_input.strip() == "999":
+                if participant_id_input == "999":
                     st.session_state.experiment_group = manual_group
                 else:
                     st.session_state.experiment_group = assign_balanced_group()
+
+                    supabase.table("sessions").upsert({
+                        "session_id": str(st.session_state.session_id),
+                        "participant_id": str(st.session_state.participant_id),
+                        "experiment_group": str(st.session_state.experiment_group),
+                        "started_at": db_israel_time()
+                    }, on_conflict="session_id").execute()
 
                 st.session_state.screen = "consent"
                 st.rerun()
@@ -1944,7 +1958,7 @@ Informed Consent to Participate in a Study
 <li>There is no time limit for completing the study, which should take about 15 minutes.</li>
 <li>The study has been approved by the institutional ethics committee of the Department of Industrial Engineering and Management at Ben-Gurion University.</li>
 <li>If you have any questions about the study, you may contact Amit Hadad at <b>hadadami@post.bgu.ac.il</b>, Department of Industrial Engineering and Management, Ben-Gurion University of the Negev.</li>
-<li>Please check one of the following boxes:</li>
+<li>Please select one of the following options:</li>
 </ol>
 </div>
 
@@ -1955,44 +1969,6 @@ Informed Consent to Participate in a Study
 """,
         unsafe_allow_html=True
     )
-
-
-    st.markdown("""
-<style>
-/* Force consent radio to be LTR - applies only on consent screen */
-div[data-testid="stRadio"] {
-    direction: ltr !important;
-    text-align: left !important;
-}
-
-div[data-testid="stRadio"] > label {
-    direction: ltr !important;
-    text-align: left !important;
-}
-
-div[data-testid="stRadio"] > div[role="radiogroup"] {
-    direction: ltr !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 12px !important;
-}
-
-div[data-testid="stRadio"] [role="radiogroup"] label {
-    direction: ltr !important;
-    text-align: left !important;
-    justify-content: flex-start !important;
-    flex-direction: row !important;
-}
-
-div[data-testid="stRadio"] [role="radiogroup"] label p,
-div[data-testid="stRadio"] [role="radiogroup"] label span {
-    direction: ltr !important;
-    text-align: left !important;
-}
-</style>
-""", unsafe_allow_html=True)
-
-
 
     col_l, col_form, col_r = st.columns([1, 2, 1])
 
@@ -2031,12 +2007,12 @@ elif st.session_state.screen == "demographics":
 """
 <div style="max-width:820px;margin:2rem auto;">
 <div class="welcome-card">
-<div class="welcome-title">שאלון דמוגרפי</div>
-<div class="welcome-subtitle">השאלון מיועד לצורכי מחקר בלבד ונשמר באופן אנונימי</div>
+<div class="welcome-title">Demographic Questionnaire</div>
+<div class="welcome-subtitle">This questionnaire is intended for research purposes only and is stored anonymously</div>
 <hr class="welcome-divider">
 
 <div class="welcome-text">
-לפני תחילת הניסוי, נבקש למלא מספר פרטים כלליים. המידע ישמש לצורכי מחקר בלבד.
+Before starting the experiment, please answer a few general questions. The information will be used for research purposes only.
 </div>
 </div>
 </div>
@@ -2048,43 +2024,43 @@ elif st.session_state.screen == "demographics":
 
     with col_form:
         age = st.selectbox(
-            "טווח גילאים",
-            ["", "18–21", "22–27", "28–35", "35 ומעלה"]
+            "Age range",
+            ["", "18–21", "22–27", "28–35", "35 and above"]
         )
 
         gender = st.selectbox(
-            "מגדר",
-            ["", "אישה", "גבר", "אחר", "מעדיפ/ה לא לציין"]
+            "Gender",
+            ["", "Female", "Male", "Other", "Prefer not to say"]
         )
 
         experience = st.selectbox(
-            "מהי רמת ההשכלה שלך?",
-            ["", "השכלה תיכונית", "סטודנט לתואר ראשון", "בעל תואר רא שון", "בעל תואר שני ומעלה"]
+            "What is your education level?",
+            ["", "High school education", "Undergraduate student", "Bachelor’s degree", "Master’s degree or higher"]
         )
 
         education = st.selectbox(
-            "מהו הרקע העיקרי שלך?",
-            ["", "סטודנט/ית", "עובד/ת בתחום עסקי", "עובד/ת בתחום טכנולוגי", "אחר"]
+            "What is your main background?",
+            ["", "Student", "Business field employee", "Technology field employee", "Other"]
         )
 
         ai_experience = st.selectbox(
-            "האם השתמשת בעבר בכלי חיזוי, אלגוריתמים או מערכות בינה מלאכותית?",
-            ["", "לא", "כן, מעט", "כן, במידה בינונית", "כן, במידה רבה"]
+            "Have you previously used prediction tools, algorithms, or artificial intelligence systems?",
+            ["", "No", "Yes, a little", "Yes, to a moderate extent", "Yes, to a great extent"]
         )
 
         bi_experience = st.selectbox(
-            "האם השתמשת בעבר במערכות Business Intelligence (BI)?",
-            ["", "לא", "כן, מעט", "כן, במידה בינונית", "כן, במידה רבה"]
+            "Have you previously used Business Intelligence (BI) systems?",
+            ["", "No", "Yes, a little", "Yes, to a moderate extent", "Yes, to a great extent"]
         )
 
         st.write("")
 
-        if st.button("שלח/י והמשך ▶", use_container_width=True):
+        if st.button("Submit and Continue ▶", use_container_width=True):
             if (
                 age == "" or gender == "" or experience == "" or education == "" or
                 ai_experience == "" or bi_experience == ""
             ):
-                st.warning("יש למלא את כל השדות לפני ההמשך")
+                st.warning("Please complete all fields before continuing")
             else:
                 st.session_state.demographic_age = age
                 st.session_state.demographic_gender = gender
@@ -2103,28 +2079,28 @@ elif st.session_state.screen == "instructions":
     st.markdown(
 """<div style="max-width:820px;margin:2rem auto;">
 <div class="welcome-card">
-<div class="welcome-title">הוראות הניסוי</div>
-<div class="welcome-subtitle">פרויקט גמר — המחלקה להנדסת תעשייה וניהול, אוניברסיטת בן-גוריון תשפ"ו</div>
+<div class="welcome-title">Experiment Instructions</div>
+<div class="welcome-subtitle">Final Project — Department of Industrial Engineering and Management, Ben-Gurion University</div>
 <hr class="welcome-divider">
 
-<div class="welcome-section-title">מה עלי לעשות?</div>
+<div class="welcome-section-title">What should I do?</div>
 <div class="welcome-text">
-יש לעיין בדשבורד האינטראקטיבי ולענות על <strong>10 שאלות</strong> המבוססות על הנתונים המוצגים.
-לאחר שליחת תשובה לא ניתן לחזור אליה. לא יינתן משוב בזמן אמת לגבי נכונות התשובה.
+Review the interactive dashboard and answer <strong>10 questions</strong> based on the data presented.
+After submitting an answer, you will not be able to go back to it. No real-time feedback will be provided regarding answer correctness.
 </div>
 <div class="welcome-text">
-ניתן לחקור את הנתונים באמצעות סמל הזכוכית המגדלת (🔍), המאפשר לבצע Drill Down (ירידה לפרטים עמוקים יותר) או להציג תצוגות מפורטות יותר של הנתונים.
+You can explore the data using the magnifying glass icon (🔍), which allows you to perform Drill Down or display more detailed views of the data.
 </div>
 <div class="welcome-text">
-💡 שימו לב - ערכי ציר ה-Y בגרפים לא תמיד יתחילו מ-0
+💡 Please note: the Y-axis values in the charts may not always start at 0.
 </div>
-<div class="welcome-section-title">תגמול</div>
+<div class="welcome-section-title">Reward</div>
 <div class="welcome-text">
-במסגרת הניסוי יוגרלו שלושה פרסים בסך 100 דולר כל אחד, כאשר סיכויי הזכייה של כל משתתף נקבעים בהתאם למספר התשובות הנכונות ולא לפי הזמן.
+As part of the experiment, three prizes of 100$ each will be raffled. Each participant’s chance of winning is determined by the number of correct answers.
 </div>
-<div class="welcome-section-title">משך הניסוי</div>
+<div class="welcome-section-title">Experiment duration</div>
 <div class="welcome-text">
-הניסוי צפוי להימשך כ-<strong>20 דקות</strong>. אין הגבלת זמן לכל שאלה בנפרד.
+The experiment is expected to take about <strong>20 minutes</strong>. There is no time limit for each individual question.
 </div>
 
 
@@ -2136,7 +2112,7 @@ elif st.session_state.screen == "instructions":
 
     col_l, col_btn, col_r = st.columns([2, 2, 2])
     with col_btn:
-        if st.button("המשך ▶", use_container_width=True):
+        if st.button("Continue ▶", use_container_width=True):
             st.session_state.screen = "initial_comprehension"
             st.rerun()
 
@@ -2155,7 +2131,7 @@ elif st.session_state.screen == "initial_comprehension":
     st.markdown('''
 <div style="max-width:820px;margin:2rem auto;">
 <div class="welcome-card">
-<div class="welcome-title">ענה על השאלות הבאות</div>
+<div class="welcome-title">Answer the Following Questions</div>
 </div>
 </div>
 ''', unsafe_allow_html=True)
@@ -2166,7 +2142,7 @@ elif st.session_state.screen == "initial_comprehension":
         check_q = initial_comprehension_questions[cq_check]
         st.markdown(
             f'<div class="rtl-title" style="font-size:1.35rem;font-weight:700;margin-bottom:0.4rem;font-family:Varela Round, sans-serif;">'
-            f'ענה/י על השאלה הבאה:</div>',
+            f'Please answer the following question:</div>',
             unsafe_allow_html=True
         )
         st.markdown(
@@ -2195,9 +2171,9 @@ elif st.session_state.screen == "initial_comprehension":
             index=None
         )
 
-        if st.button("שלח/י תשובה ▶", use_container_width=True):
+        if st.button("Submit Answer ▶", use_container_width=True):
             if selected_check is None:
-                st.warning("יש לבחור תשובה לפני ההמשך")
+                st.warning("Please select an answer before continuing")
                 st.stop()
 
             response_time = time.time() - st.session_state.question_start_time
@@ -2241,7 +2217,7 @@ elif st.session_state.screen == "initial_comprehension":
                 st.session_state["__prev_chart3_category_select"] = None
                 st.session_state["__prev_chart4_category_select"] = None
 
-                # מאתחל את ערכי הפילטרים כדי שלא יספרו כאינטראקציה
+                # Initializes filter values so they are not counted as interactions
                 #st.session_state["__prev_chart1_month_select"] = st.session_state["chart1_month_select"]
                 #st.session_state["__prev_chart2_month_select"] = st.session_state["chart2_month_select"]
                 #st.session_state["__prev_chart3_category_select"] = st.session_state["chart3_category_select"]
@@ -2264,7 +2240,7 @@ elif st.session_state.screen == "final_comprehension":
     st.markdown('''
 <div style="max-width:820px;margin:2rem auto;">
 <div class="welcome-card">
-<div class="welcome-title">שאלות לסיום</div>
+<div class="welcome-title">Final Questions</div>
 </div>
 </div>
 ''', unsafe_allow_html=True)
@@ -2275,7 +2251,7 @@ elif st.session_state.screen == "final_comprehension":
         check_q = final_comprehension_questions[cq_check]
         st.markdown(
             f'<div class="rtl-title" style="font-size:1.35rem;font-weight:700;margin-bottom:0.4rem;font-family:Varela Round, sans-serif;">'
-            f'ענה/י על השאלה הבאה:</div>',
+            f'Please answer the following question:</div>',
             unsafe_allow_html=True
         )
         st.markdown(
@@ -2304,9 +2280,9 @@ elif st.session_state.screen == "final_comprehension":
             index=None
         )
 
-        if st.button("שלח/י תשובה ▶", use_container_width=True):
+        if st.button("Submit Answer ▶", use_container_width=True):
             if selected_check is None:
-                st.warning("יש לבחור תשובה לפני ההמשך")
+                st.warning("Please select an answer before continuing")
                 st.stop()
 
             response_time = time.time() - st.session_state.question_start_time
@@ -2347,30 +2323,30 @@ elif st.session_state.screen == "final_comprehension":
 elif st.session_state.screen == "post_experiment_survey":
 
     st.markdown("""<div class="post-survey-card">
-<div class="post-survey-title">שאלות סיכום הניסוי</div>
+<div class="post-survey-title">Post-Experiment Survey</div>
 <div class="post-survey-subtitle">
-אנא דרג/י את התחושה שלך ביחס לכל אחת מהשאלות הבאות.
+Please rate your feeling regarding each of the following questions.
 <br>
-מתחת לכל שאלה יש סקאלה - הינך מתבקש להזיז את הסקאלה בין 1 ל-7.
+Please move the scale between 1 and 7.
 </div>
 </div>""", unsafe_allow_html=True)
 
     st.markdown("""<div class="likert-banner">
-<div class="likert-banner-main">סולם הדירוג</div>
+<div class="likert-banner-main">Rating Scale</div>
 
 <div class="likert-label-row">
-<span>במידה רבה מאוד</span>
-<span>במידה מועטה מאוד</span>
+<span>To a very small extent</span>
+<span>To a very great extent</span>
 </div>
 
 <div class="likert-scale-row">
-<div class="likert-number">7</div>
-<div class="likert-number">6</div>
-<div class="likert-number">5</div>
-<div class="likert-number">4</div>
-<div class="likert-number">3</div>
-<div class="likert-number">2</div>
 <div class="likert-number">1</div>
+<div class="likert-number">2</div>
+<div class="likert-number">3</div>
+<div class="likert-number">4</div>
+<div class="likert-number">5</div>
+<div class="likert-number">6</div>
+<div class="likert-number">7</div>
 </div>
 </div>""", unsafe_allow_html=True)
 
@@ -2385,7 +2361,7 @@ elif st.session_state.screen == "post_experiment_survey":
         )
 
         temp_answers[survey_q["id"]] = st.select_slider(
-            "בחר/י דירוג בין 1 ל-7",
+            "Select a rating from 1 to 7",
             options=[1, 2, 3, 4, 5, 6, 7],
             value=4,
             key=f"post_survey_{survey_q['id']}",
@@ -2394,8 +2370,8 @@ elif st.session_state.screen == "post_experiment_survey":
 
     st.write("")
 
-    if st.button("סיום ושליחת תשובות ▶", use_container_width=True):
-        # בסקאלה נעה תמיד יש ערך, ברירת המחדל היא 4
+    if st.button("Finish and Submit Answers ▶", use_container_width=True):
+        # The slider always has a value; the default is 4
         unanswered = []
 
         st.session_state.post_experiment_survey_answers = []
@@ -2422,7 +2398,7 @@ elif st.session_state.screen == "post_experiment_survey":
             if session_ok and responses_ok:
                 st.session_state.db_saved = True
             else:
-                st.warning("השמירה למסד לא הושלמה, אבל הניסוי הסתיים.")
+                st.warning("Saving to the database was not completed, but the experiment has ended.")
 
         st.session_state.screen = "summary" if is_admin_participant() else "thankyou"
         st.rerun()
@@ -2475,7 +2451,7 @@ elif st.session_state.screen == "experiment":
         show_fig4 = cq >= 8
 
     # dashboard grid
-    st.markdown('<div class="section-title">  המידע המוצג מתאר את התנהגות המכירות בחנות בגדים 🛍️---> </div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title">  The displayed information describes sales behavior in a clothing store 🛍️ ---> </div>', unsafe_allow_html=True)
 
     top_left, top_right = st.columns(2)
     bottom_left, bottom_right = st.columns(2)
@@ -2493,7 +2469,7 @@ elif st.session_state.screen == "experiment":
     #   st.session_state.filters_ready_for_tracking = True
 
     st.markdown(
-        '<div class="dashboard-note">💡 שים לב! ניתן לשנות את הבחירה לפני לחיצה על "שלח/י תשובה"</div>',
+        '<div class="dashboard-note">💡 Note! You can change your selection before clicking "Submit Answer".</div>',
         unsafe_allow_html=True
     )
 
@@ -2510,7 +2486,7 @@ elif st.session_state.screen == "experiment":
 
             st.markdown(
                 '<div class="rtl-title" style="font-size:1.35rem;font-weight:700;margin-bottom:0.4rem;font-family:Varela Round, sans-serif;">'
-                f'ענה/י על השאלה הבאה:</div>',
+                f'Please answer the following question:</div>',
                 unsafe_allow_html=True
             )
 
@@ -2528,9 +2504,9 @@ elif st.session_state.screen == "experiment":
                 index=None
             )
 
-            if st.button("שלח/י תשובה ✨", key=f"middle_attention_submit_{attention_q['id']}", use_container_width=True):
+            if st.button("Submit Answer ✨", key=f"middle_attention_submit_{attention_q['id']}", use_container_width=True):
                 if attention_selected is None:
-                    st.warning("יש לבחור תשובה לפני ההמשך")
+                    st.warning("Please select an answer before continuing")
                     st.stop()
 
                 response_time = time.time() - st.session_state.question_start_time
@@ -2570,13 +2546,13 @@ elif st.session_state.screen == "experiment":
         # new chart badge (storytelling only, at trigger questions)
         if is_storytelling and cq in NEW_CHART_AT:
             st.markdown(
-                f'<div class="new-chart-badge">✨ {NEW_CHART_AT[cq]} — עיינו בדשבורד לפני המענה</div>',
+                f'<div class="new-chart-badge">✨ {NEW_CHART_AT[cq]} — Please review the dashboard before answering</div>',
                 unsafe_allow_html=True
             )
 
         st.markdown(
             f'<div class="rtl-title" style="font-size:1.35rem;font-weight:700;margin-bottom:0.4rem;font-family:Varela Round, sans-serif;">'
-            f'שאלה {q["id"]}</div>',
+            f'Question {q["id"]}</div>',
             unsafe_allow_html=True
         )
 
@@ -2588,7 +2564,7 @@ elif st.session_state.screen == "experiment":
 
         st.markdown(
             '<div class="rtl-label" style="font-weight:600;margin-bottom:0.4rem;font-family:Varela Round, sans-serif;">'
-            'בחר/י את התשובה הנכונה ביותר:</div>',
+            'Select the best answer:</div>',
             unsafe_allow_html=True
         )
 
@@ -2600,10 +2576,10 @@ elif st.session_state.screen == "experiment":
             index=None
         )
 
-        if st.button("שלח/י תשובה ✨", use_container_width=True):
+        if st.button("Submit Answer ✨", use_container_width=True):
 
             if selected is None:
-                st.warning("יש לבחור תשובה לפני ההמשך")
+                st.warning("Please select an answer before continuing")
                 st.stop()
 
             response_time = time.time() - st.session_state.question_start_time
@@ -2653,40 +2629,40 @@ elif st.session_state.screen == "summary":
         if session_ok and responses_ok:
             st.session_state.db_saved = True
         else:
-            st.warning("השמירה למסד לא הושלמה, אבל אפשר עדיין להוריד את הנתונים כ-CSV.")
+            st.warning("Saving to the database was not completed, but you can still download the data as CSV.")
 
     st.balloons()
-    st.markdown('<div class="big-title">📋 סיכום ביצועים</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-title">הניסוי הסתיים — להלן תוצאות הסשן שלך</div>', unsafe_allow_html=True)
+    st.markdown('<div class="big-title">📋 Performance Summary</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-title">The experiment has ended — below are the session results</div>', unsafe_allow_html=True)
 
     x, y, z = st.columns(3)
     with x:
         st.markdown(
-            f'<div class="metric-card"><div class="metric-label">זמן כולל (שניות)</div>'
+            f'<div class="metric-card"><div class="metric-label">Total Time (seconds)</div>'
             f'<div class="metric-value">{round(total_duration, 2)}</div></div>',
             unsafe_allow_html=True
         )
     with y:
         st.markdown(
-            f'<div class="metric-card"><div class="metric-label">סה״כ אינטראקציות</div>'
+            f'<div class="metric-card"><div class="metric-label">Total Interactions</div>'
             f'<div class="metric-value">{st.session_state.dashboard_interaction_clicks}</div></div>',
             unsafe_allow_html=True
         )
     with z:
         st.markdown(
-            f'<div class="metric-card"><div class="metric-label">תשובות נכונות</div>'
+            f'<div class="metric-card"><div class="metric-label">Correct Answers</div>'
             f'<div class="metric-value">{st.session_state.correct_count} / {len(questions)}</div></div>',
             unsafe_allow_html=True
         )
 
-    st.subheader("סיכום תשובות")
+    st.subheader("Response Summary")
     st.dataframe(export_df, use_container_width=True)
 
     c1, c2 = st.columns(2)
     with c1:
         csv_results = export_df.to_csv(index=False).encode("utf-8-sig")
         st.download_button(
-            "📥 הורדת תוצאות CSV",
+            "📥 Download Results CSV",
             data=csv_results,
             file_name=f"results_{st.session_state.participant_id}.csv",
             mime="text/csv",
@@ -2695,7 +2671,7 @@ elif st.session_state.screen == "summary":
     with c2:
         csv_interactions = interactions_df.to_csv(index=False).encode("utf-8-sig")
         st.download_button(
-            "📥 הורדת לוג אינטראקציות",
+            "📥 Download Interaction Log",
             data=csv_interactions,
             file_name=f"interactions_{st.session_state.participant_id}.csv",
             mime="text/csv",
@@ -2705,11 +2681,11 @@ elif st.session_state.screen == "summary":
     st.markdown("<br>", unsafe_allow_html=True)
     btn1, btn2, btn3 = st.columns([1, 2, 1])
     with btn2:
-        if st.button("✅ לחץ לסיום", use_container_width=True):
+        if st.button("✅ Finish", use_container_width=True):
             st.session_state.screen = "thankyou"
             st.rerun()
         st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("התחל מחדש 🔄", use_container_width=True):
+        if st.button("Restart 🔄", use_container_width=True):
             for key in list(st.session_state.keys()):
                 del st.session_state[key]
             st.rerun()
@@ -2717,15 +2693,39 @@ elif st.session_state.screen == "summary":
 # ==============================
 # SCREEN: THANK YOU
 # ==============================
-
 elif st.session_state.screen == "thankyou":
+
+    final_redirect_url = REDIRECT_URL
 
     st.markdown("""<div class="thankyou-card">
 <div class="thankyou-emoji">🎉</div>
-<div class="thankyou-title">תודה על השתתפותך!</div>
+<div class="thankyou-title">Thank You for Participating!</div>
 <div class="thankyou-sub">
-השתתפותך בניסוי זה תורמת למחקר אקדמי חשוב בתחום מערכות מידע עסקיות.<br>
-התוצאות ישמשו למחקר בלבד.<br><br>
-הניסוי הסתיים. הודע לאחראי שסיימת ניסוי זה.
+Your participation contributes to important academic research in the field of business information systems.<br>
+The results will be used for research purposes only.<br><br>
+To register in the system that you completed the experiment, please click the finish button.
 </div>
 </div>""", unsafe_allow_html=True)
+
+    col_l, col_btn, col_r = st.columns([2, 2, 2])
+
+    with col_btn:
+        st.markdown(
+            f"""<form action="{final_redirect_url}" method="get" target="_self">
+<input type="submit" value="Finish" style="
+width:100%;
+font-family:'Varela Round', sans-serif;
+font-weight:700;
+font-size:1rem;
+border-radius:12px;
+padding:0.75rem 2rem;
+background-color:#2563eb;
+color:white;
+border:none;
+cursor:pointer;
+box-sizing:border-box;
+">
+</form>""",
+            unsafe_allow_html=True
+        )
+
