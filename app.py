@@ -2697,8 +2697,6 @@ elif st.session_state.screen == "summary":
 # ==============================
 elif st.session_state.screen == "thankyou":
 
-    final_redirect_url = REDIRECT_URL
-
     st.markdown("""<div class="thankyou-card">
 <div class="thankyou-emoji">🎉</div>
 <div class="thankyou-title">Thank You for Participating!</div>
@@ -2712,22 +2710,10 @@ To register in the system that you completed the experiment, please click the fi
     col_l, col_btn, col_r = st.columns([2, 2, 2])
 
     with col_btn:
-        st.markdown(
-            f"""<form action="{final_redirect_url}" method="get" target="_self">
-<input type="submit" value="Finish" style="
-width:100%;
-font-family:'Varela Round', sans-serif;
-font-weight:700;
-font-size:1rem;
-border-radius:12px;
-padding:0.75rem 2rem;
-background-color:#2563eb;
-color:white;
-border:none;
-cursor:pointer;
-box-sizing:border-box;
-">
-</form>""",
-            unsafe_allow_html=True
+        st.link_button(
+            "Finish",
+            REDIRECT_URL,
+            use_container_width=True,
+            type="primary"
         )
 
